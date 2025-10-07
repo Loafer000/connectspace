@@ -23,6 +23,63 @@ router.get('/test', (req, res) => {
   });
 });
 
+// @desc    Test property creation
+// @route   POST /api/properties/test-create
+// @access  Private
+router.post('/test-create', authenticate, async (req, res) => {
+  try {
+    const Property = require('../models/Property');
+    
+    const testProperty = new Property({
+      title: 'Test Property',
+      description: 'This is a test property created by the test endpoint',
+      propertyType: 'office',
+      category: 'commercial',
+      owner: req.user._id,
+      address: {
+        street: '123 Test Street',
+        area: 'Test Area',
+        city: 'Test City',
+        state: 'Test State',
+        pincode: '123456',
+        country: 'India'
+      },
+      rental: {
+        monthlyRent: 50000,
+        securityDeposit: 100000,
+        maintenanceCharges: 5000
+      },
+      specifications: {
+        totalArea: 1000,
+        builtUpArea: 800,
+        floorNumber: 2,
+        totalFloors: 5,
+        bedrooms: 3,
+        bathrooms: 2,
+        amenities: ['parking', 'wifi']
+      },
+      visibility: 'public',
+      status: 'available'
+    });
+
+    const saved = await testProperty.save();
+    
+    res.json({
+      success: true,
+      message: 'Test property created successfully',
+      propertyId: saved._id,
+      data: saved
+    });
+  } catch (error) {
+    console.error('Test create error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Test property creation failed',
+      error: error.message
+    });
+  }
+});
+
 // Step 4 Implementation - Property routes
 
 // Public routes

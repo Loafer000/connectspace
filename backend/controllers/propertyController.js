@@ -16,6 +16,8 @@ exports.getProperties = async (req, res) => {
       sort = '-createdAt'
     } = req.query;
 
+    console.log('🔍 Getting properties with query params:', req.query);
+
     // Build filter object
     const filters = {
       status: 'available',
@@ -34,6 +36,8 @@ exports.getProperties = async (req, res) => {
       if (maxRent) filters['rental.monthlyRent'].$lte = parseInt(maxRent, 10);
     }
 
+    console.log('📋 Applied filters:', JSON.stringify(filters, null, 2));
+
     // Calculate pagination
     const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
@@ -46,6 +50,17 @@ exports.getProperties = async (req, res) => {
 
     // Get total count for pagination
     const total = await Property.countDocuments(filters);
+    
+    // Also get count of ALL properties in database (for debugging)
+    const allPropertiesCount = await Property.countDocuments({});
+    const allNonDeleted = await Property.countDocuments({ isDeleted: { $ne: true } });
+
+    console.log('📊 Database stats:', {
+      totalPropertiesInDB: allPropertiesCount,
+      nonDeletedProperties: allNonDeleted,
+      filteredResults: total,
+      returnedProperties: properties.length
+    });
 
     res.json({
       success: true,
@@ -117,25 +132,70 @@ exports.getPropertyById = async (req, res) => {
 // Create new property (requires authentication)
 exports.createProperty = async (req, res) => {
   try {
+    console.log('🏠 Creating property with data:', JSON.stringify(req.body, null, 2));
+    console.log('👤 User creating property:', req.user._id, req.user.firstName, req.user.lastName);
+
     const propertyData = {
       ...req.body,
       owner: req.user._id
     };
 
+    console.log('📝 Final property data before save:', JSON.stringify(propertyData, null, 2));
+
+    // Validate required fields
+    const requiredFields = ['title', 'description', 'propertyType', 'category', 'address'];
+    const missingFields = requiredFields.filter(field => !propertyData[field]);
+    
+    if (missingFields.length > 0) {
+      console.error('❌ Missing required fields:', missingFields);
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields',
+        missingFields
+      });
+    }
+
     // Create property
     const property = new Property(propertyData);
-    await property.save();
+    
+    console.log('💾 Attempting to save property to MongoDB...');
+    const savedProperty = await property.save();
+    console.log('✅ Property saved successfully with ID:', savedProperty._id);
 
     // Populate owner data for response
-    await property.populate('owner', 'firstName lastName phone email');
+    await savedProperty.populate('owner', 'firstName lastName phone email');
+
+    console.log('🎉 Property creation complete, sending response');
 
     res.status(201).json({
       success: true,
       message: 'Property created successfully',
-      data: { property }
+      data: { property: savedProperty }
     });
   } catch (error) {
-    console.error('Create property error:', error);
+    console.error('❌ Create property error:', error);
+    console.error('❌ Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      validation: error.errors
+    });
+
+    // Handle validation errors specifically
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.keys(error.errors).map(key => ({
+        field: key,
+        message: error.errors[key].message
+      }));
+
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: validationErrors,
+        error: process.env.NODE_ENV === 'development' ? error.message : 'Validation error'
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: 'Failed to create property',
