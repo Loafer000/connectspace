@@ -1,7 +1,5 @@
 {
-  "buildCommand": "chmod +x build.sh && ./build.sh",
+  "buildCommand": "cd frontend && npm install && npx react-scripts build",
   "outputDirectory": "frontend/build",
-  "installCommand": "echo 'Install handled by build script'",
-  "framework": null,
-  "nodeVersion": "20.18.0"
+  "installCommand": "cd frontend && npm install"
 }
