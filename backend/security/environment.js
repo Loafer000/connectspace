@@ -52,15 +52,15 @@ const requiredEnvVars = {
     secure: false
   },
 
-  // Payment Gateway
-  STRIPE_SECRET_KEY: {
-    required: true,
-    description: 'Stripe secret key',
-    secure: true
+  // Payment Gateway (Razorpay)
+  RAZORPAY_KEY_ID: {
+    required: false, // Optional for initial deployment
+    description: 'Razorpay key ID',
+    secure: false
   },
-  STRIPE_WEBHOOK_SECRET: {
-    required: true,
-    description: 'Stripe webhook secret',
+  RAZORPAY_KEY_SECRET: {
+    required: false, // Optional for initial deployment
+    description: 'Razorpay key secret',
     secure: true
   },
 
