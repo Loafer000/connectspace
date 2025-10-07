@@ -1,2 +1,2 @@
 #!/bin/bash
-npx react-scripts build
+node node_modules/react-scripts/bin/react-scripts.js build

@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "chmod +x build.sh && ./build.sh || npx react-scripts build",
+    "build": "node node_modules/react-scripts/bin/react-scripts.js build",
     "build:fallback": "npx react-scripts build",
     "test": "react-scripts test --coverage --watchAll=false",
     "test:watch": "react-scripts test",
