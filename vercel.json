@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm install && npx react-scripts build",
+  "buildCommand": "npm install --prefix frontend && npx --prefix frontend react-scripts build",
   "outputDirectory": "frontend/build",
-  "installCommand": "cd frontend && npm install"
+  "installCommand": "npm install --prefix frontend"
 }
