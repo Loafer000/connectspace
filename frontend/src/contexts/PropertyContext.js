@@ -195,9 +195,26 @@ export const PropertyProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('❌ Frontend addProperty error:', error);
-      dispatch({ type: 'SET_ERROR', payload: error.message });
+      console.error('❌ Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        response: error.response?.data || 'No response data'
+      });
+      
+      // Extract meaningful error message
+      let errorMessage = 'Failed to create property';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
       dispatch({ type: 'SET_LOADING', payload: false });
-      return { success: false, error: error.message };
+      return { success: false, error: errorMessage };
     }
   }, []);
 

@@ -114,16 +114,21 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     };
 
     try {
+      console.log('🚀 Submitting property data:', finalData);
       const result = await addProperty(finalData);
+      console.log('📝 AddProperty result:', result);
+      
       if (result.success) {
         toast.success('Property added successfully!');
         onClose();
         resetForm();
       } else {
-        toast.error('Failed to add property. Please try again.');
+        console.error('❌ Property creation failed:', result.error);
+        toast.error(result.error || 'Failed to add property. Please try again.');
       }
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
+      console.error('❌ Property submission error:', error);
+      toast.error(error.message || 'An error occurred. Please try again.');
     }
   };
 
