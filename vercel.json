@@ -1,12 +1,7 @@
 {
-  "buildCommand": "cd frontend && npm ci && chmod +x node_modules/.bin/* && npm run build",
+  "buildCommand": "chmod +x build.sh && ./build.sh",
   "outputDirectory": "frontend/build",
-  "installCommand": "cd frontend && npm ci && chmod +x node_modules/.bin/* || true",
+  "installCommand": "echo 'Install handled by build script'",
   "framework": null,
-  "nodeVersion": "20.18.0",
-  "functions": {
-    "frontend/build/**": {
-      "includeFiles": "frontend/build/**"
-    }
-  }
+  "nodeVersion": "20.18.0"
 }
