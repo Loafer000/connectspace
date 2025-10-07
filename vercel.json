@@ -1,6 +1,0 @@
-{
-  "buildCommand": "npm ci && npx react-scripts build",
-  "outputDirectory": "build",
-  "installCommand": "npm ci",
-  "rootDirectory": "frontend"
-}
