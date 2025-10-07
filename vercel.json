@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm install --prefix frontend && npx --prefix frontend react-scripts build",
-  "outputDirectory": "frontend/build",
-  "installCommand": "npm install --prefix frontend"
+  "buildCommand": "npm install && npx react-scripts build",
+  "outputDirectory": "build",
+  "installCommand": "npm install",
+  "rootDirectory": "frontend"
 }
