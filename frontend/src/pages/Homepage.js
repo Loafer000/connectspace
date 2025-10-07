@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useProperty } from '../contexts/PropertyContext';
 import AuthModal from '../components/Auth/AuthModal';
 import SearchBar from '../components/Search/SearchBar';
 import FeaturedProperties from '../components/Property/FeaturedProperties';
@@ -10,11 +11,17 @@ import Testimonials from '../components/Home/Testimonials';
 
 const Homepage = () => {
   const { isAuthenticated } = useAuth();
+  const { properties, loading, fetchProperties } = useProperty();
   const navigate = useNavigate();
   const [authModal, setAuthModal] = useState({
     isOpen: false,
     type: 'login'
   });
+
+  // Fetch properties on component mount
+  useEffect(() => {
+    fetchProperties();
+  }, [fetchProperties]);
 
   const handleListProperty = () => {
     if (isAuthenticated) {
@@ -25,6 +32,9 @@ const Homepage = () => {
       setAuthModal({ isOpen: true, type: 'login' });
     }
   };
+
+  // Get featured properties (latest 6 properties)
+  const featuredProperties = properties.slice(0, 6);
 
   const closeAuthModal = () => {
     setAuthModal({ isOpen: false, type: 'login' });
@@ -82,7 +92,7 @@ const Homepage = () => {
             </p>
           </div>
           
-          <FeaturedProperties />
+          <FeaturedProperties properties={featuredProperties} loading={loading} />
           
           <div className="text-center mt-12">
             <Link

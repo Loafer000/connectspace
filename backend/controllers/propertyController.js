@@ -321,7 +321,7 @@ exports.searchProperties = async (req, res) => {
       isDeleted: false
     };
 
-    // Text search across multiple fields
+    // Enhanced text search across multiple fields
     if (q) {
       const searchRegex = new RegExp(q, 'i');
       filters.$or = [
@@ -329,12 +329,15 @@ exports.searchProperties = async (req, res) => {
         { description: searchRegex },
         { 'address.city': searchRegex },
         { 'address.area': searchRegex },
+        { 'address.state': searchRegex },
         { 'address.landmark': searchRegex },
+        { 'address.street': searchRegex },
+        { propertyType: searchRegex },
         { 'specifications.amenities': { $in: [searchRegex] } }
       ];
     }
 
-    // Location-specific filters
+    // Enhanced location-specific filters - match city parameter with location search
     if (city) {
       const cityRegex = new RegExp(city, 'i');
       if (filters.$or) {
@@ -344,7 +347,9 @@ exports.searchProperties = async (req, res) => {
           {
             $or: [
               { 'address.city': cityRegex },
-              { 'address.area': cityRegex }
+              { 'address.area': cityRegex },
+              { 'address.state': cityRegex },
+              { 'address.landmark': cityRegex }
             ]
           }
         ];
@@ -352,7 +357,9 @@ exports.searchProperties = async (req, res) => {
       } else {
         filters.$or = [
           { 'address.city': cityRegex },
-          { 'address.area': cityRegex }
+          { 'address.area': cityRegex },
+          { 'address.state': cityRegex },
+          { 'address.landmark': cityRegex }
         ];
       }
     }

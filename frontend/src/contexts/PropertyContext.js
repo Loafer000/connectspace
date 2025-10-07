@@ -176,6 +176,23 @@ export const PropertyProvider = ({ children }) => {
     }
   }, [state.favorites]);
 
+  const fetchProperties = useCallback(async () => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await propertyAPI.getAllProperties();
+      if (response.success) {
+        dispatch({ type: 'SET_PROPERTIES', payload: response.data.properties });
+      } else {
+        throw new Error(response.message || 'Failed to fetch properties');
+      }
+    } catch (error) {
+      console.error('Fetch properties error:', error);
+      dispatch({ type: 'SET_ERROR', payload: error.message });
+      // Set empty array as fallback
+      dispatch({ type: 'SET_PROPERTIES', payload: [] });
+    }
+  }, []);
+
   const setFilters = useCallback((newFilters) => {
     dispatch({ type: 'SET_FILTERS', payload: newFilters });
   }, []);
@@ -185,6 +202,7 @@ export const PropertyProvider = ({ children }) => {
     searchProperties,
     getPropertyById,
     addProperty,
+    fetchProperties,
     toggleFavorite,
     setFilters
   };

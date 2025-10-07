@@ -3,18 +3,33 @@ import { Link } from 'react-router-dom';
 
 const PropertyCard = ({ property }) => {
   const {
+    _id,
     id,
     title,
+    description,
+    address,
     location,
+    rental,
     price,
     floors,
     parkingSpaces,
     area,
     propertyType,
     images,
+    owner,
     landlord,
-    amenities = []
+    amenities = [],
+    specifications
   } = property;
+
+  // Handle different property data structures
+  const propertyId = _id || id;
+  const propertyTitle = title || 'Property';
+  const propertyLocation = address ? `${address.area}, ${address.city}` : location || 'Location';
+  const propertyPrice = rental?.monthlyRent || price || 0;
+  const propertyType_clean = propertyType || 'Commercial';
+  const propertyImages = images || [];
+  const ownerInfo = owner || landlord;
 
   return (
     <div className="bg-gradient-to-br from-white/80 to-gray-50/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl hover:scale-102 transition-all duration-500 group relative">
@@ -23,11 +38,14 @@ const PropertyCard = ({ property }) => {
       
       {/* Image */}
       <div className="relative overflow-hidden">
-        <Link to={`/property/${id}`}>
+        <Link to={`/property/${propertyId}`}>
           <img
-            src={images?.[0] || '/default-property.svg'}
-            alt={title}
+            src={propertyImages?.[0]?.url || propertyImages?.[0] || 'https://via.placeholder.com/400x300?text=No+Image'}
+            alt={propertyTitle}
             className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700 filter group-hover:brightness-110"
+            onError={(e) => {
+              e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+            }}
           />
           {/* Image Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -36,14 +54,14 @@ const PropertyCard = ({ property }) => {
         {/* Price Badge */}
         <div className="absolute top-5 left-5">
           <div className="backdrop-blur-md bg-gradient-to-r from-indigo-600/90 to-purple-600/90 text-white px-4 py-2 rounded-2xl text-sm font-bold shadow-lg border border-white/20 transform group-hover:scale-105 transition-transform duration-300">
-            💰 ${price.toLocaleString()}/month
+            💰 ₹{propertyPrice.toLocaleString()}/month
           </div>
         </div>
 
         {/* Property Type Badge */}
         <div className="absolute top-5 right-5">
           <div className="backdrop-blur-md bg-white/20 text-gray-800 px-3 py-1 rounded-xl text-xs font-semibold border border-white/30 shadow-lg">
-            {propertyType}
+            {propertyType_clean}
           </div>
         </div>
 
@@ -64,16 +82,16 @@ const PropertyCard = ({ property }) => {
       <div className="p-6">
         {/* Title & Location */}
         <div className="mb-4">
-          <Link to={`/property/${id}`}>
+          <Link to={`/property/${propertyId}`}>
             <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 transition-colors line-clamp-2">
-              {title}
+              {propertyTitle}
             </h3>
           </Link>
           <p className="text-gray-600 flex items-center text-sm">
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
             </svg>
-            {location}
+            {propertyLocation}
           </p>
         </div>
 

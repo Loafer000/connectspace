@@ -66,37 +66,37 @@ const SearchResults = () => {
 
       {/* Search Header */}
       <div className="backdrop-blur-xl bg-white/80 shadow-2xl border-b border-white/20 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+          <div className="mb-4 lg:mb-6">
+            <h1 className="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
               🔍 Property Search
             </h1>
-            <p className="text-gray-600">Find the perfect commercial space for your business</p>
+            <p className="text-sm lg:text-base text-gray-600">Find the perfect commercial space for your business</p>
           </div>
           <SearchBar />
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {/* Filters Sidebar - Collapsible on mobile */}
           <div className="lg:w-1/4">
-            <div className="sticky top-24">
+            <div className="lg:sticky lg:top-24">
               <SearchFilters />
             </div>
           </div>
 
           {/* Results Section */}
           <div className="lg:w-3/4">
-            {/* Results Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 bg-white p-4 rounded-lg shadow-sm">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+            {/* Results Header - Mobile Responsive */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 lg:mb-6 bg-white p-4 rounded-lg shadow-sm">
+              <div className="mb-4 sm:mb-0">
+                <h1 className="text-xl lg:text-2xl font-bold text-gray-900">
                   Search Results
                 </h1>
-                <p className="text-gray-600 mt-1">
+                <p className="text-sm lg:text-base text-gray-600 mt-1">
                   {searchResults.length} properties found
-                  {filters.location && ` in ${filters.location}`}
+                  {searchParams.get('location') && ` in ${searchParams.get('location')}`}
                 </p>
               </div>
 
