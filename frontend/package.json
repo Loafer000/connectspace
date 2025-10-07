@@ -39,7 +39,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "chmod +x build.sh && ./build.sh || npx react-scripts build",
+    "build:fallback": "npx react-scripts build",
     "test": "react-scripts test --coverage --watchAll=false",
     "test:watch": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false --collectCoverageFrom='src/**/*.{js,jsx}' --collectCoverageFrom='!src/index.js'",
