@@ -143,27 +143,60 @@ export const PropertyProvider = ({ children }) => {
   const addProperty = useCallback(async (propertyData) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      // API call would go here
-      const newProperty = {
-        ...propertyData,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        status: 'available',
-        landlord: {
-          name: 'Current User',
-          verified: true,
-          rating: 4.5
+      console.log('🏠 Frontend: Adding property with data:', propertyData);
+
+      // Transform frontend data to match backend schema
+      const backendData = {
+        title: propertyData.title,
+        description: propertyData.description,
+        propertyType: propertyData.propertyType || 'office', // Default to office
+        category: propertyData.category || 'commercial', // Default to commercial
+        address: {
+          street: propertyData.address,
+          area: propertyData.area || propertyData.city,
+          city: propertyData.city,
+          state: propertyData.state || 'Unknown',
+          pincode: propertyData.pincode,
+          country: 'India',
+          landmark: propertyData.landmark || ''
         },
-        reviews: []
+        rental: {
+          monthlyRent: parseInt(propertyData.price) || 0,
+          securityDeposit: parseInt(propertyData.securityDeposit) || parseInt(propertyData.price) * 2 || 0,
+          maintenanceCharges: parseInt(propertyData.maintenanceCharges) || 0,
+          utilitiesIncluded: propertyData.utilitiesIncluded || false
+        },
+        specifications: {
+          totalArea: parseInt(propertyData.area) || 0,
+          builtUpArea: parseInt(propertyData.builtUpArea) || parseInt(propertyData.area) || 0,
+          floorNumber: parseInt(propertyData.floor) || 1,
+          totalFloors: parseInt(propertyData.totalFloors) || 1,
+          bedrooms: parseInt(propertyData.bedrooms) || 0,
+          bathrooms: parseInt(propertyData.bathrooms) || 0,
+          amenities: propertyData.amenities || []
+        },
+        images: propertyData.images || [],
+        visibility: 'public',
+        status: 'available'
       };
+
+      console.log('📝 Transformed data for backend:', backendData);
+
+      // Call the actual backend API
+      const response = await propertyAPI.createProperty(backendData);
       
-      setTimeout(() => {
-        dispatch({ type: 'ADD_PROPERTY', payload: newProperty });
-      }, 1000);
-      
-      return { success: true, property: newProperty };
+      if (response.success) {
+        console.log('✅ Property created successfully:', response.data);
+        dispatch({ type: 'ADD_PROPERTY', payload: response.data.property });
+        dispatch({ type: 'SET_LOADING', payload: false });
+        return { success: true, property: response.data.property };
+      } else {
+        throw new Error(response.message || 'Failed to create property');
+      }
     } catch (error) {
+      console.error('❌ Frontend addProperty error:', error);
       dispatch({ type: 'SET_ERROR', payload: error.message });
+      dispatch({ type: 'SET_LOADING', payload: false });
       return { success: false, error: error.message };
     }
   }, []);
