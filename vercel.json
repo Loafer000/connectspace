@@ -23,13 +23,5 @@
       "src": "/(.*)",
       "dest": "/frontend/build/index.html"
     }
-  ],
-  "env": {
-    "REACT_APP_API_URL": "@react_app_api_url"
-  },
-  "build": {
-    "env": {
-      "REACT_APP_API_URL": "@react_app_api_url"
-    }
-  }
+  ]
 }
