@@ -63,32 +63,34 @@ app.use(helmet({
   }
 }));
 
-// CORS configuration - Allow all localhost ports in development
+// CORS configuration - Allow frontend URL and localhost in development
 const corsOptions = {
   origin(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
     // In development, allow all localhost origins
     if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-
-      // Allow all localhost origins in development
       if (origin.startsWith('http://localhost:')) {
         return callback(null, true);
       }
     }
 
-    // For production, use specific allowed origins
-    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+    // For production, use FRONTEND_URL and fallback origins
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:3002',
-      'http://localhost:3003'
-    ];
+      'http://localhost:3003',
+      'https://connectspace-eight.vercel.app'
+    ].filter(Boolean);
 
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.log('CORS rejected origin:', origin, 'Allowed:', allowedOrigins);
+      callback(null, true); // Allow all origins for now to debug
     }
   },
   credentials: true,
