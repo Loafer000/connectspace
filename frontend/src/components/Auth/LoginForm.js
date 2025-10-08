@@ -26,15 +26,40 @@ const LoginForm = ({ onSwitchToRegister, onClose }) => {
     setError('');
 
     try {
-      const result = await login(formData.email, formData.password);
+      // Import the API service
+      const { authAPI } = await import('../../services/api');
       
-      if (result.success) {
+      console.log('🔐 Attempting login with:', { email: formData.email });
+      
+      // Call real API
+      const response = await authAPI.login({
+        email: formData.email,
+        password: formData.password
+      });
+      
+      console.log('📝 Login response:', response);
+      
+      if (response.success) {
+        const user = {
+          id: response.data.user._id || response.data.user.id,
+          name: response.data.user.firstName + ' ' + response.data.user.lastName,
+          firstName: response.data.user.firstName,
+          lastName: response.data.user.lastName,
+          email: response.data.user.email,
+          userType: response.data.user.userType,
+          avatar: response.data.user.avatar,
+        };
+        
+        console.log('✅ Login successful, storing user:', user);
+        login(user, response.data.tokens.accessToken);
         onClose(); // Close modal on successful login
       } else {
-        setError(result.message);
+        console.error('❌ Login failed:', response.message);
+        setError(response.message || 'Invalid credentials');
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      console.error('❌ Login error:', err);
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
