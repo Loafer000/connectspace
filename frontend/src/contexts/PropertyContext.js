@@ -149,31 +149,56 @@ export const PropertyProvider = ({ children }) => {
       const backendData = {
         title: propertyData.title,
         description: propertyData.description,
-        propertyType: propertyData.propertyType || 'office', // Default to office
-        category: propertyData.category || 'commercial', // Default to commercial
+        propertyType: propertyData.propertyType || 'office',
+        category: propertyData.category || 'commercial',
         address: {
           street: propertyData.address,
           area: propertyData.area || propertyData.city,
           city: propertyData.city,
-          state: propertyData.state || 'Unknown',
+          state: propertyData.state || 'Maharashtra',
           pincode: propertyData.pincode,
           country: 'India',
           landmark: propertyData.landmark || ''
         },
-        rental: {
-          monthlyRent: parseInt(propertyData.price) || 0,
-          securityDeposit: parseInt(propertyData.securityDeposit) || parseInt(propertyData.price) * 2 || 0,
-          maintenanceCharges: parseInt(propertyData.maintenanceCharges) || 0,
-          utilitiesIncluded: propertyData.utilitiesIncluded || false
+        location: {
+          type: 'Point',
+          coordinates: [72.8777, 19.0760] // Default Mumbai coordinates [longitude, latitude]
         },
         specifications: {
-          totalArea: parseInt(propertyData.area) || 0,
-          builtUpArea: parseInt(propertyData.builtUpArea) || parseInt(propertyData.area) || 0,
-          floorNumber: parseInt(propertyData.floor) || 1,
-          totalFloors: parseInt(propertyData.totalFloors) || 1,
           bedrooms: parseInt(propertyData.bedrooms) || 0,
-          bathrooms: parseInt(propertyData.bathrooms) || 0,
-          amenities: propertyData.amenities || []
+          bathrooms: parseInt(propertyData.bathrooms) || 1,
+          area: {
+            carpet: parseInt(propertyData.area) || parseInt(propertyData.builtUpArea) || 1000,
+            builtUp: parseInt(propertyData.builtUpArea) || parseInt(propertyData.area) || 1000,
+            unit: 'sqft'
+          },
+          floor: {
+            current: parseInt(propertyData.floor) || 1,
+            total: parseInt(propertyData.totalFloors) || parseInt(propertyData.floor) || 1
+          },
+          parking: {
+            twoWheeler: 1,
+            fourWheeler: 1
+          }
+        },
+        rental: {
+          monthlyRent: parseInt(propertyData.price) || 10000,
+          securityDeposit: parseInt(propertyData.securityDeposit) || parseInt(propertyData.price) * 2 || 20000,
+          maintenanceCharges: {
+            amount: parseInt(propertyData.maintenanceCharges) || 2000,
+            included: propertyData.utilitiesIncluded || false
+          },
+          leaseDuration: {
+            minimum: 11, // 11 months minimum
+            unit: 'months'
+          },
+          availableFrom: new Date().toISOString(),
+          negotiable: true
+        },
+        amenities: {
+          basic: propertyData.amenities?.filter(a => ['furnished', 'air-conditioning', 'wifi', 'power-backup', 'lift'].includes(a)) || ['wifi'],
+          safety: propertyData.amenities?.filter(a => ['24x7-security', 'cctv', 'gated-community'].includes(a)) || ['24x7-security'],
+          utilities: ['water-supply', 'electricity', 'internet-ready']
         },
         images: propertyData.images || [],
         visibility: 'public',
