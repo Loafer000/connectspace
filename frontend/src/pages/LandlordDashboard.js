@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useProperty } from '../contexts/PropertyContext';
 import { useSearchParams } from 'react-router-dom';
 import AddPropertyModal from '../components/Property/AddPropertyModal';
 
 const LandlordDashboard = () => {
   const { user, isAuthenticated } = useAuth();
+  const { properties, fetchProperties, loading } = useProperty();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
   const [isAddPropertyModalOpen, setIsAddPropertyModalOpen] = useState(false);
@@ -29,8 +31,15 @@ const LandlordDashboard = () => {
     }
   }, [searchParams, setSearchParams]);
 
-  // Get properties from API or context
-  const [properties] = useState([]);
+  // Fetch properties when component mounts
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('🏠 LandlordDashboard: Fetching properties...');
+      fetchProperties();
+    }
+  }, [isAuthenticated, fetchProperties]);
+
+  // Properties now come from PropertyContext
 
   const tabs = [
     { id: 'overview', name: 'Overview', icon: '📊' },
@@ -146,23 +155,37 @@ const LandlordDashboard = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.length === 0 ? (
+        {loading ? (
           <div className="col-span-full text-center py-8 text-gray-500">
-            <p>No properties found. Add your first property to get started!</p>
+            <p>Loading properties...</p>
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="col-span-full text-center py-8 text-gray-500">
+            <div className="text-4xl mb-4">🏠</div>
+            <p className="text-lg font-medium mb-2">No properties yet</p>
+            <p className="text-sm mb-4">Add your first property to get started!</p>
+            <button 
+              onClick={() => setIsAddPropertyModalOpen(true)}
+              className="btn btn-primary"
+            >
+              + Add First Property
+            </button>
           </div>
         ) : properties.map((property) => (
-          <div key={property.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div key={property._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
             <img
-              src={property.images[0]}
+              src={property.images?.[0] || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800'}
               alt={property.title}
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
               <h3 className="font-semibold text-gray-900 mb-2">{property.title}</h3>
-              <p className="text-gray-600 text-sm mb-2">{property.location}</p>
+              <p className="text-gray-600 text-sm mb-2">
+                {property.address?.area}, {property.address?.city}
+              </p>
               <div className="flex justify-between items-center mb-3">
                 <span className="text-lg font-bold text-gray-900">
-                  ${property.price}/month
+                  ₹{property.rental?.monthlyRent?.toLocaleString()}/month
                 </span>
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                   property.status === 'rented' 
@@ -172,11 +195,9 @@ const LandlordDashboard = () => {
                   {property.status === 'rented' ? 'Rented' : 'Available'}
                 </span>
               </div>
-              {property.tenant && (
-                <p className="text-sm text-gray-600 mb-3">
-                  Tenant: {property.tenant}
-                </p>
-              )}
+              <div className="text-sm text-gray-600 mb-3">
+                <p>{property.propertyType} • {property.specifications?.totalArea} sq ft</p>
+              </div>
               <div className="flex space-x-2">
                 <button className="btn btn-secondary text-xs px-3 py-1">
                   Edit

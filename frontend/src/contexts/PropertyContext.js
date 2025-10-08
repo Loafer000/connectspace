@@ -229,14 +229,18 @@ export const PropertyProvider = ({ children }) => {
   const fetchProperties = useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await propertyAPI.getAllProperties();
+      console.log('🔍 Fetching all properties from backend...');
+      const response = await propertyAPI.getProperties(); // Fixed method name
+      console.log('📊 Properties response:', response);
+      
       if (response.success) {
+        console.log(`✅ Found ${response.data.properties.length} properties`);
         dispatch({ type: 'SET_PROPERTIES', payload: response.data.properties });
       } else {
         throw new Error(response.message || 'Failed to fetch properties');
       }
     } catch (error) {
-      console.error('Fetch properties error:', error);
+      console.error('❌ Fetch properties error:', error);
       dispatch({ type: 'SET_ERROR', payload: error.message });
       // Set empty array as fallback
       dispatch({ type: 'SET_PROPERTIES', payload: [] });
