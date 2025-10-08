@@ -59,7 +59,24 @@ const LoginForm = ({ onSwitchToRegister, onClose }) => {
       }
     } catch (err) {
       console.error('❌ Login error:', err);
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('❌ Error details:', {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message
+      });
+      
+      let errorMessage = 'Login failed. Please try again.';
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.response?.status === 401) {
+        errorMessage = 'Invalid email or password. Please check your credentials.';
+      } else if (err.response?.status === 500) {
+        errorMessage = 'Server error. Please try again in a moment.';
+      } else if (!navigator.onLine) {
+        errorMessage = 'No internet connection. Please check your network.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
