@@ -27,6 +27,10 @@ const Navbar = () => {
     { name: 'Contact', href: '/contact', icon: '📧' },
   ];
 
+  const premiumNavigation = [
+    { name: 'Advanced Features', href: '/advanced-features', premium: true },
+  ];
+
   const isActive = (path) => location.pathname === path;
 
   const handleLogout = () => {
@@ -85,20 +89,32 @@ const Navbar = () => {
                 </Link>
               ))}
               
-              {/* Premium Link */}
-              {isAuthenticated && (
-                <Link
-                  to="/advanced-features"
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 border ${
-                    isActive('/advanced-features')
-                      ? 'bg-gradient-to-r from-teal-500 to-indigo-500 text-white border-transparent'
-                      : 'border-teal-200 text-teal-600 hover:bg-teal-50'
-                  }`}
-                >
-                  <span>⭐</span>
-                  <span>Premium</span>
-                </Link>
-              )}
+              {/* Premium/Advanced Features Link */}
+              {premiumNavigation.map((item) => (
+                isAuthenticated ? (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 border ${
+                      isActive(item.href)
+                        ? 'bg-gradient-to-r from-teal-500 to-indigo-500 text-white border-transparent shadow-md'
+                        : 'border-teal-200 text-teal-600 hover:bg-teal-50'
+                    }`}
+                  >
+                    <span>⭐</span>
+                    <span>{item.name}</span>
+                  </Link>
+                ) : (
+                  <button
+                    key={item.name}
+                    onClick={() => openAuthModal('login')}
+                    className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 border border-teal-200 text-teal-600 hover:bg-teal-50"
+                  >
+                    <span>⭐</span>
+                    <span>{item.name}</span>
+                  </button>
+                )
+              ))}
             </div>
 
             {/* User Menu & CTA */}
@@ -176,7 +192,7 @@ const Navbar = () => {
                 <>
                   <button
                     onClick={() => openAuthModal('login')}
-                    className="hidden sm:inline-flex btn btn-secondary btn-sm"
+                    className="btn btn-secondary btn-sm"
                   >
                     Login
                   </button>
@@ -227,25 +243,43 @@ const Navbar = () => {
                   </Link>
                 ))}
 
-                {isAuthenticated && (
-                  <>
+                {/* Premium/Advanced Features in Mobile */}
+                {premiumNavigation.map((item) => (
+                  isAuthenticated ? (
                     <Link
-                      to="/dashboard"
+                      key={item.name}
+                      to={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-2"
+                      className={`px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2 border ${
+                        isActive(item.href)
+                          ? 'bg-teal-50 text-teal-700 border-teal-200'
+                          : 'text-teal-600 hover:bg-teal-50 border-teal-200'
+                      }`}
                     >
-                      <span className="text-lg">📊</span>
-                      <span>Dashboard</span>
+                      <span>⭐</span>
+                      <span>{item.name}</span>
                     </Link>
-                    <Link
-                      to="/advanced-features"
-                      onClick={() => setIsOpen(false)}
+                  ) : (
+                    <button
+                      key={item.name}
+                      onClick={() => openAuthModal('login')}
                       className="px-4 py-3 rounded-lg text-sm font-medium text-teal-600 hover:bg-teal-50 flex items-center gap-2 border border-teal-200"
                     >
                       <span>⭐</span>
-                      <span>Premium Features</span>
-                    </Link>
-                  </>
+                      <span>{item.name}</span>
+                    </button>
+                  )
+                ))}
+
+                {isAuthenticated && (
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-2"
+                  >
+                    <span className="text-lg">📊</span>
+                    <span>Dashboard</span>
+                  </Link>
                 )}
 
                 {!isAuthenticated && (
