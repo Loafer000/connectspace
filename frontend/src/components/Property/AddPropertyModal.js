@@ -28,6 +28,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [documents, setDocuments] = useState([]);
+  const [propertyImages, setPropertyImages] = useState([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
   const [amenities, setAmenities] = useState([]);
   const [usagePreferences, setUsagePreferences] = useState([]);
   const [customBusinessType, setCustomBusinessType] = useState('');
@@ -70,8 +73,14 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       return;
     }
     
+    // Validate images on step 3
+    if (currentStep === 3 && propertyImages.length === 0) {
+      toast.error('Please upload at least one property image to continue');
+      return;
+    }
+    
     setFormData(prev => ({ ...prev, ...data }));
-    if (currentStep < 4) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
       reset(); // Reset form for next step
     }
@@ -87,6 +96,84 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
     setDocuments(files);
+  };
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    
+    if (files.length === 0) return;
+    
+    // Validate file types
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'video/mp4', 'video/webm'];
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    
+    if (invalidFiles.length > 0) {
+      toast.error('Please upload only images (JPG, PNG, WebP) or videos (MP4, WebM)');
+      return;
+    }
+    
+    // Validate file sizes (max 10MB for images, 50MB for videos)
+    const oversizedFiles = files.filter(file => {
+      const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+      return file.size > maxSize;
+    });
+    
+    if (oversizedFiles.length > 0) {
+      toast.error('Images must be under 10MB, videos under 50MB');
+      return;
+    }
+    
+    setUploadingImages(true);
+    
+    try {
+      // Create preview URLs
+      const previews = files.map(file => URL.createObjectURL(file));
+      setImagePreviewUrls(prev => [...prev, ...previews]);
+      
+      // Upload to Cloudinary
+      const uploadedUrls = [];
+      
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'connectspace_properties'); // You'll need to create this preset in Cloudinary
+        formData.append('folder', 'properties');
+        
+        const cloudinaryUrl = file.type.startsWith('video/')
+          ? 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/video/upload'
+          : 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload';
+        
+        const response = await fetch(cloudinaryUrl, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.secure_url) {
+          uploadedUrls.push({
+            url: data.secure_url,
+            publicId: data.public_id,
+            type: file.type.startsWith('video/') ? 'video' : 'image'
+          });
+        }
+      }
+      
+      setPropertyImages(prev => [...prev, ...uploadedUrls]);
+      toast.success(`${files.length} file(s) uploaded successfully!`);
+      
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error('Failed to upload images. Please try again.');
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const removeImage = (index) => {
+    setPropertyImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviewUrls(prev => prev.filter((_, i) => i !== index));
+    toast.success('Image removed');
   };
 
   const toggleAmenity = (amenity) => {
@@ -110,7 +197,8 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
         type: file.type
       })),
       location: `${formData.address}, ${formData.city}, ${formData.pincode}`,
-      images: [], // Real images will be uploaded
+      images: propertyImages.map(img => img.url), // Extract URLs for backend
+      imageDetails: propertyImages, // Full details including publicId for future management
     };
 
     try {
@@ -136,6 +224,8 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     setCurrentStep(1);
     setFormData({});
     setDocuments([]);
+    setPropertyImages([]);
+    setImagePreviewUrls([]);
     setAmenities([]);
     setUsagePreferences([]);
     setCustomBusinessType('');
@@ -396,6 +486,115 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   );
 
   const renderStep3 = () => (
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Property Images & Videos</h3>
+      
+      {/* Upload Section */}
+      <div className="border-2 border-dashed border-teal-300 rounded-lg p-6 bg-teal-50/30">
+        <div className="text-center">
+          <svg className="mx-auto h-12 w-12 text-teal-600" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <div className="mt-4">
+            <label htmlFor="image-upload" className="cursor-pointer">
+              <span className="mt-2 block text-sm font-medium text-teal-900">
+                Upload Property Images/Videos *
+              </span>
+              <p className="text-xs text-teal-700 mt-1">
+                JPG, PNG, WebP (max 10MB) | MP4, WebM (max 50MB)
+              </p>
+              <p className="text-xs text-teal-600 mt-1">
+                Upload multiple files to showcase your property
+              </p>
+            </label>
+            <input
+              id="image-upload"
+              name="image-upload"
+              type="file"
+              multiple
+              accept="image/jpeg,image/jpg,image/png,image/webp,video/mp4,video/webm"
+              onChange={handleImageUpload}
+              disabled={uploadingImages}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => document.getElementById('image-upload').click()}
+              disabled={uploadingImages}
+              className="mt-4 px-6 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {uploadingImages ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Uploading...
+                </span>
+              ) : (
+                'Choose Files'
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Preview Section */}
+      {propertyImages.length > 0 && (
+        <div className="space-y-3">
+          <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Uploaded Media ({propertyImages.length})
+          </h4>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {propertyImages.map((img, index) => (
+              <div key={index} className="relative group rounded-lg overflow-hidden border-2 border-gray-200 hover:border-teal-500 transition-colors">
+                {img.type === 'video' ? (
+                  <video
+                    src={img.url}
+                    className="w-full h-32 object-cover"
+                    controls
+                  />
+                ) : (
+                  <img
+                    src={img.url}
+                    alt={`Property ${index + 1}`}
+                    className="w-full h-32 object-cover"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
+                  title="Remove"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                  <span className="text-xs text-white font-medium">
+                    {img.type === 'video' ? '🎥 Video' : '📷 Image'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {propertyImages.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-sm text-gray-500">No media uploaded yet</p>
+          <p className="text-xs text-gray-400 mt-1">Please upload at least one image to continue</p>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderStep4 = () => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Description & Amenities</h3>
       
@@ -442,9 +641,23 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     </div>
   );
 
-  const renderStep4 = () => (
+  const renderStep5 = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Document Upload</h3>
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+        <div className="flex items-start gap-3">
+          <svg className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+          <div>
+            <h4 className="text-sm font-semibold text-amber-900">Admin Verification Documents</h4>
+            <p className="text-xs text-amber-700 mt-1">
+              These documents are only visible to administrators for property verification. They will not be shown to users.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Document Upload (For Admin Verification)</h3>
       
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
         <div className="text-center">
@@ -454,9 +667,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           <div className="mt-4">
             <label htmlFor="file-upload" className="cursor-pointer">
               <span className="mt-2 block text-sm font-medium text-gray-900">
-                Upload Required Documents *
+                Upload Verification Documents (Optional)
               </span>
-              <p className="text-xs text-gray-500">Sale Deed, Property Tax Receipt, etc.</p>
+              <p className="text-xs text-gray-500">Sale Deed, Property Tax Receipt, NOC, etc.</p>
             </label>
             <input
               id="file-upload"
@@ -511,6 +724,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       case 2: return renderStep2();
       case 3: return renderStep3();
       case 4: return renderStep4();
+      case 5: return renderStep5();
       default: return null;
     }
   };
@@ -532,23 +746,23 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
         {/* Progress Steps */}
         <div className="flex justify-between items-center mb-8">
-          {[1, 2, 3, 4].map((step) => (
+          {[1, 2, 3, 4, 5].map((step) => (
             <div key={step} className="flex items-center">
               <div className={`rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium ${
-                step <= currentStep ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'
+                step <= currentStep ? 'bg-teal-600 text-white' : 'bg-gray-200 text-gray-600'
               }`}>
                 {step}
               </div>
-              {step < 4 && (
-                <div className={`w-12 h-1 mx-2 ${
-                  step < currentStep ? 'bg-primary-600' : 'bg-gray-200'
+              {step < 5 && (
+                <div className={`w-8 h-1 mx-1 ${
+                  step < currentStep ? 'bg-teal-600' : 'bg-gray-200'
                 }`} />
               )}
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit(currentStep === 4 ? handleFinalSubmit : handleNext)}>
+        <form onSubmit={handleSubmit(currentStep === 5 ? handleFinalSubmit : handleNext)}>
           {renderStepContent()}
 
           {/* Navigation Buttons */}
