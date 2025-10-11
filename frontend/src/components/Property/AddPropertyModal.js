@@ -20,7 +20,9 @@ const step2Schema = yup.object({
   bathrooms: yup.number().min(0, 'Bathrooms cannot be negative'),
 });
 
-const step3Schema = yup.object({
+// Step 3 is images (no form validation needed)
+// Step 4 is description
+const step4Schema = yup.object({
   description: yup.string().min(50, 'Description must be at least 50 characters').required('Description is required'),
 });
 
@@ -41,7 +43,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     switch (currentStep) {
       case 1: return step1Schema;
       case 2: return step2Schema;
-      case 3: return step3Schema;
+      case 3: return yup.object({}); // Step 3 is images (no form validation)
+      case 4: return step4Schema; // Step 4 is description
+      case 5: return yup.object({}); // Step 5 is documents (no form validation)
       default: return yup.object({});
     }
   };
