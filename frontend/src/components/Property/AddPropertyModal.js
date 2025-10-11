@@ -595,6 +595,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           <p className="text-xs text-gray-400 mt-1">Please upload at least one image to continue</p>
         </div>
       )}
+
+      {/* Hidden field to make form submittable */}
+      <input type="hidden" {...register('images')} value={propertyImages.length} />
     </div>
   );
 
