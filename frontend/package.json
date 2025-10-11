@@ -42,6 +42,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "vercel-build": "npm run build",
     "build:fallback": "npx react-scripts build",
     "test": "react-scripts test --coverage --watchAll=false",
     "test:watch": "react-scripts test",
