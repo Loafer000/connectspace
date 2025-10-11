@@ -109,38 +109,60 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-// Optional authentication (user can be null)
+// Optional authentication (guest allowed)
 const optionalAuth = async (req, res, next) => {
   try {
     let token;
 
-    // Get token from header
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
+
+      if (token && SecurityValidator.validateJWTFormat(token)) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || securityConfig.JWT_SECRET);
+        const user = await User.findById(decoded.userId).select('-password -refreshTokens');
+
+        if (user && !user.isDeleted && user.status !== 'suspended' && user.status !== 'banned') {
+          req.user = user;
+        }
+      }
     }
 
-    if (!token) {
-      req.user = null;
-      return next();
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Get user from database
-    const user = await User.findById(decoded.userId).select('-password -refreshTokens');
-
-    if (user && !user.isDeleted) {
-      req.user = user;
-    } else {
-      req.user = null;
-    }
-
+    // Continue even without authentication
     next();
   } catch (error) {
-    // If token is invalid, just continue without user
-    req.user = null;
+    console.log('Optional auth failed, continuing as guest:', error.message);
     next();
+  }
+};
+
+// Admin-only middleware (checks if user is admin)
+// NOTE: Requires admin role field in User model (to be added)
+const isAdmin = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
+    }
+
+    // Check if user has admin role
+    // TODO: Add 'role' field to User model and set it to 'admin' for admin users
+    if (req.user.role !== 'admin' && req.user.email !== process.env.ADMIN_EMAIL) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin privileges required.'
+      });
+    }
+
+    console.log(`✅ Admin access granted: ${req.user.email}`);
+    next();
+  } catch (error) {
+    console.error('Admin check error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error checking admin privileges'
+    });
   }
 };
 
@@ -255,5 +277,6 @@ module.exports = {
   authorize,
   checkOwnership,
   requireVerification,
-  requireCompleteProfile
+  requireCompleteProfile,
+  isAdmin
 };

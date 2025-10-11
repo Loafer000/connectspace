@@ -131,9 +131,69 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
-    setDocuments(files);
+    if (files.length === 0) return;
+    
+    // Validate file types
+    const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    
+    if (invalidFiles.length > 0) {
+      toast.error('Please upload only PDF, DOC, DOCX, or image files');
+      return;
+    }
+    
+    // Validate file sizes (max 10MB per document)
+    const oversizedFiles = files.filter(file => file.size > 10 * 1024 * 1024);
+    
+    if (oversizedFiles.length > 0) {
+      toast.error('Documents must be under 10MB each');
+      return;
+    }
+    
+    setUploadingImages(true); // Reuse the loading state
+    
+    try {
+      // Upload documents to Cloudinary
+      const uploadedDocs = [];
+      
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'connectspace_properties');
+        formData.append('folder', 'properties/documents'); // Separate folder for documents
+        formData.append('resource_type', 'auto'); // Auto-detect file type
+        
+        const cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dljvt4fkw/auto/upload';
+        
+        const response = await fetch(cloudinaryUrl, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.secure_url) {
+          uploadedDocs.push({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: data.secure_url,
+            publicId: data.public_id
+          });
+        }
+      }
+      
+      setDocuments(prevDocs => [...prevDocs, ...uploadedDocs]);
+      toast.success(`${files.length} document(s) uploaded successfully!`);
+      
+    } catch (error) {
+      console.error('Document upload error:', error);
+      toast.error('Failed to upload documents. Please try again.');
+    } finally {
+      setUploadingImages(false);
+    }
   };
 
   const handleImageUpload = async (e) => {
@@ -240,10 +300,12 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       amenities,
       usagePreferences,
       customBusinessType: hasOthersCustom ? customBusinessType : null,
-      documents: documents.map(file => ({
-        name: file.name,
-        size: file.size,
-        type: file.type
+      documents: documents.map(doc => ({
+        name: doc.name,
+        size: doc.size,
+        type: doc.type,
+        url: doc.url,
+        publicId: doc.publicId
       })),
       location: `${formData.address}, ${formData.city}, ${formData.pincode}`,
       images: propertyImages.map(img => img.url), // Extract URLs for backend
