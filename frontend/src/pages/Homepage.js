@@ -5,9 +5,6 @@ import { useProperty } from '../contexts/PropertyContext';
 import AuthModal from '../components/Auth/AuthModal';
 import SearchBar from '../components/Search/SearchBar';
 import FeaturedProperties from '../components/Property/FeaturedProperties';
-import Hero from '../components/Home/Hero';
-import Features from '../components/Home/Features';
-import Testimonials from '../components/Home/Testimonials';
 
 const Homepage = () => {
   const { isAuthenticated } = useAuth();
@@ -17,6 +14,7 @@ const Homepage = () => {
     isOpen: false,
     type: 'login'
   });
+  const [selectedPropertyType, setSelectedPropertyType] = useState('all');
 
   // Fetch properties on component mount
   useEffect(() => {
@@ -25,10 +23,8 @@ const Homepage = () => {
 
   const handleListProperty = () => {
     if (isAuthenticated) {
-      // Redirect to dashboard with add property intent
       navigate('/dashboard?tab=properties&action=add');
     } else {
-      // Open login modal first
       setAuthModal({ isOpen: true, type: 'login' });
     }
   };
@@ -40,188 +36,238 @@ const Homepage = () => {
     setAuthModal({ isOpen: false, type: 'login' });
   };
 
-  return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <Hero />
+  // Property types for quick navigation
+  const propertyTypes = [
+    { id: 'all', name: 'All Properties', icon: '🏢', count: properties.length },
+    { id: 'office', name: 'Office Space', icon: '💼', count: properties.filter(p => p.propertyType === 'office').length },
+    { id: 'shop', name: 'Retail Shops', icon: '🏪', count: properties.filter(p => p.propertyType === 'shop').length },
+    { id: 'apartment', name: 'Co-working', icon: '👥', count: properties.filter(p => p.propertyType === 'apartment').length },
+  ];
 
-      {/* Search Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-gradient-to-r from-indigo-400 to-blue-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
-        </div>
+  // Quick stats
+  const stats = [
+    { label: 'Properties', value: '5,000+', icon: '🏢' },
+    { label: 'Happy Clients', value: '10,000+', icon: '😊' },
+    { label: 'Cities', value: '50+', icon: '🌆' },
+    { label: 'Verified', value: '100%', icon: '✅' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Compact Hero with Integrated Search */}
+      <section className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 pt-4 pb-8 md:pt-6 md:pb-12">
+        <div className="absolute inset-0 bg-black opacity-10"></div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 transform hover:scale-105 transition-transform duration-300">
-            <div className="inline-block">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 animate-fade-in">
-                Find Your Perfect Commercial Space
-              </h2>
-              <div className="h-1 w-32 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto mb-6 rounded-full"></div>
-            </div>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-              Discover premium commercial properties with cutting-edge facilities and prime locations
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 relative z-10">
+          {/* Compact Header */}
+          <div className="text-center mb-4 md:mb-6">
+            <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
+              Find Your Perfect Space
+            </h1>
+            <p className="text-sm md:text-base text-indigo-100">
+              Commercial properties across India
             </p>
           </div>
-          <div className="transform hover:scale-102 transition-transform duration-500">
+
+          {/* Integrated Search Bar */}
+          <div className="max-w-4xl mx-auto">
             <SearchBar />
           </div>
-        </div>
-      </section>
 
-      {/* Featured Properties */}
-      <section className="py-20 bg-white relative">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-50/50 to-transparent"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl mb-6 transform hover:rotate-12 transition-transform duration-300">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent mb-6">
-              Premium Commercial Spaces
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Handpicked properties that combine location, amenities, and value for your business success
-            </p>
-          </div>
-          
-          <FeaturedProperties properties={featuredProperties} loading={loading} />
-          
-          <div className="text-center mt-12">
-            <Link
-              to="/search"
-              className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-2xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 hover:shadow-2xl transition-all duration-300"
-            >
-              <span>Explore All Properties</span>
-              <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+          {/* Quick Stats - Compact */}
+          <div className="grid grid-cols-4 gap-2 md:gap-4 max-w-3xl mx-auto mt-6">
+            {stats.map((stat, index) => (
+              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 md:p-3 text-center">
+                <div className="text-lg md:text-2xl mb-1">{stat.icon}</div>
+                <div className="text-xs md:text-sm font-bold text-white">{stat.value}</div>
+                <div className="text-xs text-indigo-200 hidden md:block">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <Features />
-
-      {/* Advanced Features Preview Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-72 h-72 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl mb-6">
-              <span className="text-2xl">⭐</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Premium Advanced Features
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Unlock enterprise-level property management with our advanced analytics, AI-powered insights, and comprehensive automation tools.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white/10 backdrop-filter backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
-              <div className="text-4xl mb-4">📊</div>
-              <h3 className="text-xl font-bold text-white mb-3">Advanced Analytics</h3>
-              <p className="text-gray-300">Real-time revenue tracking, occupancy metrics, and comprehensive performance insights.</p>
-            </div>
-            
-            <div className="bg-white/10 backdrop-filter backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
-              <div className="text-4xl mb-4">🤖</div>
-              <h3 className="text-xl font-bold text-white mb-3">AI-Powered Insights</h3>
-              <p className="text-gray-300">Smart recommendations, predictive maintenance, and automated workflow management.</p>
-            </div>
-            
-            <div className="bg-white/10 backdrop-filter backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300">
-              <div className="text-4xl mb-4">💳</div>
-              <h3 className="text-xl font-bold text-white mb-3">Financial Management</h3>
-              <p className="text-gray-300">Advanced payment processing, automated collections, and comprehensive reporting.</p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            {isAuthenticated ? (
-              <Link
-                to="/advanced-features"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-xl"
-              >
-                <span>⭐</span>
-                Access Advanced Features
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            ) : (
+      {/* Property Type Quick Navigation */}
+      <section className="bg-white py-4 border-b sticky top-0 z-40 shadow-sm">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between overflow-x-auto scrollbar-hide gap-2">
+            {propertyTypes.map((type) => (
               <button
-                onClick={() => setAuthModal({ isOpen: true, type: 'login' })}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                key={type.id}
+                onClick={() => setSelectedPropertyType(type.id)}
+                className={`flex-shrink-0 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all ${
+                  selectedPropertyType === type.id
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
               >
-                <span>🔐</span>
-                Login to Access Premium Features
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <span className="mr-1">{type.icon}</span>
+                <span className="hidden sm:inline">{type.name}</span>
+                <span className="sm:hidden">{type.name.split(' ')[0]}</span>
+                {type.count > 0 && (
+                  <span className="ml-1 text-xs opacity-75">({type.count})</span>
+                )}
               </button>
-            )}
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <Testimonials />
-
-      {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 animate-pulse"></div>
-          <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-cyan-400/30 to-blue-400/30 rounded-full filter blur-3xl animate-float"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-purple-400/30 to-pink-400/30 rounded-full filter blur-3xl animate-float animation-delay-2000"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="transform hover:scale-105 transition-transform duration-300">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl mb-8 transform hover:rotate-12 transition-transform duration-300">
-              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+      {/* Featured Properties - Compact Grid */}
+      <section className="py-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          {/* Section Header - Compact */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                Featured Properties
+              </h2>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">
+                Handpicked spaces for your business
+              </p>
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Ready to <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Transform</span> Your Business?
-            </h2>
-            <p className="text-2xl text-indigo-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of successful businesses who found their perfect commercial space with ConnectSpace
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link
               to="/search"
-              className="group px-10 py-5 bg-white text-indigo-900 font-bold rounded-2xl hover:bg-gray-100 transform hover:scale-110 hover:shadow-2xl transition-all duration-300 flex items-center"
+              className="text-sm md:text-base text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
             >
-              <svg className="w-6 h-6 mr-3 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              View All
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-              Start Your Search
             </Link>
-            <button
-              onClick={handleListProperty}
-              className="group px-10 py-5 border-2 border-white text-white font-bold rounded-2xl hover:bg-white hover:text-indigo-900 transform hover:scale-110 hover:shadow-2xl transition-all duration-300 flex items-center"
-            >
-              List Your Property
-            </button>
+          </div>
+
+          <FeaturedProperties properties={featuredProperties} loading={loading} />
+        </div>
+      </section>
+
+      {/* Why Choose Us - Compact Icons */}
+      <section className="py-8 bg-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 text-center">
+            Why Choose ConnectSpace
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+              <div className="text-3xl mb-2">🔒</div>
+              <h4 className="font-semibold text-sm md:text-base text-gray-900">Verified Properties</h4>
+              <p className="text-xs text-gray-600 mt-1">100% authentic listings</p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+              <div className="text-3xl mb-2">💰</div>
+              <h4 className="font-semibold text-sm md:text-base text-gray-900">Best Prices</h4>
+              <p className="text-xs text-gray-600 mt-1">Competitive rates</p>
+            </div>
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+              <div className="text-3xl mb-2">🤝</div>
+              <h4 className="font-semibold text-sm md:text-base text-gray-900">Expert Support</h4>
+              <p className="text-xs text-gray-600 mt-1">24/7 assistance</p>
+            </div>
+            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-4 text-center hover:shadow-md transition-shadow">
+              <div className="text-3xl mb-2">⚡</div>
+              <h4 className="font-semibold text-sm md:text-base text-gray-900">Quick Process</h4>
+              <p className="text-xs text-gray-600 mt-1">Fast bookings</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section - Compact */}
+      <section className="py-8 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+              Our Services
+            </h3>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { icon: '📊', title: 'Analytics', desc: 'Track performance' },
+              { icon: '🤖', title: 'AI Insights', desc: 'Smart recommendations' },
+              { icon: '💳', title: 'Payments', desc: 'Secure transactions' },
+              { icon: '📄', title: 'Legal Docs', desc: 'Agreement support' },
+            ].map((service, index) => (
+              <div key={index} className="bg-white rounded-lg p-4 hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="text-3xl mb-2">{service.icon}</div>
+                <h4 className="font-semibold text-sm text-gray-900">{service.title}</h4>
+                <p className="text-xs text-gray-600 mt-1">{service.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Compact CTA Banner */}
+      <section className="py-8 bg-gradient-to-r from-indigo-600 to-purple-600">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left">
+              <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                Ready to Find Your Perfect Space?
+              </h3>
+              <p className="text-sm md:text-base text-indigo-100">
+                Join thousands of businesses who found success with us
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                to="/search"
+                className="px-6 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm md:text-base"
+              >
+                Browse Properties
+              </Link>
+              <button
+                onClick={handleListProperty}
+                className="px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-indigo-600 transition-colors text-sm md:text-base"
+              >
+                List Property
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials - Compact Slider */}
+      <section className="py-8 bg-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 text-center">
+            What Our Clients Say
+          </h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { name: 'Rajesh Kumar', role: 'Business Owner', rating: 5, text: 'Found the perfect office space in just 2 days!' },
+              { name: 'Priya Sharma', role: 'Retail Manager', rating: 5, text: 'Excellent service and verified properties.' },
+              { name: 'Amit Patel', role: 'Startup Founder', rating: 5, text: 'Best platform for commercial real estate.' },
+            ].map((testimonial, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-1 mb-2">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i} className="text-yellow-400">⭐</span>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 mb-3">"{testimonial.text}"</p>
+                <div>
+                  <p className="font-semibold text-sm text-gray-900">{testimonial.name}</p>
+                  <p className="text-xs text-gray-600">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-6 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 text-center">
+          <p className="text-sm md:text-base mb-2">
+            Have questions? We're here to help!
+          </p>
+          <div className="flex items-center justify-center gap-4 text-xs md:text-sm">
+            <a href="tel:+911234567890" className="hover:text-indigo-400">📞 Call Us</a>
+            <span>•</span>
+            <a href="mailto:support@connectspace.com" className="hover:text-indigo-400">✉️ Email</a>
+            <span>•</span>
+            <Link to="/support" className="hover:text-indigo-400">💬 Chat</Link>
           </div>
         </div>
       </section>
@@ -232,7 +278,6 @@ const Homepage = () => {
         initialMode={authModal.type}
         onClose={closeAuthModal}
         onSuccess={() => {
-          // Redirect to dashboard with add property action after successful login
           navigate('/dashboard?tab=properties&action=add');
         }}
       />
