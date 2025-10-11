@@ -213,6 +213,12 @@ export const PropertyProvider = ({ children }) => {
           }
           return null;
         }).filter(Boolean) || [],
+        documents: propertyData.documents?.map(doc => ({
+          name: doc.name,
+          url: doc.url,
+          publicId: doc.publicId,
+          type: 'other' // Can be: 'ownership-proof', 'noc', 'floor-plan', 'other'
+        })) || [],
         visibility: 'public',
         status: 'available'
       };
