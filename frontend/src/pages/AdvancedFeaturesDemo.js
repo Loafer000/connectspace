@@ -18,84 +18,92 @@ const AdvancedFeaturesDemo = () => {
   }
 
   return (
-    <div className="advanced-features-demo">
-      {/* Simple Header */}
-      <header className="demo-header">
-        <div className="container">
-          <h1>Advanced Features</h1>
-          <p>Professional property management tools</p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 sticky top-16 z-40">
+        <div className="container-custom py-6">
+          <h1 className="text-3xl font-bold text-gray-900">Advanced Features</h1>
+          <p className="text-gray-600 mt-2">Professional property management tools</p>
         </div>
       </header>
 
       {/* Clean Navigation Grid */}
-      <nav className="features-nav">
-        <div className="container">
-          <div className="features-grid">
-            <Link to="analytics" className="feature-card">
-              <div className="feature-icon">📊</div>
-              <h3>Analytics</h3>
-              <p>Performance insights</p>
-            </Link>
-            
-            <Link to="landlord" className="feature-card">
-              <div className="feature-icon">🏠</div>
-              <h3>Landlord Tools</h3>
-              <p>Property management</p>
-            </Link>
-            
-            <Link to="financial" className="feature-card">
-              <div className="feature-icon">💳</div>
-              <h3>Financial</h3>
-              <p>Payments & reports</p>
-            </Link>
-            
-            <Link to="maintenance" className="feature-card">
-              <div className="feature-icon">🔧</div>
-              <h3>Maintenance</h3>
-              <p>Work orders & IoT</p>
-            </Link>
-            
-            <Link to="ai" className="feature-card">
-              <div className="feature-icon">🤖</div>
-              <h3>AI Features</h3>
-              <p>Smart automation</p>
-            </Link>
-            
-            <Link to="tenants" className="feature-card">
-              <div className="feature-icon">👥</div>
-              <h3>Tenants</h3>
-              <p>Tenant lifecycle</p>
-            </Link>
-            
-            <Link to="agents" className="feature-card">
-              <div className="feature-icon">🏆</div>
-              <h3>Agents</h3>
-              <p>Performance tracking</p>
-            </Link>
-          </div>
+      <div className="container-custom section">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <Link to="analytics" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">📊</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Analytics</h3>
+              <p className="text-gray-600 text-sm">Performance insights</p>
+            </div>
+          </Link>
+          
+          <Link to="landlord" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🏠</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Landlord Tools</h3>
+              <p className="text-gray-600 text-sm">Property management</p>
+            </div>
+          </Link>
+          
+          <Link to="financial" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">💳</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Financial</h3>
+              <p className="text-gray-600 text-sm">Payments & reports</p>
+            </div>
+          </Link>
+          
+          <Link to="maintenance" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🔧</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Maintenance</h3>
+              <p className="text-gray-600 text-sm">Work orders & IoT</p>
+            </div>
+          </Link>
+          
+          <Link to="ai" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🤖</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">AI Features</h3>
+              <p className="text-gray-600 text-sm">Smart automation</p>
+            </div>
+          </Link>
+          
+          <Link to="tenants" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">👥</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Tenants</h3>
+              <p className="text-gray-600 text-sm">Tenant lifecycle</p>
+            </div>
+          </Link>
+          
+          <Link to="agents" className="card card-hover group">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🏆</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Agents</h3>
+              <p className="text-gray-600 text-sm">Performance tracking</p>
+            </div>
+          </Link>
         </div>
-      </nav>
+      </div>
 
       {/* Main Content */}
-      <main className="main-content">
+      <main className="container-custom pb-16">
         <Routes>
           <Route index element={<AuthenticatedWelcome user={user} />} />
           <Route path="analytics" element={
-            <div className="min-h-screen bg-gray-50 p-6">
-              <div className="max-w-7xl mx-auto text-center py-12">
-                <div className="text-6xl mb-4">📊</div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">Advanced Analytics</h1>
-                <p className="text-gray-600">Comprehensive analytics dashboard will be available here.</p>
-              </div>
+            <div className="card text-center max-w-2xl mx-auto">
+              <div className="text-6xl mb-4">📊</div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">Advanced Analytics</h1>
+              <p className="text-gray-600">Comprehensive analytics dashboard will be available here.</p>
             </div>
           } />
           <Route path="landlord" element={
-            <div className="min-h-screen bg-gray-50">
-              <div className="max-w-7xl mx-auto text-center py-12">
-                <div className="text-6xl mb-4">🏠</div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">Advanced Landlord Tools</h1>
-                <p className="text-gray-600">Advanced landlord management tools will be available here.</p>
-              </div>
+            <div className="card text-center max-w-2xl mx-auto">
+              <div className="text-6xl mb-4">🏠</div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">Advanced Landlord Tools</h1>
+              <p className="text-gray-600">Advanced landlord management tools will be available here.</p>
             </div>
           } />
           <Route path="financial" element={<PaymentFinancialSystem />} />
