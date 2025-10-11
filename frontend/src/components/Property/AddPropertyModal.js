@@ -72,6 +72,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
   const handleNext = (data) => {
     console.log('handleNext called, step:', currentStep, 'data:', data);
+    console.log('Current formData before merge:', formData);
     
     // Validate usage preferences on step 1
     if (currentStep === 1 && usagePreferences.length === 0) {
@@ -85,10 +86,15 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       return;
     }
     
-    setFormData(prev => ({ ...prev, ...data }));
+    // Merge current step data with existing formData
+    const updatedFormData = { ...formData, ...data };
+    console.log('Updated formData after merge:', updatedFormData);
+    setFormData(updatedFormData);
+    
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
-      reset(); // Reset form for next step
+      // Don't reset - we need to keep the data
+      // reset();
     }
   };
 
@@ -221,6 +227,13 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   };
 
   const handleFinalSubmit = async (data) => {
+    console.log('🔵 handleFinalSubmit called with data:', data);
+    console.log('🔵 formData:', formData);
+    console.log('🔵 amenities:', amenities);
+    console.log('🔵 usagePreferences:', usagePreferences);
+    console.log('🔵 documents:', documents);
+    console.log('🔵 propertyImages:', propertyImages);
+    
     const finalData = {
       ...formData,
       ...data,
