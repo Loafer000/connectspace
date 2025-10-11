@@ -152,8 +152,8 @@ export const PropertyProvider = ({ children }) => {
         propertyType: propertyData.propertyType || 'office',
         category: propertyData.category || 'commercial',
         address: {
-          street: propertyData.address,
-          area: propertyData.area || propertyData.city,
+          street: propertyData.address || 'Not specified',
+          area: propertyData.city || 'Not specified', // Use city as area since we don't collect area separately
           city: propertyData.city,
           state: propertyData.state || 'Maharashtra',
           pincode: propertyData.pincode,
@@ -168,8 +168,8 @@ export const PropertyProvider = ({ children }) => {
           bedrooms: parseInt(propertyData.bedrooms) || 0,
           bathrooms: parseInt(propertyData.bathrooms) || 1,
           area: {
-            carpet: parseInt(propertyData.area) || parseInt(propertyData.builtUpArea) || 1000,
-            builtUp: parseInt(propertyData.builtUpArea) || parseInt(propertyData.area) || 1000,
+            carpet: parseInt(propertyData.area) || 1000, // This is the property size in sq ft
+            builtUp: parseInt(propertyData.area) || 1000,
             unit: 'sqft'
           },
           floor: {
