@@ -111,6 +111,17 @@ const PropertyDetails = () => {
     );
   }
 
+  // Ensure required data exists with safe defaults
+  const safeProperty = {
+    ...currentProperty,
+    images: Array.isArray(currentProperty.images) ? currentProperty.images : [],
+    amenities: Array.isArray(currentProperty.amenities) ? currentProperty.amenities : [],
+    price: currentProperty.price || currentProperty.rental?.monthlyRent || 0,
+    location: currentProperty.location || currentProperty.address?.city || 'Location not specified',
+    propertyType: currentProperty.propertyType || 'Property',
+    title: currentProperty.title || 'Property Details'
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -122,19 +133,19 @@ const PropertyDetails = () => {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                 </svg>
-                {currentProperty.propertyType}
+                {safeProperty.propertyType}
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-                {currentProperty.title}
+                {safeProperty.title}
               </h1>
               <p className="text-lg text-gray-600 flex items-center mb-4">
                 <svg className="w-5 h-5 mr-2 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
-                {currentProperty.location}
+                {safeProperty.location}
               </p>
               <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-2xl font-bold rounded-xl">
-                ₹{currentProperty.price?.toLocaleString()}<span className="text-base font-normal">/month</span>
+                ₹{safeProperty.price?.toLocaleString()}<span className="text-base font-normal">/month</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -169,12 +180,12 @@ const PropertyDetails = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
             <div className="animate-fade-in animation-delay-100">
-              <ImageGallery images={currentProperty.images} />
+              <ImageGallery images={safeProperty.images} />
             </div>
 
             {/* Property Information */}
             <div className="animate-fade-in animation-delay-200">
-              <PropertyInfo property={currentProperty} />
+              <PropertyInfo property={safeProperty} />
             </div>
 
             {/* Map */}
@@ -189,8 +200,8 @@ const PropertyDetails = () => {
               </div>
               <div className="h-64">
                 <MapView 
-                  properties={[currentProperty]} 
-                  center={currentProperty.coordinates}
+                  properties={[safeProperty]} 
+                  center={currentProperty.coordinates || currentProperty.location?.coordinates}
                   zoom={15}
                 />
               </div>
@@ -198,7 +209,7 @@ const PropertyDetails = () => {
 
             {/* Reviews */}
             <div className="animate-fade-in animation-delay-400">
-              <Reviews reviews={currentProperty.reviews} />
+              <Reviews reviews={currentProperty.reviews || []} />
             </div>
           </div>
 
@@ -209,11 +220,11 @@ const PropertyDetails = () => {
               <div className="card animate-fade-in animation-delay-200">
                 <div className="text-center mb-6">
                   <div className="text-3xl font-bold text-gray-900">
-                    ₹{currentProperty.price}
+                    ₹{safeProperty.price}
                     <span className="text-lg font-normal text-gray-600">/month</span>
                   </div>
                 </div>
-                <ContactLandlord landlord={currentProperty.landlord} />
+                <ContactLandlord landlord={currentProperty.landlord || {}} />
                 
                 {/* Booking Actions */}
                 <div className="mt-6 space-y-3">
@@ -255,31 +266,31 @@ const PropertyDetails = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Type</span>
-                    <span className="badge badge-secondary">{currentProperty.propertyType}</span>
+                    <span className="badge badge-secondary">{safeProperty.propertyType}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Floors</span>
-                    <span className="font-medium text-gray-900">{currentProperty.floors || 1}</span>
+                    <span className="font-medium text-gray-900">{currentProperty.floors || currentProperty.specifications?.floor?.total || 1}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Parking Spaces</span>
-                    <span className="font-medium text-gray-900">{currentProperty.parkingSpaces || 0}</span>
+                    <span className="font-medium text-gray-900">{currentProperty.parkingSpaces || (currentProperty.specifications?.parking?.twoWheeler + currentProperty.specifications?.parking?.fourWheeler) || 0}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Area</span>
-                    <span className="font-medium text-gray-900">{currentProperty.area} sq ft</span>
+                    <span className="font-medium text-gray-900">{currentProperty.area || currentProperty.specifications?.area?.carpet || 1000} sq ft</span>
                   </div>
                 </div>
               </div>
 
               {/* Amenities */}
-              {currentProperty.amenities && currentProperty.amenities.length > 0 && (
+              {safeProperty.amenities && safeProperty.amenities.length > 0 && (
                 <div className="card animate-fade-in animation-delay-400">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Amenities
                   </h3>
                   <div className="grid grid-cols-1 gap-2">
-                    {currentProperty.amenities.map((amenity, index) => (
+                    {safeProperty.amenities.map((amenity, index) => (
                       <div key={index} className="flex items-center text-sm text-gray-700">
                         <svg className="w-4 h-4 text-teal-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -298,7 +309,7 @@ const PropertyDetails = () => {
       {/* Booking Modal */}
       {showBookingModal && (
         <PropertyBooking
-          property={currentProperty}
+          property={safeProperty}
           initialTab={typeof showBookingModal === 'string' ? showBookingModal : 'inquiry'}
           onClose={() => setShowBookingModal(false)}
           onSubmit={handleBookingSubmit}
