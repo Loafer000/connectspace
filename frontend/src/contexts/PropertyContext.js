@@ -200,7 +200,19 @@ export const PropertyProvider = ({ children }) => {
           safety: propertyData.amenities?.filter(a => ['24x7-security', 'cctv', 'gated-community'].includes(a)) || ['24x7-security'],
           utilities: ['water-supply', 'electricity', 'internet-ready']
         },
-        images: propertyData.images?.map(img => typeof img === 'string' ? img : img.url).filter(Boolean) || [],
+        images: propertyData.images?.map(img => {
+          if (typeof img === 'string') {
+            return { url: img, isPrimary: false };
+          } else if (img.url) {
+            return {
+              url: img.url,
+              publicId: img.publicId,
+              isPrimary: false,
+              category: 'other'
+            };
+          }
+          return null;
+        }).filter(Boolean) || [],
         visibility: 'public',
         status: 'available'
       };
@@ -227,6 +239,11 @@ export const PropertyProvider = ({ children }) => {
         response: error.response?.data || 'No response data'
       });
       
+      // Log the full error response for debugging
+      if (error.response?.data) {
+        console.error('❌ Backend validation errors:', JSON.stringify(error.response.data, null, 2));
+      }
+      
       // Extract meaningful error message
       let errorMessage = 'Failed to create property';
       if (error.response?.data?.message) {
@@ -235,6 +252,12 @@ export const PropertyProvider = ({ children }) => {
         errorMessage = error.response.data.error;
       } else if (error.message) {
         errorMessage = error.message;
+      }
+      
+      // If there are specific validation errors, show them
+      if (error.response?.data?.errors) {
+        const validationMessages = error.response.data.errors.map(e => `${e.field}: ${e.message}`).join(', ');
+        errorMessage = `Validation failed: ${validationMessages}`;
       }
       
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
