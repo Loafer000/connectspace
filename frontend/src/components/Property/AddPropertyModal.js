@@ -136,9 +136,13 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       for (const file of files) {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'connectspace_properties'); // You'll need to create this preset in Cloudinary
+        formData.append('upload_preset', 'connectspace_properties'); // ⚠️ STEP 3: Create this preset in Cloudinary (see CLOUDINARY_VISUAL_GUIDE.md)
         formData.append('folder', 'properties');
         
+        // ⚠️ STEP 4: Replace YOUR_CLOUD_NAME with your actual Cloudinary cloud name below
+        // Example: If your cloud name is "democloud123", change both URLs to:
+        // 'https://api.cloudinary.com/v1_1/democloud123/video/upload'
+        // 'https://api.cloudinary.com/v1_1/democloud123/image/upload'
         const cloudinaryUrl = file.type.startsWith('video/')
           ? 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/video/upload'
           : 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload';
