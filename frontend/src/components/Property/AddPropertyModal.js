@@ -67,6 +67,8 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   ];
 
   const handleNext = (data) => {
+    console.log('handleNext called, step:', currentStep, 'data:', data);
+    
     // Validate usage preferences on step 1
     if (currentStep === 1 && usagePreferences.length === 0) {
       toast.error('Please select at least one preferred business type');
@@ -84,6 +86,19 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       setCurrentStep(currentStep + 1);
       reset(); // Reset form for next step
     }
+  };
+
+  // Handle Next button click for Step 3 (bypass form validation)
+  const handleStep3Next = (e) => {
+    e.preventDefault();
+    console.log('Step 3 Next clicked, images:', propertyImages.length);
+    
+    if (propertyImages.length === 0) {
+      toast.error('Please upload at least one property image to continue');
+      return;
+    }
+    
+    setCurrentStep(4);
   };
 
   const handleBack = () => {
@@ -769,7 +784,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit(currentStep === 5 ? handleFinalSubmit : handleNext)}>
+        <form onSubmit={currentStep === 3 ? handleStep3Next : handleSubmit(currentStep === 5 ? handleFinalSubmit : handleNext)}>
           {renderStepContent()}
 
           {/* Navigation Buttons */}
@@ -797,7 +812,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               </button>
               <button
                 type="submit"
-                disabled={loading || (currentStep === 4 && documents.length === 0)}
+                disabled={loading || (currentStep === 5 && documents.length === 0)}
                 className="px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
@@ -808,7 +823,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
                     </svg>
                     Adding...
                   </div>
-                ) : currentStep === 4 ? 'Submit Property' : 'Next'}
+                ) : currentStep === 5 ? 'Submit Property' : 'Next'}
               </button>
             </div>
           </div>
