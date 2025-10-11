@@ -105,6 +105,19 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     setCurrentStep(4);
   };
 
+  // Handle Submit button for Step 5 (bypass form validation, but check documents)
+  const handleStep5Submit = (e) => {
+    e.preventDefault();
+    console.log('Step 5 Submit clicked, documents:', documents.length);
+    
+    if (documents.length === 0) {
+      toast.error('Please upload at least one verification document to submit');
+      return;
+    }
+    
+    handleFinalSubmit({});
+  };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
@@ -693,7 +706,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           <div className="mt-4">
             <label htmlFor="file-upload" className="cursor-pointer">
               <span className="mt-2 block text-sm font-medium text-gray-900">
-                Upload Verification Documents (Optional)
+                Upload Verification Documents *
               </span>
               <p className="text-xs text-gray-500">Sale Deed, Property Tax Receipt, NOC, etc.</p>
             </label>
@@ -788,7 +801,11 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           ))}
         </div>
 
-        <form onSubmit={currentStep === 3 ? handleStep3Next : handleSubmit(currentStep === 5 ? handleFinalSubmit : handleNext)}>
+        <form onSubmit={
+          currentStep === 3 ? handleStep3Next : 
+          currentStep === 5 ? handleStep5Submit : 
+          handleSubmit(handleNext)
+        }>
           {renderStepContent()}
 
           {/* Navigation Buttons */}
