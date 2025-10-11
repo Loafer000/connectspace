@@ -200,7 +200,7 @@ export const PropertyProvider = ({ children }) => {
           safety: propertyData.amenities?.filter(a => ['24x7-security', 'cctv', 'gated-community'].includes(a)) || ['24x7-security'],
           utilities: ['water-supply', 'electricity', 'internet-ready']
         },
-        images: propertyData.images || [],
+        images: propertyData.images?.map(img => typeof img === 'string' ? img : img.url).filter(Boolean) || [],
         visibility: 'public',
         status: 'available'
       };
