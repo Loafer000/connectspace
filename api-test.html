@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectSpace API Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #14b8a6;
+            margin-bottom: 8px;
+        }
+        h2 {
+            color: #334155;
+            border-bottom: 2px solid #14b8a6;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        button {
+            background: #14b8a6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+        button:hover {
+            background: #0d9488;
+        }
+        .results {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #059669; font-weight: bold; }
+        .error { color: #dc2626; font-weight: bold; }
+        .property-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .property-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .property-info {
+            color: #64748b;
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏠 ConnectSpace API Test Dashboard</h1>
+    <p style="color: #64748b; margin-bottom: 32px;">Test your backend APIs to verify search and property details functionality</p>
+
+    <!-- Search Tests -->
+    <div class="test-section">
+        <h2>🔍 Search API Tests</h2>
+        <button onclick="testSearch('Abcde')">Search: Abcde</button>
+        <button onclick="testSearch('Mumbai')">Search: Mumbai</button>
+        <button onclick="testSearch('Ancde')">Search: Ancde</button>
+        <button onclick="testSearch('')">Search: All Properties</button>
+        <div id="searchResults" class="results"></div>
+    </div>
+
+    <!-- Property Details Test -->
+    <div class="test-section">
+        <h2>🏠 Property Details API Test</h2>
+        <button onclick="testPropertyDetails('68ea3d84a89dd982640f5f00')">Test Property ID: 68ea3d84a89dd982640f5f00</button>
+        <button onclick="testPropertyDetails('68ea2872bc9a0b0f7f1c10d3')">Test Property ID: 68ea2872bc9a0b0f7f1c10d3</button>
+        <button onclick="testPropertyDetails('invalid-id')">Test Invalid ID</button>
+        <div id="propertyResults" class="results"></div>
+    </div>
+
+    <!-- All Properties Display -->
+    <div class="test-section">
+        <h2>📋 All Properties in Database</h2>
+        <button onclick="listAllProperties()">Load All Properties</button>
+        <div id="allProperties" class="results"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        async function testSearch(query) {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = `<p>🔄 Searching for "${query}"...</p>`;
+
+            try {
+                const url = query 
+                    ? `${API_URL}/properties/search?q=${encodeURIComponent(query)}`
+                    : `${API_URL}/properties/search`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success) {
+                    let html = `<p class="success">✅ SUCCESS: Found ${data.data.properties.length} properties</p>\n\n`;
+                    
+                    html += `<strong>Search Query:</strong> "${query || 'All Properties'}"\n`;
+                    html += `<strong>Total Results:</strong> ${data.data.properties.length}\n\n`;
+                    
+                    if (data.data.properties.length > 0) {
+                        html += `<strong>Properties:</strong>\n`;
+                        data.data.properties.forEach((prop, index) => {
+                            html += `\n${index + 1}. ${prop.title}\n`;
+                            html += `   City: ${prop.address?.city || 'N/A'}\n`;
+                            html += `   Area: ${prop.address?.area || 'N/A'}\n`;
+                            html += `   Type: ${prop.propertyType}\n`;
+                            html += `   Status: ${prop.status}\n`;
+                            html += `   Visibility: ${prop.visibility}\n`;
+                            html += `   ID: ${prop._id}\n`;
+                        });
+                    } else {
+                        html += `\n<p style="color: #f59e0b;">⚠️ No properties match the search criteria</p>`;
+                    }
+
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${data.message}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${error.message}</p>`;
+            }
+        }
+
+        async function testPropertyDetails(propertyId) {
+            const resultsDiv = document.getElementById('propertyResults');
+            resultsDiv.innerHTML = `<p>🔄 Fetching property ${propertyId}...</p>`;
+
+            try {
+                const response = await fetch(`${API_URL}/properties/${propertyId}`);
+                const data = await response.json();
+
+                if (data.success && data.data?.property) {
+                    const prop = data.data.property;
+                    let html = `<p class="success">✅ SUCCESS: Property found</p>\n\n`;
+                    html += `<strong>Title:</strong> ${prop.title}\n`;
+                    html += `<strong>City:</strong> ${prop.address?.city || 'N/A'}\n`;
+                    html += `<strong>Area:</strong> ${prop.address?.area || 'N/A'}\n`;
+                    html += `<strong>Type:</strong> ${prop.propertyType}\n`;
+                    html += `<strong>Status:</strong> ${prop.status}\n`;
+                    html += `<strong>Visibility:</strong> ${prop.visibility}\n`;
+                    html += `<strong>Price:</strong> ₹${prop.rental?.monthlyRent || 0}/month\n`;
+                    html += `<strong>Images:</strong> ${prop.images?.length || 0} image(s)\n`;
+                    html += `<strong>Description:</strong> ${prop.description?.substring(0, 100) || 'N/A'}...\n`;
+
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${data.message || 'Property not found'}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${error.message}</p>`;
+            }
+        }
+
+        async function listAllProperties() {
+            const resultsDiv = document.getElementById('allProperties');
+            resultsDiv.innerHTML = `<p>🔄 Loading all properties...</p>`;
+
+            try {
+                const response = await fetch(`${API_URL}/properties/search`);
+                const data = await response.json();
+
+                if (data.success) {
+                    let html = `<p class="success">✅ Total Properties in Database: ${data.data.properties.length}</p>\n\n`;
+                    
+                    data.data.properties.forEach((prop, index) => {
+                        html += `<div class="property-card">`;
+                        html += `<div class="property-title">${index + 1}. ${prop.title}</div>`;
+                        html += `<div class="property-info">📍 Location: ${prop.address?.city}, ${prop.address?.area}</div>`;
+                        html += `<div class="property-info">🏢 Type: ${prop.propertyType}</div>`;
+                        html += `<div class="property-info">💰 Price: ₹${prop.rental?.monthlyRent || 0}/month</div>`;
+                        html += `<div class="property-info">📊 Status: ${prop.status} | Visibility: ${prop.visibility}</div>`;
+                        html += `<div class="property-info">🆔 ID: ${prop._id}</div>`;
+                        html += `</div>`;
+                    });
+
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${data.message}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">❌ ERROR: ${error.message}</p>`;
+            }
+        }
+
+        // Auto-load all properties on page load
+        window.onload = () => {
+            listAllProperties();
+        };
+    </script>
+</body>
+</html>
