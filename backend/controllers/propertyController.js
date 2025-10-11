@@ -89,8 +89,20 @@ exports.getProperties = async (req, res) => {
 // Get single property by ID
 exports.getPropertyById = async (req, res) => {
   try {
+    console.log('🏠 ========== GET PROPERTY BY ID START ==========');
     const { id } = req.params;
+    console.log('📍 Requested property ID:', id);
 
+    // Validate MongoDB ObjectId format
+    if (!id || !id.match(/^[0-9a-fA-F]{24}$/)) {
+      console.log('❌ Invalid MongoDB ObjectId format:', id);
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid property ID format'
+      });
+    }
+
+    console.log('⏳ Querying MongoDB...');
     const property = await Property.findById(id)
       .populate('owner', 'firstName lastName phone email profilePicture documentVerified')
       .populate({
@@ -98,21 +110,36 @@ exports.getPropertyById = async (req, res) => {
         select: 'firstName lastName'
       });
 
+    console.log('📦 MongoDB query result:', property ? 'Property found' : 'Property NOT found');
+
     if (!property || property.isDeleted) {
+      console.log('⚠️ Property not found or deleted. Deleted status:', property?.isDeleted);
       return res.status(404).json({
         success: false,
         message: 'Property not found'
       });
     }
 
+    console.log('✅ Property retrieved successfully:');
+    console.log(`   Title: ${property.title}`);
+    console.log(`   City: ${property.address?.city}`);
+    console.log(`   Status: ${property.status}`);
+    console.log(`   Visibility: ${property.visibility}`);
+    console.log(`   Images count: ${property.images?.length || 0}`);
+    console.log(`   Owner: ${property.owner?.firstName} ${property.owner?.lastName}`);
+
     // Increment view count (if user is provided in auth)
     if (req.user) {
+      console.log('👤 Logged in user viewing:', req.user._id);
       await property.incrementViews(req.user._id, 'direct');
     } else {
+      console.log('👻 Anonymous user viewing property');
       property.analytics.views += 1;
       property.analytics.lastViewed = new Date();
       await property.save();
     }
+
+    console.log('🏠 ========== GET PROPERTY BY ID END ==========\n');
 
     res.json({
       success: true,
@@ -120,7 +147,8 @@ exports.getPropertyById = async (req, res) => {
       data: { property }
     });
   } catch (error) {
-    console.error('Get property error:', error);
+    console.error('❌ Get property error:', error);
+    console.error('❌ Error stack:', error.stack);
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve property',
@@ -360,6 +388,9 @@ exports.findNearbyProperties = async (req, res) => {
 // Search properties with text search
 exports.searchProperties = async (req, res) => {
   try {
+    console.log('🔍 ========== SEARCH REQUEST START ==========');
+    console.log('📥 Query params received:', req.query);
+    
     const {
       q, // Search query
       city,
@@ -374,6 +405,8 @@ exports.searchProperties = async (req, res) => {
       sort = '-createdAt'
     } = req.query;
 
+    console.log('🎯 Search term (q):', q);
+
     // Build text search filter
     const filters = {
       status: 'available',
@@ -381,9 +414,13 @@ exports.searchProperties = async (req, res) => {
       isDeleted: false
     };
 
+    console.log('🔧 Base filters:', filters);
+
     // Enhanced text search across multiple fields
     if (q) {
       const searchRegex = new RegExp(q, 'i');
+      console.log('🔎 Creating search regex for:', q);
+      
       filters.$or = [
         { title: searchRegex },
         { description: searchRegex },
@@ -395,10 +432,17 @@ exports.searchProperties = async (req, res) => {
         { propertyType: searchRegex },
         { 'specifications.amenities': { $in: [searchRegex] } }
       ];
+      
+      console.log('📋 Search will match against fields:', [
+        'title', 'description', 'address.city', 'address.area', 
+        'address.state', 'address.landmark', 'address.street', 
+        'propertyType', 'specifications.amenities'
+      ]);
     }
 
     // Enhanced location-specific filters - match city parameter with location search
     if (city) {
+      console.log('🏙️ City filter:', city);
       const cityRegex = new RegExp(city, 'i');
       if (filters.$or) {
         // If we already have text search, combine with location
@@ -424,35 +468,84 @@ exports.searchProperties = async (req, res) => {
       }
     }
 
-    if (area) filters['address.area'] = new RegExp(area, 'i');
-    if (propertyType) filters.propertyType = propertyType;
-    if (bedrooms) filters['specifications.bedrooms'] = parseInt(bedrooms, 10);
+    if (area) {
+      console.log('📍 Area filter:', area);
+      filters['address.area'] = new RegExp(area, 'i');
+    }
+    if (propertyType) {
+      console.log('🏠 Property type filter:', propertyType);
+      filters.propertyType = propertyType;
+    }
+    if (bedrooms) {
+      console.log('🛏️ Bedrooms filter:', bedrooms);
+      filters['specifications.bedrooms'] = parseInt(bedrooms, 10);
+    }
 
     // Price range filter
     if (minRent || maxRent) {
       filters['rental.monthlyRent'] = {};
-      if (minRent) filters['rental.monthlyRent'].$gte = parseInt(minRent, 10);
-      if (maxRent) filters['rental.monthlyRent'].$lte = parseInt(maxRent, 10);
+      if (minRent) {
+        filters['rental.monthlyRent'].$gte = parseInt(minRent, 10);
+        console.log('💰 Min rent:', minRent);
+      }
+      if (maxRent) {
+        filters['rental.monthlyRent'].$lte = parseInt(maxRent, 10);
+        console.log('💰 Max rent:', maxRent);
+      }
     }
 
     // Amenities filter
     if (amenities) {
       const amenityArray = Array.isArray(amenities) ? amenities : [amenities];
+      console.log('✨ Amenities filter:', amenityArray);
       filters['specifications.amenities'] = { $in: amenityArray };
     }
+
+    console.log('🎯 Final MongoDB query filters:', JSON.stringify(filters, null, 2));
 
     // Calculate pagination
     const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
     // Execute search query
+    console.log('⏳ Executing MongoDB query...');
     const properties = await Property.find(filters)
       .populate('owner', 'firstName lastName phone email profilePicture')
       .sort(sort)
       .skip(skip)
       .limit(parseInt(limit, 10));
 
+    console.log(`✅ Query executed. Found ${properties.length} properties`);
+    
+    if (properties.length > 0) {
+      console.log('📦 Sample property data:');
+      properties.slice(0, 2).forEach((prop, idx) => {
+        console.log(`   [${idx + 1}] ${prop.title}`);
+        console.log(`       City: ${prop.address?.city}`);
+        console.log(`       Area: ${prop.address?.area}`);
+        console.log(`       Visibility: ${prop.visibility}`);
+        console.log(`       Status: ${prop.status}`);
+      });
+    } else {
+      console.log('⚠️ No properties found matching the criteria');
+      
+      // Debug: Check if ANY properties exist in DB
+      const totalInDB = await Property.countDocuments({});
+      console.log(`📊 Total properties in database: ${totalInDB}`);
+      
+      const publicProperties = await Property.countDocuments({ visibility: 'public' });
+      console.log(`📊 Public properties: ${publicProperties}`);
+      
+      const availableProperties = await Property.countDocuments({ 
+        status: 'available', 
+        visibility: 'public' 
+      });
+      console.log(`📊 Available & public properties: ${availableProperties}`);
+    }
+
     // Get total count for pagination
     const total = await Property.countDocuments(filters);
+
+    console.log('🔍 ========== SEARCH REQUEST END ==========\n');
 
     res.json({
       success: true,
@@ -473,7 +566,8 @@ exports.searchProperties = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Search properties error:', error);
+    console.error('❌ Search properties error:', error);
+    console.error('❌ Error stack:', error.stack);
     res.status(500).json({
       success: false,
       message: 'Failed to search properties',
