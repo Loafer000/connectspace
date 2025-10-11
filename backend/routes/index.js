@@ -14,6 +14,7 @@ const chatRoutes = require('./chat');
 const reviewRoutes = require('./reviews');
 const analyticsRoutes = require('./analytics');
 const landlordRoutes = require('./landlord');
+const adminRoutes = require('./admin'); // Admin routes
 
 // Import new advanced features routes
 const financialRoutes = require('./financial');
@@ -61,6 +62,7 @@ router.use('/chat', chatRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/landlord', landlordRoutes);
+router.use('/admin', adminRoutes); // Admin routes
 
 // Mount new advanced features routes
 router.use('/financial', financialRoutes);

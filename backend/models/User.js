@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
   },
 
   // User Role & Status
+  role: {
+    type: String,
+    enum: ['user', 'admin', 'superadmin'],
+    default: 'user'
+  },
   userType: {
     type: String,
     required: [true, 'User type is required'],
