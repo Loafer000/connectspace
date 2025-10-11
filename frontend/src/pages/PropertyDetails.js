@@ -57,8 +57,6 @@ const PropertyDetails = () => {
 
   const handleBookingSubmit = async (bookingData) => {
     try {
-      // Here we'll integrate with backend API
-      // Process booking data
       toast.success('Booking request submitted successfully!');
       setShowBookingModal(false);
       
@@ -100,7 +98,7 @@ const PropertyDetails = () => {
   if (!currentProperty) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center animate-fade-in">
           <div className="text-6xl mb-4">🏠</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Property Not Found
@@ -114,42 +112,40 @@ const PropertyDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="backdrop-blur-xl bg-white/80 rounded-3xl shadow-2xl border border-white/20 p-8 mb-8 animate-slide-up">
+        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 mb-6 animate-fade-in">
           <div className="flex flex-col sm:flex-row justify-between items-start gap-6">
             <div className="flex-1">
-              <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-2xl mb-4">
-                🏢 {currentProperty.propertyType}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 text-teal-700 text-sm font-semibold rounded-lg mb-3">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                {currentProperty.propertyType}
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent mb-4">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
                 {currentProperty.title}
               </h1>
-              <p className="text-xl text-gray-600 flex items-center">
-                <svg className="w-6 h-6 mr-3 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
+              <p className="text-lg text-gray-600 flex items-center mb-4">
+                <svg className="w-5 h-5 mr-2 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
                 {currentProperty.location}
               </p>
-              <div className="mt-4 inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xl font-bold rounded-2xl shadow-lg">
-                💰 ${currentProperty.price?.toLocaleString()}/month
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-2xl font-bold rounded-xl">
+                ₹{currentProperty.price?.toLocaleString()}<span className="text-base font-normal">/month</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={handleFavoriteToggle}
-                className={`p-2 rounded-full transition-colors ${
+                className={`p-3 rounded-xl transition-all duration-200 ${
                   isFavorite 
-                    ? 'bg-red-100 text-red-600' 
+                    ? 'bg-red-50 text-red-600 hover:bg-red-100' 
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
+                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
                 <svg className="w-6 h-6" fill={isFavorite ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -157,7 +153,8 @@ const PropertyDetails = () => {
               </button>
               <button
                 onClick={handleShare}
-                className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                className="p-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all duration-200"
+                title="Share property"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
@@ -171,15 +168,24 @@ const PropertyDetails = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
-            <ImageGallery images={currentProperty.images} />
+            <div className="animate-fade-in animation-delay-100">
+              <ImageGallery images={currentProperty.images} />
+            </div>
 
             {/* Property Information */}
-            <PropertyInfo property={currentProperty} />
+            <div className="animate-fade-in animation-delay-200">
+              <PropertyInfo property={currentProperty} />
+            </div>
 
             {/* Map */}
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="p-6 border-b">
-                <h3 className="text-xl font-semibold text-gray-900">Location</h3>
+            <div className="card animate-fade-in animation-delay-300">
+              <div className="p-6 border-b border-gray-100">
+                <h3 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  Location
+                </h3>
               </div>
               <div className="h-64">
                 <MapView 
@@ -191,17 +197,19 @@ const PropertyDetails = () => {
             </div>
 
             {/* Reviews */}
-            <Reviews reviews={currentProperty.reviews} />
+            <div className="animate-fade-in animation-delay-400">
+              <Reviews reviews={currentProperty.reviews} />
+            </div>
           </div>
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-20 space-y-6">
+            <div className="sticky top-24 space-y-6">
               {/* Price & Contact */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="card animate-fade-in animation-delay-200">
                 <div className="text-center mb-6">
                   <div className="text-3xl font-bold text-gray-900">
-                    ${currentProperty.price}
+                    ₹{currentProperty.price}
                     <span className="text-lg font-normal text-gray-600">/month</span>
                   </div>
                 </div>
@@ -211,60 +219,69 @@ const PropertyDetails = () => {
                 <div className="mt-6 space-y-3">
                   <button
                     onClick={() => handleBookProperty('booking')}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                    className="btn btn-primary w-full"
                   >
-                    📝 Book This Property
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Book This Property
                   </button>
                   <button
                     onClick={() => handleBookProperty('visit')}
-                    className="w-full border-2 border-indigo-200 text-indigo-600 py-3 px-6 rounded-xl font-semibold hover:bg-indigo-50 transition-colors"
+                    className="btn btn-outline w-full"
                   >
-                    📞 Schedule Visit
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Schedule Visit
                   </button>
                   <button
                     onClick={() => handleBookProperty('inquiry')}
-                    className="w-full border-2 border-gray-200 text-gray-600 py-3 px-6 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                    className="btn btn-secondary w-full"
                   >
-                    💬 Send Inquiry
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    Send Inquiry
                   </button>
                 </div>
               </div>
 
               {/* Quick Info */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="card animate-fade-in animation-delay-300">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Property Details
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-600">Type</span>
-                    <span className="font-medium">{currentProperty.propertyType}</span>
+                    <span className="badge badge-secondary">{currentProperty.propertyType}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-600">Floors</span>
-                    <span className="font-medium">{currentProperty.floors || 1}</span>
+                    <span className="font-medium text-gray-900">{currentProperty.floors || 1}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-600">Parking Spaces</span>
-                    <span className="font-medium">{currentProperty.parkingSpaces || 0}</span>
+                    <span className="font-medium text-gray-900">{currentProperty.parkingSpaces || 0}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-gray-600">Area</span>
-                    <span className="font-medium">{currentProperty.area} sq ft</span>
+                    <span className="font-medium text-gray-900">{currentProperty.area} sq ft</span>
                   </div>
                 </div>
               </div>
 
               {/* Amenities */}
               {currentProperty.amenities && currentProperty.amenities.length > 0 && (
-                <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="card animate-fade-in animation-delay-400">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Amenities
                   </h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2">
                     {currentProperty.amenities.map((amenity, index) => (
-                      <div key={index} className="flex items-center text-sm">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <div key={index} className="flex items-center text-sm text-gray-700">
+                        <svg className="w-4 h-4 text-teal-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                         {amenity}
