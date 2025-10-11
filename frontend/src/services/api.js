@@ -3,6 +3,8 @@ import axios from 'axios';
 // API Base URL - Backend is running on port 5000
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://connectspace-abgg.onrender.com/api';
 
+console.log('🌐 API Configuration - Base URL:', API_BASE_URL);
+
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -139,7 +141,10 @@ export const propertyAPI = {
 
   // Search properties
   searchProperties: async (searchParams) => {
+    console.log('🔎 propertyAPI.searchProperties called with:', searchParams);
+    console.log('🌐 Full URL will be:', `${API_BASE_URL}/properties/search`);
     const response = await api.get('/properties/search', { params: searchParams });
+    console.log('📦 propertyAPI.searchProperties response:', response.data);
     return response.data;
   },
 
