@@ -194,6 +194,7 @@ const Navbar = () => {
                   <button
                     onClick={() => openAuthModal('login')}
                     className="btn btn-secondary btn-sm whitespace-nowrap"
+                    style={{ minWidth: '80px' }}
                   >
                     Login
                   </button>

@@ -67,7 +67,7 @@
   }
   
   .btn-secondary {
-    @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus:ring-gray-500 shadow-sm hover:shadow;
+    @apply bg-white text-gray-900 border-2 border-gray-300 hover:bg-gray-50 active:bg-gray-100 focus:ring-gray-500 shadow-sm hover:shadow font-semibold;
   }
   
   .btn-accent {
