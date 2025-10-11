@@ -144,8 +144,8 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
         // 'https://api.cloudinary.com/v1_1/democloud123/video/upload'
         // 'https://api.cloudinary.com/v1_1/democloud123/image/upload'
         const cloudinaryUrl = file.type.startsWith('video/')
-          ? 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/video/upload'
-          : 'https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload';
+          ? 'https://api.cloudinary.com/v1_1/dljvt4fkw/video/upload'
+          : 'https://api.cloudinary.com/v1_1/dljvt4fkw/image/upload';
         
         const response = await fetch(cloudinaryUrl, {
           method: 'POST',
