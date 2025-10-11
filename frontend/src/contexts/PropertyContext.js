@@ -85,13 +85,14 @@ export const PropertyProvider = ({ children }) => {
   const searchProperties = useCallback(async (searchParams) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      console.log('🔍 Searching properties with params:', searchParams);
+      
       // Build query parameters for backend search API
       const queryParams = {};
       
-      // Use location as both city filter and general search query
+      // Use location for text search (searches city, area, address, etc.)
       if (searchParams.location) {
-        queryParams.city = searchParams.location;  // For city-specific search
-        queryParams.q = searchParams.location;     // For general text search
+        queryParams.q = searchParams.location;  // General text search across all fields
       }
       
       if (searchParams.propertyType) queryParams.propertyType = searchParams.propertyType;
@@ -100,20 +101,20 @@ export const PropertyProvider = ({ children }) => {
       if (searchParams.bedrooms) queryParams.bedrooms = searchParams.bedrooms;
       if (searchParams.capacity) queryParams.bedrooms = searchParams.capacity;
 
+      console.log('📡 Sending search request:', queryParams);
+
       // Call backend search API
       const response = await propertyAPI.searchProperties(queryParams);
       
       if (response.success) {
+        console.log(`✅ Found ${response.data.properties.length} properties`);
         dispatch({ type: 'SET_SEARCH_RESULTS', payload: response.data.properties });
       } else {
         throw new Error(response.message || 'Failed to search properties');
       }
     } catch (error) {
-      console.error('Search properties error:', error);
+      console.error('❌ Search properties error:', error);
       dispatch({ type: 'SET_ERROR', payload: error.message });
-      
-      // Fallback to empty results for production - no mock data
-      console.warn('API search failed, using empty results. Ensure backend is running.');
       
       // Return empty results when API fails
       dispatch({ 
@@ -126,17 +127,25 @@ export const PropertyProvider = ({ children }) => {
   const getPropertyById = useCallback(async (id) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
+      console.log(`🔍 Fetching property by ID: ${id}`);
+      
       // Try backend API first
       const response = await propertyAPI.getProperty(id);
-      if (response.success) {
+      
+      console.log('📡 Property response:', response);
+      
+      if (response.success && response.data?.property) {
+        console.log('✅ Property loaded successfully');
         dispatch({ type: 'SET_PROPERTY', payload: response.data.property });
+        dispatch({ type: 'SET_LOADING', payload: false });
       } else {
         throw new Error(response.message || 'Property not found');
       }
     } catch (error) {
-      console.error('Get property error:', error);
-      // No fallback data for production
+      console.error('❌ Get property error:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Property not found' });
+      dispatch({ type: 'SET_PROPERTY', payload: null }); // Clear current property
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, []);
 

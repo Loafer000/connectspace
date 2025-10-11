@@ -95,16 +95,39 @@ const PropertyDetails = () => {
     );
   }
 
-  if (!currentProperty) {
+  if (!currentProperty || !currentProperty._id) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fade-in">
-          <div className="text-6xl mb-4">🏠</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center animate-fade-in max-w-md mx-auto p-8">
+          <div className="text-6xl mb-6">🏠</div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Property Not Found
           </h1>
-          <p className="text-gray-600">
-            The property you're looking for doesn't exist or has been removed.
+          <p className="text-gray-600 mb-8">
+            The property you're looking for doesn't exist, has been removed, or is pending verification.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => window.history.back()}
+              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            >
+              ← Go Back
+            </button>
+            <button
+              onClick={() => window.location.href = '/'}
+              className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+            >
+              🏠 Go Home
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              🔄 Refresh Page
+            </button>
+          </div>
+          <p className="text-sm text-gray-500 mt-8">
+            If this problem persists, please contact support or try again later.
           </p>
         </div>
       </div>
