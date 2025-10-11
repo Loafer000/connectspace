@@ -66,7 +66,7 @@ const Navbar = () => {
                 <span className="text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">
                   ConnectSpace
                 </span>
-                <span className="text-xs text-gray-500 -mt-1 hidden sm:block">
+                <span className="text-xs text-gray-500 -mt-1">
                   Find Your Perfect Space
                 </span>
               </div>
@@ -190,11 +190,17 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  {/* Login Button - Always Visible */}
+                  {/* Login Button - Always Visible with explicit styling */}
                   <button
                     onClick={() => openAuthModal('login')}
                     className="btn btn-secondary btn-sm whitespace-nowrap"
-                    style={{ minWidth: '80px' }}
+                    style={{ 
+                      minWidth: '80px',
+                      backgroundColor: '#ffffff',
+                      color: '#111827',
+                      border: '2px solid #d1d5db',
+                      fontWeight: '600'
+                    }}
                   >
                     Login
                   </button>
