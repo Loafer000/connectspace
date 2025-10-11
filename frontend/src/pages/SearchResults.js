@@ -24,8 +24,22 @@ const SearchResults = () => {
       floorPreference: searchParams.get('floorPreference') || ''
     };
 
+    console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
+    console.log('🔍 SearchResults: Built search query:', searchQuery);
+    console.log('🔍 SearchResults: Calling searchProperties...');
+
     searchProperties(searchQuery);
   }, [searchParams, searchProperties]);
+
+  // Log whenever searchResults changes
+  useEffect(() => {
+    console.log(`📊 SearchResults: searchResults updated, count: ${searchResults.length}`);
+    console.log('📦 SearchResults: Results:', searchResults.map(p => ({
+      title: p.title,
+      city: p.address?.city,
+      id: p._id
+    })));
+  }, [searchResults]);
 
   const handleSortChange = (value) => {
     setSortBy(value);

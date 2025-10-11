@@ -85,7 +85,7 @@ export const PropertyProvider = ({ children }) => {
   const searchProperties = useCallback(async (searchParams) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      console.log('🔍 Searching properties with params:', searchParams);
+      console.log('🔍 PropertyContext: Searching properties with params:', searchParams);
       
       // Build query parameters for backend search API
       const queryParams = {};
@@ -93,27 +93,39 @@ export const PropertyProvider = ({ children }) => {
       // Use location for text search (searches city, area, address, etc.)
       if (searchParams.location) {
         queryParams.q = searchParams.location;  // General text search across all fields
+        console.log('🎯 Search term (q):', queryParams.q);
       }
       
-      if (searchParams.propertyType) queryParams.propertyType = searchParams.propertyType;
+      if (searchParams.propertyType) {
+        queryParams.propertyType = searchParams.propertyType;
+        console.log('🏢 Property type filter:', queryParams.propertyType);
+      }
       if (searchParams.minPrice) queryParams.minRent = searchParams.minPrice;
       if (searchParams.maxPrice) queryParams.maxRent = searchParams.maxPrice;
       if (searchParams.bedrooms) queryParams.bedrooms = searchParams.bedrooms;
       if (searchParams.capacity) queryParams.bedrooms = searchParams.capacity;
 
-      console.log('📡 Sending search request:', queryParams);
+      console.log('📡 PropertyContext: Sending search request to API:', queryParams);
 
       // Call backend search API
       const response = await propertyAPI.searchProperties(queryParams);
       
+      console.log('📥 PropertyContext: API Response:', response);
+      
       if (response.success) {
-        console.log(`✅ Found ${response.data.properties.length} properties`);
+        console.log(`✅ PropertyContext: Found ${response.data.properties.length} properties`);
+        console.log('📦 PropertyContext: First 3 properties:', response.data.properties.slice(0, 3).map(p => ({
+          title: p.title,
+          city: p.address?.city,
+          id: p._id
+        })));
+        
         dispatch({ type: 'SET_SEARCH_RESULTS', payload: response.data.properties });
       } else {
         throw new Error(response.message || 'Failed to search properties');
       }
     } catch (error) {
-      console.error('❌ Search properties error:', error);
+      console.error('❌ PropertyContext: Search properties error:', error);
       dispatch({ type: 'SET_ERROR', payload: error.message });
       
       // Return empty results when API fails
