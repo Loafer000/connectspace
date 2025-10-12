@@ -32,17 +32,25 @@ const SearchBar = ({ className = '' }) => {
   });
 
   const onSubmit = (data) => {
+    console.log('🔍 SearchBar: Form submitted with data:', data);
+    
     // Create search parameters
     const params = new URLSearchParams();
     
     Object.entries(data).forEach(([key, value]) => {
       if (value) {
+        console.log(`  ✅ Adding param: ${key} = ${value}`);
         params.append(key, value);
+      } else {
+        console.log(`  ⏭️ Skipping empty param: ${key}`);
       }
     });
 
+    const searchUrl = `/search?${params.toString()}`;
+    console.log('🌐 Navigating to:', searchUrl);
+    
     // Navigate to search results
-    navigate(`/search?${params.toString()}`);
+    navigate(searchUrl);
   };
 
   return (
