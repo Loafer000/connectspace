@@ -53,13 +53,13 @@ const Navbar = () => {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-white shadow-md py-2' 
-          : 'bg-white/95 backdrop-blur-sm py-3'
+          ? 'bg-white shadow-md py-3' 
+          : 'bg-white/95 backdrop-blur-sm py-4'
       }`}>
-        <div className="container-custom px-4">
-          <div className="flex items-center justify-between">
-            {/* Logo - Shifted to extreme left */}
-            <Link to="/" className="flex items-center gap-2 group -ml-2">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between gap-8">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
               <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                 <span className="text-white text-xl font-bold">C</span>
               </div>
@@ -73,14 +73,16 @@ const Navbar = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden lg:flex items-center gap-2 flex-1 justify-center">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                    isActive(item.href)
+                    item.highlight
+                      ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg'
+                      : isActive(item.href)
                       ? 'bg-teal-50 text-teal-700'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`}
@@ -89,37 +91,10 @@ const Navbar = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
-              
-              {/* Premium/Advanced Features Link */}
-              {premiumNavigation.map((item) => (
-                isAuthenticated ? (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 border ${
-                      isActive(item.href)
-                        ? 'bg-gradient-to-r from-teal-500 to-indigo-500 text-white border-transparent shadow-md'
-                        : 'border-teal-200 text-teal-600 hover:bg-teal-50'
-                    }`}
-                  >
-                    <span>⭐</span>
-                    <span>{item.name}</span>
-                  </Link>
-                ) : (
-                  <button
-                    key={item.name}
-                    onClick={() => openAuthModal('login')}
-                    className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 border border-teal-200 text-teal-600 hover:bg-teal-50"
-                  >
-                    <span>⭐</span>
-                    <span>{item.name}</span>
-                  </button>
-                )
-              ))}
             </div>
 
-            {/* User Menu & CTA */}
-            <div className="flex items-center gap-3 ml-6">
+            {/* Right Side - Auth Buttons */}
+            <div className="flex items-center gap-3 flex-shrink-0">
               {isAuthenticated ? (
                 <>
                   {/* Dashboard Link - Desktop */}
@@ -191,35 +166,19 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  {/* Login Button - Always Visible with explicit styling */}
+                  {/* Login & Sign Up Buttons */}
                   <button
                     onClick={() => openAuthModal('login')}
-                    className="btn btn-secondary btn-sm whitespace-nowrap"
-                    style={{ 
-                      minWidth: '80px',
-                      backgroundColor: '#ffffff',
-                      color: '#111827',
-                      border: '2px solid #d1d5db',
-                      fontWeight: '600'
-                    }}
+                    className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border-2 border-gray-300 hover:border-teal-500 hover:text-teal-600 transition-all whitespace-nowrap"
                   >
                     Login
                   </button>
-                  {/* Sign Up Button - Hidden on Mobile */}
                   <button
                     onClick={() => openAuthModal('signup')}
-                    className="hidden lg:inline-flex btn btn-primary btn-sm whitespace-nowrap"
+                    className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-medium bg-teal-600 text-white hover:bg-teal-700 transition-all whitespace-nowrap"
                   >
                     Sign Up
                   </button>
-                  {/* Premium Plans Link */}
-                  <Link
-                    to="/pricing"
-                    className="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 whitespace-nowrap"
-                  >
-                    <span className="mr-1">⭐</span>
-                    Premium
-                  </Link>
                 </>
               )}
 
@@ -261,34 +220,6 @@ const Navbar = () => {
                     <span className="text-lg">{item.icon}</span>
                     <span>{item.name}</span>
                   </Link>
-                ))}
-
-                {/* Premium/Advanced Features in Mobile */}
-                {premiumNavigation.map((item) => (
-                  isAuthenticated ? (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2 border ${
-                        isActive(item.href)
-                          ? 'bg-teal-50 text-teal-700 border-teal-200'
-                          : 'text-teal-600 hover:bg-teal-50 border-teal-200'
-                      }`}
-                    >
-                      <span>⭐</span>
-                      <span>{item.name}</span>
-                    </Link>
-                  ) : (
-                    <button
-                      key={item.name}
-                      onClick={() => openAuthModal('login')}
-                      className="px-4 py-3 rounded-lg text-sm font-medium text-teal-600 hover:bg-teal-50 flex items-center gap-2 border border-teal-200"
-                    >
-                      <span>⭐</span>
-                      <span>{item.name}</span>
-                    </button>
-                  )
                 ))}
 
                 {isAuthenticated && (
