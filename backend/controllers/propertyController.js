@@ -319,35 +319,6 @@ exports.deleteProperty = async (req, res) => {
   }
 };
 
-// Search properties with advanced filters
-exports.searchProperties = async (req, res) => {
-  try {
-    const searchFilters = req.body;
-
-    const properties = await Property.advancedSearch(searchFilters)
-      .populate('owner', 'firstName lastName profilePicture')
-      .sort('-qualityScore -createdAt')
-      .limit(50);
-
-    res.json({
-      success: true,
-      message: 'Search completed successfully',
-      data: {
-        properties,
-        count: properties.length,
-        searchFilters
-      }
-    });
-  } catch (error) {
-    console.error('Search properties error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Search failed',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-};
-
 // Find nearby properties
 exports.findNearbyProperties = async (req, res) => {
   try {
