@@ -139,13 +139,20 @@ const PropertyDetails = () => {
   console.log('🖼️ PropertyDetails - Images:', currentProperty.images);
   console.log('🏷️ PropertyDetails - Amenities:', currentProperty.amenities);
 
+  // Handle amenities being either an array or object with categories
+  const flattenedAmenities = Array.isArray(currentProperty.amenities)
+    ? currentProperty.amenities
+    : (currentProperty.amenities && typeof currentProperty.amenities === 'object')
+      ? Object.values(currentProperty.amenities).flat()
+      : [];
+
   // Ensure required data exists with safe defaults
   const safeProperty = {
     ...currentProperty,
     images: Array.isArray(currentProperty.images) && currentProperty.images.length > 0 
       ? currentProperty.images 
       : ['https://images.unsplash.com/photo-1497366216548-37526070297c?w=800'],
-    amenities: Array.isArray(currentProperty.amenities) ? currentProperty.amenities : [],
+    amenities: flattenedAmenities,
     price: currentProperty.price || currentProperty.rental?.monthlyRent || 0,
     location: currentProperty.location || currentProperty.address?.city || 'Location not specified',
     propertyType: currentProperty.propertyType || 'Property',

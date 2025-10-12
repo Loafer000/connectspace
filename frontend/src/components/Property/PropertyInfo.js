@@ -11,6 +11,11 @@ const PropertyInfo = ({ property }) => {
     landlord
   } = property;
 
+  // Handle amenities being either an array or an object with categories
+  const amenitiesList = Array.isArray(amenities) 
+    ? amenities 
+    : Object.values(amenities || {}).flat();
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="space-y-6">
@@ -46,11 +51,11 @@ const PropertyInfo = ({ property }) => {
         </div>
 
         {/* Amenities */}
-        {amenities.length > 0 && (
+        {amenitiesList.length > 0 && (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Amenities & Features</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {amenities.map((amenity, index) => (
+              {amenitiesList.map((amenity, index) => (
                 <div key={index} className="flex items-center">
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
