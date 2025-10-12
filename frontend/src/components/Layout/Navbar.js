@@ -56,10 +56,10 @@ const Navbar = () => {
           ? 'bg-white shadow-md py-2' 
           : 'bg-white/95 backdrop-blur-sm py-3'
       }`}>
-        <div className="container-custom">
+        <div className="container-custom px-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
+            {/* Logo - Shifted to extreme left */}
+            <Link to="/" className="flex items-center gap-2 group -ml-2">
               <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                 <span className="text-white text-xl font-bold">C</span>
               </div>
