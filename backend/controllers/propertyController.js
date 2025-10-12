@@ -401,13 +401,14 @@ exports.searchProperties = async (req, res) => {
         { 'address.landmark': searchRegex },
         { 'address.street': searchRegex },
         { propertyType: searchRegex },
+        { usagePreferences: { $in: [searchRegex] } }, // NEW: Search in usage preferences
         { 'specifications.amenities': { $in: [searchRegex] } }
       ];
       
       console.log('📋 Search will match against fields:', [
         'title', 'description', 'address.city', 'address.area', 
         'address.state', 'address.landmark', 'address.street', 
-        'propertyType', 'specifications.amenities'
+        'propertyType', 'usagePreferences', 'specifications.amenities'
       ]);
     }
 

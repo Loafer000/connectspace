@@ -171,10 +171,27 @@ export const PropertyProvider = ({ children }) => {
       console.log('🏠 Frontend: Adding property with data:', propertyData);
 
       // Transform frontend data to match backend schema
+      console.log('🔄 Transforming property data...');
+      console.log('📝 usagePreferences:', propertyData.usagePreferences);
+      
+      // Map usage preferences to property type
+      let propertyType = 'office'; // default
+      if (propertyData.usagePreferences && propertyData.usagePreferences.length > 0) {
+        const firstPref = propertyData.usagePreferences[0].toLowerCase();
+        if (firstPref.includes('retail')) propertyType = 'shop';
+        else if (firstPref.includes('industrial') || firstPref.includes('warehouse')) propertyType = 'office';
+        else if (firstPref.includes('office')) propertyType = 'office';
+        else if (firstPref.includes('anyone')) propertyType = 'office'; // "anyone" defaults to office
+        else propertyType = 'office';
+      }
+      
+      console.log('🏢 Mapped propertyType:', propertyType);
+      
       const backendData = {
         title: propertyData.title,
         description: propertyData.description,
-        propertyType: propertyData.propertyType || 'office',
+        propertyType: propertyType,
+        usagePreferences: propertyData.usagePreferences || ['Anyone (No Preferences)'], // NEW: Store usage preferences
         category: propertyData.category || 'commercial',
         address: {
           street: propertyData.address || 'Not specified',

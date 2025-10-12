@@ -24,6 +24,11 @@ const propertySchema = new mongoose.Schema({
       message: 'Invalid property type'
     }
   },
+  // Usage Preferences - WHO can use this property
+  usagePreferences: {
+    type: [String],
+    default: ['Anyone (No Preferences)']
+  },
   category: {
     type: String,
     required: [true, 'Category is required'],
