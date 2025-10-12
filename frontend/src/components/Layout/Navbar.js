@@ -119,7 +119,7 @@ const Navbar = () => {
             </div>
 
             {/* User Menu & CTA */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 ml-6">
               {isAuthenticated ? (
                 <>
                   {/* Dashboard Link - Desktop */}
