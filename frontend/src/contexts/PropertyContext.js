@@ -316,7 +316,8 @@ export const PropertyProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('❌ Fetch properties error:', error);
-      dispatch({ type: 'SET_ERROR', payload: error.message });
+      const errorMessage = error?.message || error?.toString() || 'Failed to fetch properties';
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
       // Set empty array as fallback
       dispatch({ type: 'SET_PROPERTIES', payload: [] });
     }
