@@ -25,6 +25,7 @@ const Navbar = () => {
     { name: 'Search', href: '/search', icon: '🔍' },
     { name: 'About', href: '/about', icon: 'ℹ️' },
     { name: 'Contact', href: '/contact', icon: '📧' },
+    { name: 'Premium', href: '/pricing', icon: '⭐', highlight: true },
   ];
 
   const premiumNavigation = [
@@ -211,6 +212,14 @@ const Navbar = () => {
                   >
                     Sign Up
                   </button>
+                  {/* Premium Plans Link */}
+                  <Link
+                    to="/pricing"
+                    className="hidden lg:inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-sm hover:shadow-lg transform hover:scale-105 transition-all duration-300 whitespace-nowrap"
+                  >
+                    <span className="mr-1">⭐</span>
+                    Premium
+                  </Link>
                 </>
               )}
 
@@ -242,7 +251,9 @@ const Navbar = () => {
                     to={item.href}
                     onClick={() => setIsOpen(false)}
                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                      isActive(item.href)
+                      item.highlight
+                        ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-md'
+                        : isActive(item.href)
                         ? 'bg-teal-50 text-teal-700'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}

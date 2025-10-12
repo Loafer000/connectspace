@@ -17,6 +17,7 @@ import LandlordDashboard from './pages/LandlordDashboard';
 import AgentDashboardPage from './pages/AgentDashboardPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import PricingPage from './pages/PricingPage';
 import NotFound from './pages/NotFound';
 import IntegrationTest from './components/Testing/IntegrationTest';
 import AdvancedFeaturesDemo from './pages/AdvancedFeaturesDemo';
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/agent-dashboard" element={<AgentDashboardPage />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contact" element={<ContactUs />} />
+                <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/test" element={<IntegrationTest />} />
                 <Route path="/advanced-features/*" element={<AdvancedFeaturesDemo />} />
                 <Route path="*" element={<NotFound />} />
