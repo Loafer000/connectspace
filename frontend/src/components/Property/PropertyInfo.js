@@ -1,6 +1,8 @@
 import React from 'react';
 
-const PropertyInfo = ({ property }) => {
+// Guard against undefined `property` so destructuring doesn't throw when
+// this component is rendered before data has arrived.
+const PropertyInfo = ({ property = {} }) => {
   const {
     description,
     floors,

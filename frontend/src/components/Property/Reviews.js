@@ -65,11 +65,17 @@ const Reviews = ({ reviews = [] }) => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    try {
+      const d = new Date(dateString);
+      if (Number.isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (e) {
+      return '';
+    }
   };
 
   const averageRating = reviews.length > 0 
@@ -168,7 +174,7 @@ const Reviews = ({ reviews = [] }) => {
       <div className="space-y-6">
         {reviews.length > 0 ? (
           reviews.map((review) => (
-            <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+            <div key={review._id || review.id || `${review.author}-${review.date}`} className="border-b border-gray-200 pb-6 last:border-b-0">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-3">
                   <img
