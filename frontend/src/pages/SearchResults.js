@@ -46,18 +46,20 @@ const SearchResults = () => {
   };
 
   const sortedResults = useMemo(() => {
-    return [...searchResults].sort((a, b) => {
+    const sorted = [...searchResults].sort((a, b) => {
       switch (sortBy) {
         case 'price-low':
-          return a.price - b.price;
+          return (a.rental?.monthlyRent || 0) - (b.rental?.monthlyRent || 0);
         case 'price-high':
-          return b.price - a.price;
+          return (b.rental?.monthlyRent || 0) - (a.rental?.monthlyRent || 0);
         case 'newest':
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         default:
           return 0;
       }
     });
+    console.log('🔄 sortedResults computed, length:', sorted.length);
+    return sorted;
   }, [searchResults, sortBy]);
 
   if (loading) {
