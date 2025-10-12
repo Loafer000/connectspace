@@ -146,6 +146,11 @@ const PropertyDetails = () => {
       ? Object.values(currentProperty.amenities).flat()
       : [];
 
+  // Build location string from address or coordinates
+  const locationString = currentProperty.address 
+    ? `${currentProperty.address.area || ''}, ${currentProperty.address.city || ''}`.replace(/^,\s*/, '').replace(/,\s*$/, '') || 'Location not specified'
+    : 'Location not specified';
+
   // Ensure required data exists with safe defaults
   const safeProperty = {
     ...currentProperty,
@@ -154,7 +159,7 @@ const PropertyDetails = () => {
       : ['https://images.unsplash.com/photo-1497366216548-37526070297c?w=800'],
     amenities: flattenedAmenities,
     price: currentProperty.price || currentProperty.rental?.monthlyRent || 0,
-    location: currentProperty.location || currentProperty.address?.city || 'Location not specified',
+    location: locationString,
     propertyType: currentProperty.propertyType || 'Property',
     title: currentProperty.title || 'Property Details'
   };
