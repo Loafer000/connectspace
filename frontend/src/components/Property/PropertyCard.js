@@ -37,11 +37,14 @@ const PropertyCard = ({ property }) => {
       <div className="relative overflow-hidden">
         <Link to={`/property/${propertyId}`}>
           <img
-            src={propertyImages?.[0]?.url || propertyImages?.[0] || 'https://via.placeholder.com/400x300?text=No+Image'}
+            src={propertyImages?.[0]?.url || propertyImages?.[0] || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23ddd" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="20"%3ENo Image%3C/text%3E%3C/svg%3E'}
             alt={propertyTitle}
             className="property-card-image group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+              if (!e.target.dataset.errorHandled) {
+                e.target.dataset.errorHandled = 'true';
+                e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23ddd" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="20"%3ENo Image%3C/text%3E%3C/svg%3E';
+              }
             }}
           />
         </Link>

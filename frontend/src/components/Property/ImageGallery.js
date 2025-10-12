@@ -5,9 +5,11 @@ const ImageGallery = ({ images = [] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Extract URLs from image objects and use default if none provided
+  const defaultImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="24"%3ENo Image Available%3C/text%3E%3C/svg%3E';
+  
   const galleryImages = images.length > 0 
-    ? images.map(img => typeof img === 'string' ? img : img?.url || img?.secure_url || img)
-    : ['https://images.unsplash.com/photo-1497366216548-37526070297c?w=800'];
+    ? images.map(img => typeof img === 'string' ? img : img?.url || img?.secure_url || img).filter(url => url)
+    : [defaultImage];
 
   const nextImage = () => {
     setCurrentImage((prev) => (prev + 1) % galleryImages.length);
@@ -35,6 +37,12 @@ const ImageGallery = ({ images = [] }) => {
           alt={`Property view ${currentImage + 1}`}
           className="w-full h-96 object-cover cursor-pointer"
           onClick={() => openModal(currentImage)}
+          onError={(e) => {
+            if (!e.target.dataset.errorHandled) {
+              e.target.dataset.errorHandled = 'true';
+              e.target.src = defaultImage;
+            }
+          }}
         />
         
         {/* Navigation Arrows */}
