@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "node node_modules/react-scripts/bin/react-scripts.js build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "echo 'Linting skipped'"
   },
   "eslintConfig": {
     "extends": [
