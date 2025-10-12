@@ -35,23 +35,28 @@ const SearchBar = ({ className = '' }) => {
   });
 
   const onSubmit = (data) => {
+    console.log('🔍 ===== SEARCH FORM SUBMITTED =====');
     console.log('🔍 SearchBar: Form submitted with data:', data);
     console.log('🔍 SearchBar: location value:', data.location);
     console.log('🔍 SearchBar: location type:', typeof data.location);
     console.log('🔍 SearchBar: location empty?:', !data.location);
+    console.log('🔍 SearchBar: Current URL:', window.location.href);
     
     // CRITICAL FIX: Don't navigate if location is empty
     if (!data.location || data.location.trim() === '') {
       console.error('❌ SearchBar: Cannot search without a location!');
-      alert('Please enter a location to search');
+      console.error('❌ SearchBar: Validation failed - showing alert');
+      alert('⚠️ Please enter a location to search!\n\nExample: Mumbai, Delhi, Bangalore, etc.');
       return;
     }
+    
+    console.log('✅ SearchBar: Validation passed, building URL...');
     
     // Create search parameters
     const params = new URLSearchParams();
     
     Object.entries(data).forEach(([key, value]) => {
-      if (value) {
+      if (value && String(value).trim() !== '') {
         console.log(`  ✅ Adding param: ${key} = ${value}`);
         params.append(key, value);
       } else {
@@ -60,16 +65,25 @@ const SearchBar = ({ className = '' }) => {
     });
 
     const searchUrl = `/search?${params.toString()}`;
-    console.log('🌐 Navigating to:', searchUrl);
-    console.log('🔗 Full URL will be:', window.location.origin + searchUrl);
+    console.log('🌐 SearchBar: Built search URL:', searchUrl);
+    console.log('🔗 SearchBar: Full URL will be:', window.location.origin + searchUrl);
+    console.log('🚀 SearchBar: Calling navigate() now...');
     
     // Navigate to search results
     navigate(searchUrl);
+    
+    console.log('✅ SearchBar: navigate() called successfully');
+    console.log('🔍 ===== END SEARCH FORM SUBMISSION =====');
   };
 
   return (
     <div className={`backdrop-blur-xl bg-white/90 border border-white/20 rounded-3xl shadow-2xl p-8 hover:shadow-3xl transition-all duration-500 ${className}`}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={(e) => {
+        console.log('📝 Form onSubmit event triggered');
+        console.log('📝 Event type:', e.type);
+        console.log('📝 Event target:', e.target);
+        handleSubmit(onSubmit)(e);
+      }}>
         {/* Main Search Row */}
         <div className="flex flex-col lg:flex-row gap-6 mb-6">
           {/* Location Input */}
