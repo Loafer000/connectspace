@@ -173,19 +173,22 @@ export const PropertyProvider = ({ children }) => {
       // Transform frontend data to match backend schema
       console.log('🔄 Transforming property data...');
       console.log('📝 usagePreferences:', propertyData.usagePreferences);
+      console.log('🏢 propertyType from form:', propertyData.propertyType);
       
-      // Map usage preferences to property type
-      let propertyType = 'office'; // default
-      if (propertyData.usagePreferences && propertyData.usagePreferences.length > 0) {
+      // Use propertyType from form, or fallback to mapping from usage preferences
+      let propertyType = propertyData.propertyType || 'office'; // Use what user selected!
+      
+      // If user didn't select a property type, try to guess from usage preferences
+      if (!propertyData.propertyType && propertyData.usagePreferences && propertyData.usagePreferences.length > 0) {
         const firstPref = propertyData.usagePreferences[0].toLowerCase();
         if (firstPref.includes('retail')) propertyType = 'shop';
         else if (firstPref.includes('industrial') || firstPref.includes('warehouse')) propertyType = 'office';
         else if (firstPref.includes('office')) propertyType = 'office';
-        else if (firstPref.includes('anyone')) propertyType = 'office'; // "anyone" defaults to office
         else propertyType = 'office';
+        console.log('⚠️ No propertyType selected, guessed from preferences:', propertyType);
       }
       
-      console.log('🏢 Mapped propertyType:', propertyType);
+      console.log('✅ Final propertyType:', propertyType);
       
       const backendData = {
         title: propertyData.title,
