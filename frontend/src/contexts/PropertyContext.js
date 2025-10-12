@@ -198,12 +198,12 @@ export const PropertyProvider = ({ children }) => {
         category: propertyData.category || 'commercial',
         address: {
           street: propertyData.address || 'Not specified',
-          area: propertyData.city || 'Not specified', // Use city as area since we don't collect area separately
+          area: propertyData.area || 'Not specified', // NOW using actual area from form
           city: propertyData.city,
-          state: propertyData.state || 'Maharashtra',
+          state: propertyData.state || 'Maharashtra', // NOW using actual state from form
           pincode: propertyData.pincode,
           country: 'India',
-          landmark: propertyData.landmark || ''
+          landmark: propertyData.landmark || '' // NOW using actual landmark from form
         },
         location: {
           type: 'Point',

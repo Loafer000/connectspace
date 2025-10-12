@@ -10,7 +10,9 @@ const step1Schema = yup.object({
   title: yup.string().required('Property name is required'),
   propertyType: yup.string().required('Property type is required'),
   address: yup.string().required('Address is required'),
+  area: yup.string().required('Area/Locality is required'),
   city: yup.string().required('City is required'),
+  state: yup.string().required('State is required'),
   pincode: yup.string().matches(/^\d{6}$/, 'Pincode must be 6 digits').required('Pincode is required'),
 });
 
@@ -514,16 +516,47 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
+            Area/Locality *
+          </label>
+          <input
+            {...register('area')}
+            type="text"
+            placeholder="e.g., Bandra West, Andheri East"
+            className="input"
+          />
+          {errors.area && (
+            <p className="mt-1 text-sm text-red-600">{errors.area.message}</p>
+          )}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             City *
           </label>
           <input
             {...register('city')}
             type="text"
-            placeholder="City name"
+            placeholder="e.g., Mumbai, Delhi, Bangalore"
             className="input"
           />
           {errors.city && (
             <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            State *
+          </label>
+          <input
+            {...register('state')}
+            type="text"
+            placeholder="e.g., Maharashtra, Delhi, Karnataka"
+            className="input"
+          />
+          {errors.state && (
+            <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>
           )}
         </div>
         <div>
@@ -540,6 +573,18 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
             <p className="mt-1 text-sm text-red-600">{errors.pincode.message}</p>
           )}
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Landmark (Optional)
+        </label>
+        <input
+          {...register('landmark')}
+          type="text"
+          placeholder="e.g., Near Metro Station, Opposite Mall"
+          className="input"
+        />
       </div>
     </div>
   );
