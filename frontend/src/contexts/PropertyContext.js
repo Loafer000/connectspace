@@ -94,6 +94,8 @@ export const PropertyProvider = ({ children }) => {
       if (searchParams.location) {
         queryParams.q = searchParams.location;  // General text search across all fields
         console.log('🎯 Search term (q):', queryParams.q);
+      } else {
+        console.log('⚠️ No location provided in search params');
       }
       
       if (searchParams.propertyType) {
@@ -106,6 +108,8 @@ export const PropertyProvider = ({ children }) => {
       if (searchParams.capacity) queryParams.bedrooms = searchParams.capacity;
 
       console.log('📡 PropertyContext: Sending search request to API:', queryParams);
+      console.log('📋 QueryParams details:', JSON.stringify(queryParams, null, 2));
+      console.log('🔑 QueryParams.q =', queryParams.q, '(type:', typeof queryParams.q, ')');
 
       // Call backend search API
       const response = await propertyAPI.searchProperties(queryParams);
