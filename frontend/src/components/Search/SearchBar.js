@@ -54,11 +54,14 @@ const SearchBar = ({ className = '' }) => {
     
     // Create search parameters
     const params = new URLSearchParams();
-    
     Object.entries(data).forEach(([key, value]) => {
-      if (value && String(value).trim() !== '') {
-        console.log(`  ✅ Adding param: ${key} = ${value}`);
+      if (key === 'location' && value && String(value).trim() !== '') {
+        // Send location as 'q' for backend compatibility
+        params.append('q', value);
+        console.log(`  ✅ Adding param: q = ${value}`);
+      } else if (key !== 'location' && value && String(value).trim() !== '') {
         params.append(key, value);
+        console.log(`  ✅ Adding param: ${key} = ${value}`);
       } else {
         console.log(`  ⏭️ Skipping empty param: ${key}`);
       }
@@ -68,10 +71,8 @@ const SearchBar = ({ className = '' }) => {
     console.log('🌐 SearchBar: Built search URL:', searchUrl);
     console.log('🔗 SearchBar: Full URL will be:', window.location.origin + searchUrl);
     console.log('🚀 SearchBar: Calling navigate() now...');
-    
     // Navigate to search results
     navigate(searchUrl);
-    
     console.log('✅ SearchBar: navigate() called successfully');
     console.log('🔍 ===== END SEARCH FORM SUBMISSION =====');
   };

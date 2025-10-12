@@ -412,30 +412,30 @@ exports.searchProperties = async (req, res) => {
       ]);
     }
 
-    // Enhanced location-specific filters - match city parameter with location search
-    if (city) {
-      console.log('🏙️ City filter:', city);
-      const cityRegex = new RegExp(city, 'i');
+    // Enhanced location-specific filters - match q parameter with location search
+    if (q) {
+      console.log('🏙️ Location filter:', q);
+      const locationRegex = new RegExp(q, 'i');
       if (filters.$or) {
         // If we already have text search, combine with location
         filters.$and = [
           { $or: filters.$or },
           {
             $or: [
-              { 'address.city': cityRegex },
-              { 'address.area': cityRegex },
-              { 'address.state': cityRegex },
-              { 'address.landmark': cityRegex }
+              { 'address.city': locationRegex },
+              { 'address.area': locationRegex },
+              { 'address.state': locationRegex },
+              { 'address.landmark': locationRegex }
             ]
           }
         ];
         delete filters.$or;
       } else {
         filters.$or = [
-          { 'address.city': cityRegex },
-          { 'address.area': cityRegex },
-          { 'address.state': cityRegex },
-          { 'address.landmark': cityRegex }
+          { 'address.city': locationRegex },
+          { 'address.area': locationRegex },
+          { 'address.state': locationRegex },
+          { 'address.landmark': locationRegex }
         ];
       }
     }
