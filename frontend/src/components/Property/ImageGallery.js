@@ -4,8 +4,10 @@ const ImageGallery = ({ images = [] }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Use default image if none provided
-  const galleryImages = images.length > 0 ? images : ['/default-property.svg'];
+  // Extract URLs from image objects and use default if none provided
+  const galleryImages = images.length > 0 
+    ? images.map(img => typeof img === 'string' ? img : img?.url || img?.secure_url || img)
+    : ['https://images.unsplash.com/photo-1497366216548-37526070297c?w=800'];
 
   const nextImage = () => {
     setCurrentImage((prev) => (prev + 1) % galleryImages.length);
