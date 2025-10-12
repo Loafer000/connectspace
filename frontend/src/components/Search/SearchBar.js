@@ -5,7 +5,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 const schema = yup.object({
-  location: yup.string().required('Location is required'),
+  location: yup.string()
+    .required('Location is required')
+    .min(2, 'Location must be at least 2 characters')
+    .trim(),
   propertyType: yup.string(),
   minPrice: yup.number().min(0, 'Minimum price must be at least 0'),
   maxPrice: yup.number().min(0, 'Maximum price must be at least 0'),
@@ -33,6 +36,16 @@ const SearchBar = ({ className = '' }) => {
 
   const onSubmit = (data) => {
     console.log('🔍 SearchBar: Form submitted with data:', data);
+    console.log('🔍 SearchBar: location value:', data.location);
+    console.log('🔍 SearchBar: location type:', typeof data.location);
+    console.log('🔍 SearchBar: location empty?:', !data.location);
+    
+    // CRITICAL FIX: Don't navigate if location is empty
+    if (!data.location || data.location.trim() === '') {
+      console.error('❌ SearchBar: Cannot search without a location!');
+      alert('Please enter a location to search');
+      return;
+    }
     
     // Create search parameters
     const params = new URLSearchParams();
@@ -48,6 +61,7 @@ const SearchBar = ({ className = '' }) => {
 
     const searchUrl = `/search?${params.toString()}`;
     console.log('🌐 Navigating to:', searchUrl);
+    console.log('🔗 Full URL will be:', window.location.origin + searchUrl);
     
     // Navigate to search results
     navigate(searchUrl);
