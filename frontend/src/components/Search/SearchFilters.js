@@ -3,11 +3,25 @@ import { useProperty } from '../../contexts/PropertyContext';
 
 const SearchFilters = () => {
   const { filters, dispatch } = useProperty();
-  const [localFilters, setLocalFilters] = useState(filters);
+  const [localFilters, setLocalFilters] = useState({
+    rentRange: { min: 0, max: 100000 },
+    sizeRange: { min: 0, max: 10000 },
+    propertyTypes: [],
+    capacity: '',
+    floorLevel: '',
+    amenities: [],
+    verified: false,
+    availability: 'all',
+    ...filters
+  });
+  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([]);
 
   // Sync local filters with context filters
   useEffect(() => {
-    setLocalFilters(filters);
+    setLocalFilters(prev => ({
+      ...prev,
+      ...filters
+    }));
   }, [filters]);
 
   const handleFilterChange = (key, value) => {
@@ -18,28 +32,45 @@ const SearchFilters = () => {
     dispatch({ type: 'SET_FILTERS', payload: { [key]: value } });
   };
 
-  const handlePriceChange = (type, value) => {
-    const newPriceRange = {
-      ...localFilters.priceRange,
+  const handleRangeChange = (key, type, value) => {
+    const newRange = {
+      ...(localFilters[key] || { min: 0, max: 100000 }),
       [type]: parseInt(value) || 0
     };
     setLocalFilters(prev => ({
       ...prev,
-      priceRange: newPriceRange
+      [key]: newRange
     }));
-    dispatch({ type: 'SET_FILTERS', payload: { priceRange: newPriceRange } });
+    dispatch({ type: 'SET_FILTERS', payload: { [key]: newRange } });
+  };
+
+  const togglePropertyType = (type) => {
+    const newTypes = selectedPropertyTypes.includes(type)
+      ? selectedPropertyTypes.filter(t => t !== type)
+      : [...selectedPropertyTypes, type];
+    
+    setSelectedPropertyTypes(newTypes);
+    setLocalFilters(prev => ({
+      ...prev,
+      propertyTypes: newTypes
+    }));
+    dispatch({ type: 'SET_FILTERS', payload: { propertyTypes: newTypes } });
   };
 
   const clearFilters = () => {
     const defaultFilters = {
       location: '',
-      priceRange: { min: 0, max: 10000 },
-      propertyType: '',
+      rentRange: { min: 0, max: 100000 },
+      sizeRange: { min: 0, max: 10000 },
+      propertyTypes: [],
       capacity: '',
       floorLevel: '',
-      amenities: []
+      amenities: [],
+      verified: false,
+      availability: 'all'
     };
     setLocalFilters(defaultFilters);
+    setSelectedPropertyTypes([]);
     dispatch({ type: 'SET_FILTERS', payload: defaultFilters });
   };
 
@@ -49,13 +80,39 @@ const SearchFilters = () => {
     'Hospital Nearby', 'ATM Access', 'Market/Shopping Area', 'Petrol Pump',
     'Public Transport', 'Restaurant/Food Court', 'Fire Safety System', 'Handicap Accessible',
     'Loading Dock', 'Storage Space', 'Natural Light', 'Ventilation System',
-    'Cafeteria', 'Cleaning Service', '24/7 Access', 'Maintenance Service'
+    'Cafeteria', 'Cleaning Service', '24/7 Access', 'Maintenance Service',
+    'Green Spaces/Terrace Access', 'Police Station Nearby', 'Bank Nearby', 
+    'Gym/Fitness Center', 'Pharmacy', 'EV Charging Station'
+  ];
+
+  const propertyTypesList = [
+    'Anyone (No Preferences)',
+    'Retail',
+    'Industrial',
+    'Office Buildings',
+    'F&B Spaces (Food & Beverage)',
+    'Warehousing & Storage',
+    'Wellness & Fitness Studios',
+    'Training & Coaching Center',
+    'Mixed-Use Commercial Floors',
+    'Studio & Creative Spaces',
+    'Diagnostic Centers',
+    'Spas & Wellness Retreats',
+    'Office & Corporate',
+    'Healthcare & Medical',
+    'Education & Training',
+    'Fitness & Wellness',
+    'Creative & Studios',
+    'Technology & IT',
+    'Manufacturing & Industrial',
+    'Others/Custom'
   ];
 
   const toggleAmenity = (amenity) => {
-    const newAmenities = localFilters.amenities.includes(amenity)
-      ? localFilters.amenities.filter(a => a !== amenity)
-      : [...localFilters.amenities, amenity];
+    const currentAmenities = localFilters.amenities || [];
+    const newAmenities = currentAmenities.includes(amenity)
+      ? currentAmenities.filter(a => a !== amenity)
+      : [...currentAmenities, amenity];
     
     setLocalFilters(prev => ({
       ...prev,
@@ -70,56 +127,187 @@ const SearchFilters = () => {
         <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
         <button
           onClick={clearFilters}
-          className="text-sm text-primary-600 hover:text-primary-700"
+          className="text-sm text-primary-600 hover:text-primary-700 font-medium"
         >
           Clear All
         </button>
       </div>
 
       <div className="space-y-6">
-        {/* Price Range */}
+        {/* Rent Price Range Slider */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Price Range
+            Monthly Rent (₹)
           </label>
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            <input
-              type="number"
-              placeholder="Min"
-              value={localFilters.priceRange.min || ''}
-              onChange={(e) => handlePriceChange('min', e.target.value)}
-              className="input text-sm"
-            />
-            <input
-              type="number"
-              placeholder="Max"
-              value={localFilters.priceRange.max || ''}
-              onChange={(e) => handlePriceChange('max', e.target.value)}
-              className="input text-sm"
-            />
-          </div>
-          <div className="text-xs text-gray-500">
-            ${localFilters.priceRange.min.toLocaleString()} - ${localFilters.priceRange.max.toLocaleString()}
+          <div className="space-y-3">
+            <div className="relative pt-1">
+              <input
+                type="range"
+                min="0"
+                max="100000"
+                step="1000"
+                value={localFilters.rentRange?.min || 0}
+                onChange={(e) => handleRangeChange('rentRange', 'min', e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((localFilters.rentRange?.min || 0) / 100000) * 100}%, #e5e7eb ${((localFilters.rentRange?.min || 0) / 100000) * 100}%, #e5e7eb 100%)`
+                }}
+              />
+              <input
+                type="range"
+                min="0"
+                max="100000"
+                step="1000"
+                value={localFilters.rentRange?.max || 100000}
+                onChange={(e) => handleRangeChange('rentRange', 'max', e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mt-2"
+                style={{
+                  background: `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${((localFilters.rentRange?.max || 100000) / 100000) * 100}%, #3b82f6 ${((localFilters.rentRange?.max || 100000) / 100000) * 100}%, #3b82f6 100%)`
+                }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-sm gap-2">
+              <input
+                type="number"
+                value={localFilters.rentRange?.min || 0}
+                onChange={(e) => handleRangeChange('rentRange', 'min', e.target.value)}
+                className="w-28 px-2 py-1 border border-gray-300 rounded text-center"
+                placeholder="Min"
+              />
+              <span className="text-gray-500">to</span>
+              <input
+                type="number"
+                value={localFilters.rentRange?.max || 100000}
+                onChange={(e) => handleRangeChange('rentRange', 'max', e.target.value)}
+                className="w-28 px-2 py-1 border border-gray-300 rounded text-center"
+                placeholder="Max"
+              />
+            </div>
+            <div className="text-xs text-gray-500 text-center">
+              ₹{(localFilters.rentRange?.min || 0).toLocaleString()} - ₹{(localFilters.rentRange?.max || 100000).toLocaleString()}
+            </div>
           </div>
         </div>
 
-        {/* Property Type */}
+        {/* Size Range Slider */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Property Type
+            Property Size (sq. ft.)
+          </label>
+          <div className="space-y-3">
+            <div className="relative pt-1">
+              <input
+                type="range"
+                min="0"
+                max="10000"
+                step="100"
+                value={localFilters.sizeRange?.min || 0}
+                onChange={(e) => handleRangeChange('sizeRange', 'min', e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #10b981 0%, #10b981 ${((localFilters.sizeRange?.min || 0) / 10000) * 100}%, #e5e7eb ${((localFilters.sizeRange?.min || 0) / 10000) * 100}%, #e5e7eb 100%)`
+                }}
+              />
+              <input
+                type="range"
+                min="0"
+                max="10000"
+                step="100"
+                value={localFilters.sizeRange?.max || 10000}
+                onChange={(e) => handleRangeChange('sizeRange', 'max', e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mt-2"
+                style={{
+                  background: `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${((localFilters.sizeRange?.max || 10000) / 10000) * 100}%, #10b981 ${((localFilters.sizeRange?.max || 10000) / 10000) * 100}%, #10b981 100%)`
+                }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-sm gap-2">
+              <input
+                type="number"
+                value={localFilters.sizeRange?.min || 0}
+                onChange={(e) => handleRangeChange('sizeRange', 'min', e.target.value)}
+                className="w-28 px-2 py-1 border border-gray-300 rounded text-center"
+                placeholder="Min"
+              />
+              <span className="text-gray-500">to</span>
+              <input
+                type="number"
+                value={localFilters.sizeRange?.max || 10000}
+                onChange={(e) => handleRangeChange('sizeRange', 'max', e.target.value)}
+                className="w-28 px-2 py-1 border border-gray-300 rounded text-center"
+                placeholder="Max"
+              />
+            </div>
+            <div className="text-xs text-gray-500 text-center">
+              {(localFilters.sizeRange?.min || 0).toLocaleString()} - {(localFilters.sizeRange?.max || 10000).toLocaleString()} sq. ft.
+            </div>
+          </div>
+        </div>
+
+        {/* Property Type - Multi-select */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Property Type (Multi-select)
+          </label>
+          <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-3">
+            {propertyTypesList.map((type) => (
+              <label key={type} className="flex items-center hover:bg-gray-50 p-1 rounded cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedPropertyTypes.includes(type)}
+                  onChange={() => togglePropertyType(type)}
+                  className="mr-2 text-primary-600 focus:ring-primary-500 rounded"
+                />
+                <span className={`text-sm ${type === 'Anyone (No Preferences)' ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
+                  {type}
+                </span>
+              </label>
+            ))}
+          </div>
+          {selectedPropertyTypes.length > 0 && (
+            <div className="mt-2 text-xs text-primary-600 font-medium">
+              ✓ {selectedPropertyTypes.length} type(s) selected
+            </div>
+          )}
+        </div>
+
+        {/* Verified Properties */}
+        <div className="border border-gray-200 rounded-lg p-3">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={localFilters.verified || false}
+              onChange={(e) => handleFilterChange('verified', e.target.checked)}
+              className="mr-3 text-primary-600 focus:ring-primary-500 rounded w-4 h-4"
+            />
+            <span className="text-sm font-medium text-gray-900">
+              ✓ Show Only Verified Properties
+            </span>
+          </label>
+        </div>
+
+        {/* Availability Status */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Availability Status
           </label>
           <div className="space-y-2">
-            {['Retail', 'Industrial', 'Office Buildings', 'F&B Spaces', 'Warehousing & Storage', 'Wellness & Fitness Studios', 'Training & Coaching Center', 'Mixed-Use Commercial Floors', 'Studio & Creative Spaces', 'Diagnostic Centers', 'Spas & Wellness Retreats', 'Others/Custom'].map((type) => (
-              <label key={type} className="flex items-center">
+            {[
+              { value: 'all', label: 'All Properties' },
+              { value: 'available', label: 'Available Now' },
+              { value: 'under-construction', label: 'Under Construction' },
+              { value: 'ready-to-move', label: 'Ready to Move' }
+            ].map((status) => (
+              <label key={status.value} className="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded">
                 <input
                   type="radio"
-                  name="propertyType"
-                  value={type.toLowerCase()}
-                  checked={localFilters.propertyType === type.toLowerCase()}
-                  onChange={(e) => handleFilterChange('propertyType', e.target.value)}
+                  name="availability"
+                  value={status.value}
+                  checked={localFilters.availability === status.value}
+                  onChange={(e) => handleFilterChange('availability', e.target.value)}
                   className="mr-2 text-primary-600 focus:ring-primary-500"
                 />
-                <span className="text-sm text-gray-700">{type}</span>
+                <span className="text-sm text-gray-700">{status.label}</span>
               </label>
             ))}
           </div>
@@ -130,18 +318,18 @@ const SearchFilters = () => {
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Capacity (People)
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {['10', '25', '50', '100+'].map((cap) => (
               <button
                 key={cap}
                 onClick={() => handleFilterChange('capacity', cap === localFilters.capacity ? '' : cap)}
-                className={`py-2 px-3 text-sm rounded-lg border transition-colors ${
+                className={`py-2 px-2 text-sm rounded-lg border transition-colors font-medium ${
                   localFilters.capacity === cap
-                    ? 'bg-primary-500 text-white border-primary-500'
+                    ? 'bg-primary-500 text-white border-primary-500 shadow-md'
                     : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                 }`}
               >
-                {cap === '100+' ? '100+' : `${cap}`}
+                {cap}
               </button>
             ))}
           </div>
@@ -157,9 +345,9 @@ const SearchFilters = () => {
               <button
                 key={floor.key}
                 onClick={() => handleFilterChange('floorLevel', floor.key === localFilters.floorLevel ? '' : floor.key)}
-                className={`py-2 px-3 text-sm rounded-lg border transition-colors ${
+                className={`py-2 px-3 text-sm rounded-lg border transition-colors font-medium ${
                   localFilters.floorLevel === floor.key
-                    ? 'bg-primary-500 text-white border-primary-500'
+                    ? 'bg-primary-500 text-white border-primary-500 shadow-md'
                     : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                 }`}
               >
@@ -174,21 +362,55 @@ const SearchFilters = () => {
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Amenities
           </label>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+          <div className="space-y-2 max-h-56 overflow-y-auto border border-gray-200 rounded-lg p-3">
             {amenitiesList.map((amenity) => (
-              <label key={amenity} className="flex items-center">
+              <label key={amenity} className="flex items-center hover:bg-gray-50 p-1 rounded cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={localFilters.amenities.includes(amenity)}
+                  checked={(localFilters.amenities || []).includes(amenity)}
                   onChange={() => toggleAmenity(amenity)}
-                  className="mr-2 text-primary-600 focus:ring-primary-500"
+                  className="mr-2 text-primary-600 focus:ring-primary-500 rounded"
                 />
                 <span className="text-sm text-gray-700">{amenity}</span>
               </label>
             ))}
           </div>
+          {(localFilters.amenities?.length || 0) > 0 && (
+            <div className="mt-2 text-xs text-primary-600 font-medium">
+              ✓ {localFilters.amenities.length} amenity(ies) selected
+            </div>
+          )}
         </div>
       </div>
+
+      <style>{`
+        input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          border: 2px solid white;
+        }
+        input[type="range"]::-moz-range-thumb {
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          border: 2px solid white;
+        }
+        input[type="range"]:focus::-webkit-slider-thumb {
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        input[type="range"]:focus::-moz-range-thumb {
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+      `}</style>
     </div>
   );
 };

@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 // Validation schemas for each step
 const step1Schema = yup.object({
   title: yup.string().required('Property name is required'),
-  propertyType: yup.string().required('Property type is required'),
   address: yup.string().required('Address is required'),
   area: yup.string().required('Area/Locality is required'),
   city: yup.string().required('City is required'),
@@ -70,7 +69,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     'Hospital Nearby', 'ATM Access', 'Market/Shopping Area', 'Petrol Pump',
     'Public Transport', 'Restaurant/Food Court', 'Loading Dock', 'Storage Space',
     'Natural Light', 'Ventilation System', 'Cafeteria', 'Cleaning Service',
-    '24/7 Access', 'Maintenance Service', 'Washrooms', 'Kitchen/Pantry'
+    '24/7 Access', 'Maintenance Service', 'Washrooms', 'Kitchen/Pantry',
+    'Green Spaces/Terrace Access', 'Police Station Nearby', 'Bank Nearby', 
+    'Gym/Fitness Center', 'Pharmacy', 'EV Charging Station'
   ];
 
   const handleNext = (data) => {
@@ -370,25 +371,6 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
         />
         {errors.title && (
           <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
-        )}
-      </div>
-
-      {/* Property Type Selection - NEW! */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Property Type * <span className="text-xs text-gray-500">(What type of property is this?)</span>
-        </label>
-        <select {...register('propertyType')} className="input">
-          <option value="">Select property type...</option>
-          <option value="office">🏢 Office Space</option>
-          <option value="shop">🏪 Shop/Retail Space</option>
-          <option value="apartment">🏠 Apartment/Residential</option>
-          <option value="house">🏡 House/Villa</option>
-          <option value="studio">🎨 Studio</option>
-          <option value="hostel">🏨 Hostel/PG</option>
-        </select>
-        {errors.propertyType && (
-          <p className="mt-1 text-sm text-red-600">{errors.propertyType.message}</p>
         )}
       </div>
 
