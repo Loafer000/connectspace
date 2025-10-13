@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { useProperty } from '../../contexts/PropertyContext';
 import toast from 'react-hot-toast';
 import MapLocationPicker from './MapLocationPicker';
+import api from '../../services/api';
 
 // Validation schemas for each step
 const step1Schema = yup.object({
@@ -146,16 +147,22 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
     try {
       setVerifyingOtp(true);
-      // TODO: Implement actual OTP sending via API
-      // const response = await api.post('/auth/send-otp', { phoneNumber });
       
-      // Simulate OTP sending
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Call backend API to send OTP
+      const response = await api.post('/auth/send-otp', { 
+        phone: `+91${phoneNumber}`,
+        type: 'verification'
+      });
       
-      setOtpSent(true);
-      toast.success(`OTP sent to +91 ${phoneNumber}`);
+      if (response.data.success) {
+        setOtpSent(true);
+        toast.success(`OTP sent to ${response.data.data.phone}`);
+      } else {
+        throw new Error(response.data.message || 'Failed to send OTP');
+      }
     } catch (error) {
-      toast.error('Failed to send OTP. Please try again.');
+      console.error('OTP send error:', error);
+      toast.error(error.response?.data?.message || 'Failed to send OTP. Please try again.');
     } finally {
       setVerifyingOtp(false);
     }
@@ -170,17 +177,23 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
     try {
       setVerifyingOtp(true);
-      // TODO: Implement actual OTP verification via API
-      // const response = await api.post('/auth/verify-otp', { phoneNumber, otp });
       
-      // Simulate OTP verification
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Call backend API to verify OTP
+      const response = await api.post('/auth/verify-otp', { 
+        phone: `+91${phoneNumber}`,
+        otp: otp,
+        type: 'verification'
+      });
       
-      // For demo, accept any 6-digit OTP
-      setOtpVerified(true);
-      toast.success('Phone number verified successfully!');
+      if (response.data.success) {
+        setOtpVerified(true);
+        toast.success('Phone number verified successfully!');
+      } else {
+        throw new Error(response.data.message || 'Invalid OTP');
+      }
     } catch (error) {
-      toast.error('Invalid OTP. Please try again.');
+      console.error('OTP verification error:', error);
+      toast.error(error.response?.data?.message || 'Invalid OTP. Please try again.');
     } finally {
       setVerifyingOtp(false);
     }
