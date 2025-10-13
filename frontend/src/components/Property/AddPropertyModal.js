@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useProperty } from '../../contexts/PropertyContext';
 import toast from 'react-hot-toast';
+import MapLocationPicker from './MapLocationPicker';
 
 // Validation schemas for each step
 const step1Schema = yup.object({
@@ -39,6 +40,12 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
   const [usagePreferences, setUsagePreferences] = useState([]);
   const [customBusinessType, setCustomBusinessType] = useState('');
   const [hasOthersCustom, setHasOthersCustom] = useState(false);
+  const [mapLocation, setMapLocation] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const { addProperty, loading } = useProperty();
 
   const getSchema = () => {
@@ -48,6 +55,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       case 3: return yup.object({}); // Step 3 is images (no form validation)
       case 4: return step4Schema; // Step 4 is description
       case 5: return yup.object({}); // Step 5 is documents (no form validation)
+      case 6: return yup.object({}); // Step 6 is phone verification (handled separately)
       default: return yup.object({});
     }
   };
@@ -95,7 +103,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     console.log('Updated formData after merge:', updatedFormData);
     setFormData(updatedFormData);
     
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
       // Don't reset - we need to keep the data
       // reset();
@@ -121,7 +129,69 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     console.log('Step 5 Submit clicked, documents:', documents.length);
     
     if (documents.length === 0) {
-      toast.error('Please upload at least one verification document to submit');
+      toast.error('Please upload at least one verification document to continue');
+      return;
+    }
+    
+    // Go to phone verification step
+    setCurrentStep(6);
+  };
+
+  // Send OTP to phone number
+  const handleSendOtp = async () => {
+    if (!phoneNumber || phoneNumber.length !== 10) {
+      toast.error('Please enter a valid 10-digit phone number');
+      return;
+    }
+
+    try {
+      setVerifyingOtp(true);
+      // TODO: Implement actual OTP sending via API
+      // const response = await api.post('/auth/send-otp', { phoneNumber });
+      
+      // Simulate OTP sending
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setOtpSent(true);
+      toast.success(`OTP sent to +91 ${phoneNumber}`);
+    } catch (error) {
+      toast.error('Failed to send OTP. Please try again.');
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
+  // Verify OTP
+  const handleVerifyOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      toast.error('Please enter a valid 6-digit OTP');
+      return;
+    }
+
+    try {
+      setVerifyingOtp(true);
+      // TODO: Implement actual OTP verification via API
+      // const response = await api.post('/auth/verify-otp', { phoneNumber, otp });
+      
+      // Simulate OTP verification
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demo, accept any 6-digit OTP
+      setOtpVerified(true);
+      toast.success('Phone number verified successfully!');
+    } catch (error) {
+      toast.error('Invalid OTP. Please try again.');
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
+  // Handle final submit after phone verification
+  const handleStep6Submit = (e) => {
+    e.preventDefault();
+    
+    if (!otpVerified) {
+      toast.error('Please verify your phone number before submitting');
       return;
     }
     
@@ -568,6 +638,24 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           className="input"
         />
       </div>
+
+      {/* Map Location Picker */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          📍 Pin Location on Map (Optional)
+        </label>
+        <MapLocationPicker
+          initialLat={28.6139}
+          initialLng={77.2090}
+          onLocationSelect={(location) => {
+            setMapLocation(location);
+            console.log('Map location selected:', location);
+          }}
+        />
+        <p className="mt-2 text-xs text-gray-500">
+          💡 Tip: Setting the exact location helps tenants find your property easily
+        </p>
+      </div>
     </div>
   );
 
@@ -879,6 +967,153 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
     </div>
   );
 
+  const renderStep6 = () => (
+    <div className="space-y-6">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+        <div className="flex items-start gap-3">
+          <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+          </svg>
+          <div>
+            <h4 className="text-sm font-semibold text-blue-900">Phone Verification Required</h4>
+            <p className="text-xs text-blue-700 mt-1">
+              We need to verify your phone number to ensure the authenticity of property listings and enable direct contact with potential tenants.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Verify Your Phone Number</h3>
+
+      <div className="space-y-4">
+        {/* Phone Number Input */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Mobile Number *
+          </label>
+          <div className="flex gap-2">
+            <div className="flex items-center bg-gray-100 px-3 rounded-lg border border-gray-300">
+              <span className="text-gray-700 font-medium">+91</span>
+            </div>
+            <input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                setPhoneNumber(value);
+              }}
+              placeholder="Enter 10-digit mobile number"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              disabled={otpSent}
+              maxLength={10}
+            />
+            <button
+              type="button"
+              onClick={handleSendOtp}
+              disabled={otpSent || phoneNumber.length !== 10 || verifyingOtp}
+              className={`px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap ${
+                otpSent
+                  ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                  : phoneNumber.length === 10
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {verifyingOtp ? 'Sending...' : otpSent ? '✓ Sent' : 'Send OTP'}
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            We'll send a 6-digit OTP to this number for verification
+          </p>
+        </div>
+
+        {/* OTP Input */}
+        {otpSent && !otpVerified && (
+          <div className="animate-fade-in">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Enter OTP *
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setOtp(value);
+                }}
+                placeholder="Enter 6-digit OTP"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-center text-lg tracking-widest"
+                maxLength={6}
+              />
+              <button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={otp.length !== 6 || verifyingOtp}
+                className={`px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap ${
+                  otp.length === 6
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
+              </button>
+            </div>
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-xs text-gray-500">
+                Didn't receive OTP?
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setOtpSent(false);
+                  setOtp('');
+                  toast.info('You can resend OTP now');
+                }}
+                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Resend OTP
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Verification Success */}
+        {otpVerified && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 animate-fade-in">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-green-900">Phone Number Verified!</h4>
+                <p className="text-xs text-green-700">
+                  Your phone number +91 {phoneNumber} has been successfully verified.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <p className="text-sm text-yellow-800">
+              <strong>Privacy Note:</strong> Your phone number will only be used for property-related communication and won't be shared publicly without your consent.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1: return renderStep1();
@@ -886,6 +1121,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       case 3: return renderStep3();
       case 4: return renderStep4();
       case 5: return renderStep5();
+      case 6: return renderStep6();
       default: return null;
     }
   };
@@ -907,14 +1143,14 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
         {/* Progress Steps */}
         <div className="flex justify-between items-center mb-8">
-          {[1, 2, 3, 4, 5].map((step) => (
+          {[1, 2, 3, 4, 5, 6].map((step) => (
             <div key={step} className="flex items-center">
               <div className={`rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium ${
                 step <= currentStep ? 'bg-teal-600 text-white' : 'bg-gray-200 text-gray-600'
               }`}>
                 {step}
               </div>
-              {step < 5 && (
+              {step < 6 && (
                 <div className={`w-8 h-1 mx-1 ${
                   step < currentStep ? 'bg-teal-600' : 'bg-gray-200'
                 }`} />
@@ -925,7 +1161,8 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 
         <form onSubmit={
           currentStep === 3 ? handleStep3Next : 
-          currentStep === 5 ? handleStep5Submit : 
+          currentStep === 5 ? handleStep5Submit :
+          currentStep === 6 ? handleStep6Submit :
           handleSubmit(handleNext)
         }>
           {renderStepContent()}
@@ -955,7 +1192,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               </button>
               <button
                 type="submit"
-                disabled={loading || (currentStep === 5 && documents.length === 0)}
+                disabled={loading || (currentStep === 5 && documents.length === 0) || (currentStep === 6 && !otpVerified)}
                 className="px-6 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
@@ -966,7 +1203,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
                     </svg>
                     Adding...
                   </div>
-                ) : currentStep === 5 ? 'Submit Property' : 'Next'}
+                ) : currentStep === 6 ? 'Submit Property' : currentStep === 5 ? 'Continue to Phone Verification' : 'Next'}
               </button>
             </div>
           </div>
