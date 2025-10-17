@@ -380,9 +380,9 @@ exports.searchProperties = async (req, res) => {
 
     // Build text search filter
     const filters = {
-      status: 'available',
-      visibility: 'public',
       isDeleted: false
+      // Accept both 'public' and 'draft' visibility for search
+      // Default visibility is 'draft' when property is created
     };
 
     console.log('🔧 Base filters:', filters);
