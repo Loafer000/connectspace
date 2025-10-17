@@ -392,6 +392,7 @@ exports.searchProperties = async (req, res) => {
       const searchRegex = new RegExp(q, 'i');
       console.log('🔎 Creating search regex for:', q);
       
+      // Simple and clear search - search in all relevant fields
       filters.$or = [
         { title: searchRegex },
         { description: searchRegex },
@@ -401,7 +402,7 @@ exports.searchProperties = async (req, res) => {
         { 'address.landmark': searchRegex },
         { 'address.street': searchRegex },
         { propertyType: searchRegex },
-        { usagePreferences: { $in: [searchRegex] } }, // NEW: Search in usage preferences
+        { usagePreferences: { $in: [searchRegex] } },
         { 'specifications.amenities': { $in: [searchRegex] } }
       ];
       
@@ -410,34 +411,6 @@ exports.searchProperties = async (req, res) => {
         'address.state', 'address.landmark', 'address.street', 
         'propertyType', 'usagePreferences', 'specifications.amenities'
       ]);
-    }
-
-    // Enhanced location-specific filters - match q parameter with location search
-    if (q) {
-      console.log('🏙️ Location filter:', q);
-      const locationRegex = new RegExp(q, 'i');
-      if (filters.$or) {
-        // If we already have text search, combine with location
-        filters.$and = [
-          { $or: filters.$or },
-          {
-            $or: [
-              { 'address.city': locationRegex },
-              { 'address.area': locationRegex },
-              { 'address.state': locationRegex },
-              { 'address.landmark': locationRegex }
-            ]
-          }
-        ];
-        delete filters.$or;
-      } else {
-        filters.$or = [
-          { 'address.city': locationRegex },
-          { 'address.area': locationRegex },
-          { 'address.state': locationRegex },
-          { 'address.landmark': locationRegex }
-        ];
-      }
     }
 
     if (area) {

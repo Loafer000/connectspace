@@ -16,7 +16,7 @@ const SearchResults = () => {
 
   useEffect(() => {
     const searchQuery = {
-      location: searchParams.get('location') || '',
+      location: searchParams.get('q') || searchParams.get('location') || '',
       propertyType: searchParams.get('propertyType') || searchParams.get('type') || '',
       minPrice: searchParams.get('minPrice') || '',
       maxPrice: searchParams.get('maxPrice') || '',
