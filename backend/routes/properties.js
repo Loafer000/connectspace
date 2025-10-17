@@ -83,9 +83,8 @@ router.post('/test-create', authenticate, async (req, res) => {
 // Step 4 Implementation - Property routes
 
 // Public routes
-router.get('/', optionalAuth, propertyController.getProperties);
+router.get('/search', propertyController.searchProperties);  // Must come BEFORE /:id
 router.get('/featured', propertyController.getFeaturedProperties);
-router.get('/search', propertyController.searchProperties);
 router.get(
   '/nearby',
   [
@@ -95,6 +94,7 @@ router.get(
   validateRequest,
   propertyController.findNearbyProperties
 );
+router.get('/', optionalAuth, propertyController.getProperties);
 router.get('/:id', optionalAuth, propertyController.getPropertyById);
 
 // Protected routes
