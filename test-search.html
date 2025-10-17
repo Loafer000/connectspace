@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectSpace Search Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>🔍 ConnectSpace Search Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Search API Directly</h2>
+        <button onclick="testSearch('Dum')">Test: Dum</button>
+        <button onclick="testSearch('s')">Test: s</button>
+        <button onclick="testSearch('a')">Test: a</button>
+        <button onclick="testSearch('mumbai')">Test: mumbai</button>
+        <button onclick="testSearch('')">Test: Empty</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Result:</h2>
+        <div id="result">Click a button to test...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        
+        async function testSearch(searchTerm) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `Testing search for: "${searchTerm}"...\n\n`;
+            
+            try {
+                const url = `${API_URL}/properties/search?q=${encodeURIComponent(searchTerm)}`;
+                console.log('Calling:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const count = data.data.properties.length;
+                    resultDiv.innerHTML += `<span class="success">✅ SUCCESS!</span>\n\n`;
+                    resultDiv.innerHTML += `Found: ${count} properties\n\n`;
+                    
+                    if (count > 0) {
+                        resultDiv.innerHTML += 'Properties:\n';
+                        data.data.properties.forEach((prop, idx) => {
+                            resultDiv.innerHTML += `${idx + 1}. ${prop.title}\n`;
+                            resultDiv.innerHTML += `   City: ${prop.address?.city}\n`;
+                            resultDiv.innerHTML += `   Area: ${prop.address?.area}\n`;
+                            resultDiv.innerHTML += `   Status: ${prop.status}\n\n`;
+                        });
+                    } else {
+                        resultDiv.innerHTML += '<span class="error">⚠️ No properties found for this search term</span>\n';
+                        resultDiv.innerHTML += '\nTry searching for:\n';
+                        resultDiv.innerHTML += '- "Dum" (should find "Dum Dum" city)\n';
+                        resultDiv.innerHTML += '- "s" (should find properties with "s" in title or city)\n';
+                    }
+                } else {
+                    resultDiv.innerHTML += `<span class="error">❌ API Error: ${data.message}</span>`;
+                }
+                
+                console.log('Full response:', data);
+            } catch (error) {
+                resultDiv.innerHTML += `<span class="error">❌ ERROR: ${error.message}</span>\n\n`;
+                resultDiv.innerHTML += 'Make sure backend is running on http://localhost:5000';
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

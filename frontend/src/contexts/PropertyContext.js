@@ -137,6 +137,8 @@ export const PropertyProvider = ({ children }) => {
         type: 'SET_SEARCH_RESULTS', 
         payload: [] 
       });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, []);
 
