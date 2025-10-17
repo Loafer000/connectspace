@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ConnectSpace Frontend Diagnostic</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .warning { color: #ce9178; }
+        .info { color: #569cd6; }
+        h1 { color: #4ec9b0; }
+        button { 
+            background: #0e639c; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            margin: 10px 5px; 
+            cursor: pointer; 
+            border-radius: 4px;
+        }
+        button:hover { background: #1177bb; }
+        #output { 
+            background: #252526; 
+            padding: 20px; 
+            margin-top: 20px; 
+            border-radius: 4px;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 ConnectSpace Frontend Diagnostic Tool</h1>
+    <p class="info">This page tests if your frontend can communicate with the backend.</p>
+    
+    <div>
+        <button onclick="testBackend()">1. Test Backend Connection</button>
+        <button onclick="testFrontendEnv()">2. Check Frontend Environment</button>
+        <button onclick="testSearchAPI()">3. Test Search API</button>
+        <button onclick="testFrontendSearch()">4. Open Frontend Search</button>
+        <button onclick="clearOutput()">Clear Output</button>
+    </div>
+    
+    <div id="output">Click a button to start testing...</div>
+    
+    <script>
+        const output = document.getElementById('output');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type;
+            output.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function clearOutput() {
+            output.innerHTML = '';
+        }
+        
+        async function testBackend() {
+            clearOutput();
+            log('═══════════════════════════════════════', 'info');
+            log('TEST 1: Backend Connection', 'info');
+            log('═══════════════════════════════════════', 'info');
+            
+            try {
+                log('Checking http://localhost:5000/api/health...', 'info');
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ Backend is RUNNING!', 'success');
+                    log(`   Status: ${response.status}`, 'success');
+                    log(`   Message: ${data.message}`, 'success');
+                } else {
+                    log('❌ Backend returned error', 'error');
+                    log(`   Status: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log('❌ BACKEND NOT ACCESSIBLE!', 'error');
+                log(`   Error: ${error.message}`, 'error');
+                log('   Solution: Run in terminal: cd backend && npm start', 'warning');
+            }
+        }
+        
+        async function testFrontendEnv() {
+            clearOutput();
+            log('═══════════════════════════════════════', 'info');
+            log('TEST 2: Frontend Environment', 'info');
+            log('═══════════════════════════════════════', 'info');
+            
+            log('Checking what API URL frontend will use...', 'info');
+            
+            // Check if we're on the actual React app
+            if (window.location.port === '3000') {
+                log('✅ You are on the React app (port 3000)', 'success');
+                log('   The actual API URL should be logged in browser console', 'info');
+                log('   Look for: "🌐 API Configuration - Base URL: ..."', 'info');
+            } else {
+                log('⚠️  You are NOT on the React app', 'warning');
+                log(`   Current port: ${window.location.port || '80/443'}`, 'warning');
+                log('   Expected: 3000', 'warning');
+                log('   Solution: Go to http://localhost:3000', 'warning');
+            }
+            
+            log('\nExpected .env.local content:', 'info');
+            log('   REACT_APP_API_URL=http://localhost:5000/api', 'success');
+        }
+        
+        async function testSearchAPI() {
+            clearOutput();
+            log('═══════════════════════════════════════', 'info');
+            log('TEST 3: Search API', 'info');
+            log('═══════════════════════════════════════', 'info');
+            
+            const searchTerm = 'Dum';
+            log(`Testing search for: "${searchTerm}"`, 'info');
+            log('This should find property in "Dum Dum" city', 'info');
+            
+            try {
+                const url = `http://localhost:5000/api/properties/search?q=${searchTerm}`;
+                log(`\nCalling: ${url}`, 'info');
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const count = data.data.properties.length;
+                    log(`\n✅ SEARCH WORKS!`, 'success');
+                    log(`   Found: ${count} properties`, 'success');
+                    
+                    if (count > 0) {
+                        log('\n   Properties found:', 'success');
+                        data.data.properties.forEach((prop, idx) => {
+                            log(`   ${idx + 1}. "${prop.title}"`, 'success');
+                            log(`      City: ${prop.address?.city}`, 'success');
+                            log(`      Area: ${prop.address?.area}`, 'success');
+                        });
+                    } else {
+                        log('\n⚠️  No properties found for this search', 'warning');
+                        log('   Try searching for: Dum, s, or a', 'warning');
+                    }
+                } else {
+                    log('❌ API returned error', 'error');
+                    log(`   Message: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                log('❌ SEARCH API FAILED!', 'error');
+                log(`   Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testFrontendSearch() {
+            clearOutput();
+            log('═══════════════════════════════════════', 'info');
+            log('TEST 4: Opening Frontend Search', 'info');
+            log('═══════════════════════════════════════', 'info');
+            
+            log('Instructions:', 'info');
+            log('1. A new window will open with the frontend', 'info');
+            log('2. Open DevTools (Press F12)', 'info');
+            log('3. Go to Console tab', 'info');
+            log('4. Type "Dum" in search box', 'info');
+            log('5. Click "Search Properties"', 'info');
+            log('6. Look for these logs in console:', 'info');
+            log('   - 🔍 SearchBar: Form submitted', 'success');
+            log('   - 🔍 PropertyContext: Searching properties', 'success');
+            log('   - 📥 PropertyContext: API Response', 'success');
+            log('   - ✅ PropertyContext: Found X properties', 'success');
+            log('\nOpening frontend in 3 seconds...', 'warning');
+            
+            setTimeout(() => {
+                window.open('http://localhost:3000', '_blank');
+                log('✅ Frontend opened! Check the new window.', 'success');
+            }, 3000);
+        }
+        
+        // Auto-run first test
+        setTimeout(() => testBackend(), 500);
+    </script>
+</body>
+</html>
