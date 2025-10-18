@@ -63,7 +63,7 @@
   }
   
   .btn-primary {
-    @apply bg-teal-500 text-white hover:bg-teal-600 active:bg-teal-700 focus:ring-teal-500 shadow-sm hover:shadow-md;
+    @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 shadow-sm hover:shadow-md;
   }
   
   .btn-secondary {
@@ -71,11 +71,11 @@
   }
   
   .btn-accent {
-    @apply bg-gradient-to-r from-teal-500 to-indigo-500 text-white hover:from-teal-600 hover:to-indigo-600 focus:ring-teal-500 shadow-md hover:shadow-lg;
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 focus:ring-blue-500 shadow-md hover:shadow-lg;
   }
   
   .btn-outline {
-    @apply border-2 border-teal-500 text-teal-600 hover:bg-teal-50 active:bg-teal-100 focus:ring-teal-500;
+    @apply border-2 border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100 focus:ring-blue-500;
   }
   
   .btn-sm {
@@ -118,7 +118,7 @@
   }
   
   .badge-primary {
-    @apply bg-teal-100 text-teal-800;
+    @apply bg-blue-100 text-blue-800;
   }
   
   .badge-secondary {
@@ -126,7 +126,7 @@
   }
   
   .badge-success {
-    @apply bg-green-100 text-green-800;
+    @apply bg-blue-100 text-blue-700;
   }
   
   .badge-warning {
@@ -175,7 +175,7 @@
   }
   
   .icon-wrapper-primary {
-    @apply icon-wrapper bg-teal-100 text-teal-600;
+    @apply icon-wrapper bg-blue-100 text-blue-600;
   }
   
   .icon-wrapper-secondary {

@@ -213,7 +213,7 @@ const Navbar = () => {
                       item.highlight
                         ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-md'
                         : isActive(item.href)
-                        ? 'bg-teal-50 text-teal-700'
+                        ? 'bg-blue-50 text-blue-700'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
