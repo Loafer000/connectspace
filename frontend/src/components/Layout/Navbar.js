@@ -234,21 +234,12 @@ const Navbar = () => {
 
                 {!isAuthenticated && (
                   <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-gray-200">
-                    <div className="grid grid-cols-2 gap-2">
-                      <Link
-                        to="/pricing"
-                        onClick={() => setIsOpen(false)}
-                        className="btn btn-sm bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-sm hover:shadow-md text-center"
-                      >
-                        ⭐ Premium
-                      </Link>
-                      <button
-                        onClick={() => openAuthModal('login')}
-                        className="btn btn-sm btn-outline"
-                      >
-                        Login
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => openAuthModal('login')}
+                      className="btn btn-outline w-full"
+                    >
+                      Login
+                    </button>
                     <button
                       onClick={() => openAuthModal('signup')}
                       className="btn btn-primary w-full"
