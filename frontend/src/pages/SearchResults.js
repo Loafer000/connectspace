@@ -122,7 +122,7 @@ const SearchResults = () => {
                   </h2>
                   {searchParams.get('location') && (
                     <p className="text-sm text-gray-600 mt-1">
-                      in <span className="font-medium text-teal-600">{searchParams.get('location')}</span>
+                      in <span className="font-medium text-blue-600">{searchParams.get('location')}</span>
                     </p>
                   )}
                 </div>
@@ -134,7 +134,7 @@ const SearchResults = () => {
                       onClick={() => setViewMode('grid')}
                       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         viewMode === 'grid'
-                          ? 'bg-white text-teal-600 shadow-sm'
+                          ? 'bg-white text-blue-600 shadow-sm'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
@@ -146,7 +146,7 @@ const SearchResults = () => {
                       onClick={() => setViewMode('map')}
                       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         viewMode === 'map'
-                          ? 'bg-white text-teal-600 shadow-sm'
+                          ? 'bg-white text-blue-600 shadow-sm'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
@@ -211,7 +211,7 @@ const SearchResults = () => {
                   <button className="btn btn-secondary btn-sm">
                     Previous
                   </button>
-                  <button className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium">
+                  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium">
                     1
                   </button>
                   <button className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50">
@@ -234,3 +234,4 @@ const SearchResults = () => {
 };
 
 export default SearchResults;
+

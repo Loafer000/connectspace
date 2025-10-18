@@ -94,11 +94,11 @@ const AboutUs = () => {
             </div>
             <div className="text-center">
               <div className="text-5xl font-bold mb-2">25,000+</div>
-              <div className="text-teal-100">Happy Clients</div>
+              <div className="text-blue-100">Happy Clients</div>
             </div>
             <div className="text-center">
               <div className="text-5xl font-bold mb-2">98%</div>
-              <div className="text-teal-100">Satisfaction Rate</div>
+              <div className="text-blue-100">Satisfaction Rate</div>
             </div>
           </div>
         </div>

@@ -64,7 +64,7 @@ const Navbar = () => {
                 <span className="text-white text-xl font-bold">C</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">
+                <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                   ConnectSpace
                 </span>
                 <span className="text-xs text-gray-500 -mt-1">
@@ -100,7 +100,7 @@ const Navbar = () => {
                   {/* Dashboard Link - Desktop */}
                   <Link
                     to="/dashboard"
-                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-teal-600 transition-colors"
+                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
                   >
                     <span>📊</span>
                     <span>Dashboard</span>
@@ -113,7 +113,7 @@ const Navbar = () => {
                         <img
                           src={user.avatar}
                           alt={user.name}
-                          className="w-8 h-8 rounded-full border-2 border-teal-200"
+                          className="w-8 h-8 rounded-full border-2 border-blue-200"
                         />
                       ) : (
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center text-white font-semibold">
@@ -169,13 +169,13 @@ const Navbar = () => {
                   {/* Login & Sign Up Buttons */}
                   <button
                     onClick={() => openAuthModal('login')}
-                    className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border-2 border-gray-300 hover:border-teal-500 hover:text-teal-600 transition-all whitespace-nowrap"
+                    className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition-all whitespace-nowrap"
                   >
                     Login
                   </button>
                   <button
                     onClick={() => openAuthModal('signup')}
-                    className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-medium bg-teal-600 text-white hover:bg-teal-700 transition-all whitespace-nowrap"
+                    className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all whitespace-nowrap"
                   >
                     Sign Up
                   </button>
@@ -275,3 +275,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+

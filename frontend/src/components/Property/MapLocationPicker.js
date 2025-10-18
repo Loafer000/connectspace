@@ -168,3 +168,4 @@ const MapLocationPicker = ({ initialLat = 28.6139, initialLng = 77.2090, onLocat
 };
 
 export default MapLocationPicker;
+

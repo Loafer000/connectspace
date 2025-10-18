@@ -81,7 +81,7 @@ const PropertyCard = ({ property }) => {
         {/* Title & Location */}
         <div className="mb-3">
           <Link to={`/property/${propertyId}`}>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1.5 hover:text-teal-600 transition-colors line-clamp-2">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1.5 hover:text-blue-600 transition-colors line-clamp-2">
               {propertyTitle}
             </h3>
           </Link>
@@ -146,7 +146,7 @@ const PropertyCard = ({ property }) => {
                 className="w-8 h-8 rounded-full object-cover ring-2 ring-gray-100"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white text-sm font-medium">
+              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
                 {(landlord?.name || 'L').charAt(0).toUpperCase()}
               </div>
             )}
@@ -190,3 +190,4 @@ const PropertyCard = ({ property }) => {
 };
 
 export default PropertyCard;
+

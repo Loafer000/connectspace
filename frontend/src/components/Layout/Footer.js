@@ -59,7 +59,7 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-teal-500 transition-colors group"
+                  className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-blue-500 transition-colors group"
                   aria-label={social.name}
                 >
                   <svg className="w-5 h-5 fill-current text-gray-400 group-hover:text-white transition-colors" viewBox="0 0 24 24">
@@ -167,3 +167,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

@@ -152,7 +152,7 @@ const Homepage = () => {
                   {stat.icon}
                 </div>
                 <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-sm text-teal-100">{stat.label}</div>
+                <div className="text-sm text-blue-100">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -164,7 +164,7 @@ const Homepage = () => {
         <div className="container-custom">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Browse by Type</h2>
-            <Link to="/search" className="text-sm font-medium text-teal-600 hover:text-teal-700 flex items-center gap-1">
+            <Link to="/search" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
               <span>View All</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -240,7 +240,7 @@ const Homepage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="section bg-gradient-to-br from-gray-50 to-teal-50">
+      <section className="section bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -315,3 +315,4 @@ const Homepage = () => {
 };
 
 export default Homepage;
+

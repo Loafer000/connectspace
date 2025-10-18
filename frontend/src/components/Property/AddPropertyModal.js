@@ -749,9 +749,9 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Property Images & Videos</h3>
       
       {/* Upload Section */}
-      <div className="border-2 border-dashed border-teal-300 rounded-lg p-6 bg-teal-50/30">
+      <div className="border-2 border-dashed border-blue-300 rounded-lg p-6 bg-blue-50/30">
         <div className="text-center">
-          <svg className="mx-auto h-12 w-12 text-teal-600" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+          <svg className="mx-auto h-12 w-12 text-blue-600" stroke="currentColor" fill="none" viewBox="0 0 48 48">
             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <div className="mt-4">
@@ -759,10 +759,10 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               <span className="mt-2 block text-sm font-medium text-teal-900">
                 Upload Property Images/Videos *
               </span>
-              <p className="text-xs text-teal-700 mt-1">
+              <p className="text-xs text-blue-700 mt-1">
                 JPG, PNG, WebP (max 10MB) | MP4, WebM (max 50MB)
               </p>
-              <p className="text-xs text-teal-600 mt-1">
+              <p className="text-xs text-blue-600 mt-1">
                 Upload multiple files to showcase your property
               </p>
             </label>
@@ -780,7 +780,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               type="button"
               onClick={() => document.getElementById('image-upload').click()}
               disabled={uploadingImages}
-              className="mt-4 px-6 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploadingImages ? (
                 <span className="flex items-center gap-2">
@@ -802,14 +802,14 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
       {propertyImages.length > 0 && (
         <div className="space-y-3">
           <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
             Uploaded Media ({propertyImages.length})
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {propertyImages.map((img, index) => (
-              <div key={index} className="relative group rounded-lg overflow-hidden border-2 border-gray-200 hover:border-teal-500 transition-colors">
+              <div key={index} className="relative group rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-600 transition-colors">
                 {img.type === 'video' ? (
                   <video
                     src={img.url}
@@ -1159,13 +1159,13 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
           {[1, 2, 3, 4, 5, 6].map((step) => (
             <div key={step} className="flex items-center">
               <div className={`rounded-full w-8 h-8 flex items-center justify-center text-sm font-medium ${
-                step <= currentStep ? 'bg-teal-600 text-white' : 'bg-gray-200 text-gray-600'
+                step <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
               }`}>
                 {step}
               </div>
               {step < 6 && (
                 <div className={`w-8 h-1 mx-1 ${
-                  step < currentStep ? 'bg-teal-600' : 'bg-gray-200'
+                  step < currentStep ? 'bg-blue-600' : 'bg-gray-200'
                 }`} />
               )}
             </div>
@@ -1227,3 +1227,4 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 };
 
 export default AddPropertyModal;
+

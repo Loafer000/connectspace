@@ -33,7 +33,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="analytics" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">📊</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Analytics</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Analytics</h3>
               <p className="text-gray-600 text-sm">Performance insights</p>
             </div>
           </Link>
@@ -41,7 +41,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="landlord" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">🏠</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Landlord Tools</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Landlord Tools</h3>
               <p className="text-gray-600 text-sm">Property management</p>
             </div>
           </Link>
@@ -49,7 +49,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="financial" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">💳</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Financial</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Financial</h3>
               <p className="text-gray-600 text-sm">Payments & reports</p>
             </div>
           </Link>
@@ -57,7 +57,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="maintenance" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">🔧</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Maintenance</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Maintenance</h3>
               <p className="text-gray-600 text-sm">Work orders & IoT</p>
             </div>
           </Link>
@@ -65,7 +65,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="ai" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">🤖</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">AI Features</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">AI Features</h3>
               <p className="text-gray-600 text-sm">Smart automation</p>
             </div>
           </Link>
@@ -73,7 +73,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="tenants" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">👥</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Tenants</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Tenants</h3>
               <p className="text-gray-600 text-sm">Tenant lifecycle</p>
             </div>
           </Link>
@@ -81,7 +81,7 @@ const AdvancedFeaturesDemo = () => {
           <Link to="agents" className="card card-hover group">
             <div className="text-center">
               <div className="text-5xl mb-4">🏆</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">Agents</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Agents</h3>
               <p className="text-gray-600 text-sm">Performance tracking</p>
             </div>
           </Link>
