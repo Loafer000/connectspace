@@ -59,10 +59,12 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between gap-8">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                <span className="text-white text-xl font-bold">C</span>
-              </div>
+            <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
+              <img 
+                src="/logo.png" 
+                alt="ConnectSpace Logo" 
+                className="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+              />
               <div className="flex flex-col">
                 <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                   ConnectSpace
