@@ -344,3 +344,4 @@ const RegisterForm = ({ onSwitchToLogin, onClose }) => {
 };
 
 export default RegisterForm;
+

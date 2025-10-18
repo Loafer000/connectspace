@@ -156,7 +156,7 @@ const PricingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 text-white py-20">
         <div className="container-custom text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
             🏠 Premium Plans for Landlords & Tenants
@@ -369,7 +369,7 @@ const PricingPage = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-12 text-white">
+          <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 rounded-3xl p-12 text-white">
             <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-blue-100 mb-8">
               Join thousands of satisfied landlords and tenants
@@ -391,4 +391,5 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
+
 

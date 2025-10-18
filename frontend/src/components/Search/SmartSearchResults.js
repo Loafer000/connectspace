@@ -331,3 +331,4 @@ const SmartSearchResults = ({ searchResults = [], isLoading = false, searchQuery
 };
 
 export default SmartSearchResults;
+

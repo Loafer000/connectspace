@@ -110,7 +110,7 @@ const EnhancedLoginForm = () => {
         <LoadingButton
           type="submit"
           loading={isLoading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+          className="w-full bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white py-2 px-4 rounded-md hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 disabled:opacity-50"
         >
           {isLoading ? 'Signing In...' : 'Sign In'}
         </LoadingButton>
@@ -255,3 +255,4 @@ const TestDashboardOriginal = () => {
   );
 };
 */
+

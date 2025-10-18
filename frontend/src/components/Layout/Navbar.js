@@ -60,7 +60,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between gap-8">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                 <span className="text-white text-xl font-bold">C</span>
               </div>
               <div className="flex flex-col">
@@ -175,7 +175,7 @@ const Navbar = () => {
                   </button>
                   <button
                     onClick={() => openAuthModal('signup')}
-                    className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all whitespace-nowrap"
+                    className="hidden lg:inline-flex px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 transition-all whitespace-nowrap"
                   >
                     Sign Up
                   </button>
@@ -275,5 +275,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 
 

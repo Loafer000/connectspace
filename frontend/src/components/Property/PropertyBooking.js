@@ -886,3 +886,4 @@ const PropertyBooking = ({ property, initialTab = 'inquiry', onClose, onSubmit }
 };
 
 export default PropertyBooking;
+

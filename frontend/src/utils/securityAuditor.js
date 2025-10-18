@@ -368,3 +368,4 @@ const securityAuditor = new SecurityAuditor();
 window.securityAuditor = securityAuditor;
 
 export default securityAuditor;
+

@@ -490,7 +490,7 @@ const AccountSettings = ({ userProfile, onUpdate }) => {
                 Current plan: <span className="font-medium capitalize">{settings.subscriptionPlan}</span>
               </p>
             </div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <button className="px-4 py-2 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white rounded-md hover:from-blue-800 hover:via-blue-700 hover:to-blue-600">
               Upgrade Plan
             </button>
           </div>
@@ -587,3 +587,4 @@ const AccountSettings = ({ userProfile, onUpdate }) => {
 };
 
 export default AccountSettings;
+

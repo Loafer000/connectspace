@@ -780,7 +780,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               type="button"
               onClick={() => document.getElementById('image-upload').click()}
               disabled={uploadingImages}
-              className="mt-4 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 px-6 py-2.5 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploadingImages ? (
                 <span className="flex items-center gap-2">
@@ -1028,7 +1028,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
                 otpSent
                   ? 'bg-green-100 text-green-700 cursor-not-allowed'
                   : phoneNumber.length === 10
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-blue-600 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-600'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
@@ -1165,7 +1165,7 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
               </div>
               {step < 6 && (
                 <div className={`w-8 h-1 mx-1 ${
-                  step < currentStep ? 'bg-blue-600' : 'bg-gray-200'
+                  step < currentStep ? 'bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500' : 'bg-gray-200'
                 }`} />
               )}
             </div>
@@ -1227,4 +1227,5 @@ const AddPropertyModal = ({ isOpen, onClose }) => {
 };
 
 export default AddPropertyModal;
+
 

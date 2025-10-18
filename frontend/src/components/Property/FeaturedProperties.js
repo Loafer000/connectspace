@@ -39,3 +39,4 @@ const FeaturedProperties = ({ properties = [], loading = false }) => {
 };
 
 export default FeaturedProperties;
+

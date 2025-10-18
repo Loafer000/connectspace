@@ -115,13 +115,13 @@ const PropertyDetails = () => {
             </button>
             <button
               onClick={() => window.location.href = '/'}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-6 py-3 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 transition"
             >
               🏠 Go Home
             </button>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="px-6 py-3 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 transition"
             >
               🔄 Refresh Page
             </button>
@@ -186,7 +186,7 @@ const PropertyDetails = () => {
                 </svg>
                 {safeProperty.location}
               </p>
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-2xl font-bold rounded-xl">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white text-2xl font-bold rounded-xl">
                 ₹{safeProperty.price?.toLocaleString()}<span className="text-base font-normal">/month</span>
               </div>
             </div>
@@ -375,4 +375,5 @@ const PropertyDetails = () => {
 };
 
 export default PropertyDetails;
+
 

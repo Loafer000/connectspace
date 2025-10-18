@@ -410,3 +410,4 @@ const MediaGallery = ({ propertyId, mediaData = null }) => {
 };
 
 export default MediaGallery;
+

@@ -272,3 +272,4 @@ const ProfilePhotoUpload = ({ currentPhoto, onPhotoUpdate, isEditing }) => {
 };
 
 export default ProfilePhotoUpload;
+

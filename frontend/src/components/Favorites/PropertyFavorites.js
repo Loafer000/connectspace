@@ -286,3 +286,4 @@ export const FavoritesList = () => {
 };
 
 export default PropertyFavorites;
+

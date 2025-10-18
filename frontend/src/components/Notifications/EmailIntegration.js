@@ -682,3 +682,4 @@ const EmailIntegration = ({ userId }) => {
 };
 
 export default EmailIntegration;
+

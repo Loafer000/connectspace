@@ -431,3 +431,4 @@ const PropertySearchFilter = ({ onFiltersChange, initialFilters = {} }) => {
 };
 
 export default PropertySearchFilter;
+

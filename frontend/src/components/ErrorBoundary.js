@@ -92,7 +92,7 @@ class ErrorBoundary extends Component {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={this.handleRetry}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                className="flex-1 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white px-4 py-2 rounded-md hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
               >
                 Try Again
               </button>
@@ -133,3 +133,4 @@ class ErrorBoundary extends Component {
 }
 
 export default ErrorBoundary;
+

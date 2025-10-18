@@ -328,3 +328,4 @@ if (document.readyState === 'loading') {
 }
 
 export default FrontendSecurity;
+

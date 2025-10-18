@@ -119,3 +119,4 @@ const PropertyInfo = ({ property }) => {
 };
 
 export default PropertyInfo;
+

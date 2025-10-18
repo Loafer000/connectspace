@@ -99,7 +99,7 @@ const Homepage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section - Modern & Clean */}
-      <section className="relative bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-700 via-blue-600 via-blue-500 to-blue-300 overflow-hidden">
         {/* Subtle Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -280,7 +280,7 @@ const Homepage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section bg-gradient-to-r from-blue-600 to-blue-700">
+      <section className="section bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -315,4 +315,5 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
 

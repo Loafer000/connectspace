@@ -483,3 +483,4 @@ const MobileOptimizer = ({ children }) => {
 };
 
 export default MobileOptimizer;
+

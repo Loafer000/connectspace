@@ -578,3 +578,4 @@ const NotificationSettings = ({ userId }) => {
 };
 
 export default NotificationSettings;
+

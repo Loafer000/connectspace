@@ -45,7 +45,7 @@ const ContactUs = () => {
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             Contact Us
           </h1>
-          <div className="h-1 w-20 bg-blue-600 mx-auto mb-6 rounded-full"></div>
+          <div className="h-1 w-20 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-400 mx-auto mb-6 rounded-full"></div>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
             Have questions or need help? <span className="text-blue-600 font-semibold">We're here to assist you</span> with your commercial space journey.
           </p>
@@ -180,7 +180,7 @@ const ContactUs = () => {
               </div>
             </div>
 
-            <div className="bg-blue-600 rounded-2xl text-white p-8 animate-fade-in animation-delay-300">
+            <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 rounded-2xl text-white p-8 animate-fade-in animation-delay-300">
               <h3 className="text-xl font-bold mb-4">Business Hours</h3>
               <div className="space-y-2 text-blue-50">
                 <div className="flex justify-between">
@@ -205,3 +205,4 @@ const ContactUs = () => {
 };
 
 export default ContactUs;
+

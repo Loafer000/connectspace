@@ -58,3 +58,4 @@ const MapView = ({ properties = [], center, zoom = 13 }) => {
 };
 
 export default MapView;
+

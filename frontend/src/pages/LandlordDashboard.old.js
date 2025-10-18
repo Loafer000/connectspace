@@ -296,3 +296,4 @@ const LandlordDashboard = () => {
 };
 
 export default LandlordDashboard;
+

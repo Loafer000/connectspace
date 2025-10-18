@@ -192,3 +192,4 @@ const performanceMonitor = new PerformanceMonitor();
 window.performanceMonitor = performanceMonitor;
 
 export default performanceMonitor;
+

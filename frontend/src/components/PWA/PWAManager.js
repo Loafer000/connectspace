@@ -505,3 +505,4 @@ const PWAManager = () => {
 };
 
 export default PWAManager;
+

@@ -209,3 +209,4 @@ const PropertyComparison = ({ properties = [] }) => {
 };
 
 export default PropertyComparison;
+

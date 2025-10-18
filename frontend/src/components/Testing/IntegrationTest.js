@@ -180,7 +180,7 @@ const IntegrationTest = () => {
       <div className="mt-8 text-center">
         <button 
           onClick={runTests}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+          className="bg-blue-500 hover:bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
         >
           🔄 Run Tests Again
         </button>
@@ -211,3 +211,4 @@ const IntegrationTest = () => {
 };
 
 export default IntegrationTest;
+

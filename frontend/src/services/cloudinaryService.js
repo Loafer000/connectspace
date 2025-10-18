@@ -239,3 +239,4 @@ class CloudinaryService {
 const cloudinaryService = new CloudinaryService();
 
 export default cloudinaryService;
+

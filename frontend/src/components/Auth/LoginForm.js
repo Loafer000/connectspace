@@ -262,3 +262,4 @@ const LoginForm = ({ onSwitchToRegister, onClose }) => {
 };
 
 export default LoginForm;
+

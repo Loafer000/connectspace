@@ -240,3 +240,4 @@ const PaymentGatewayIntegration = ({ amount, bookingId, propertyId, onSuccess, o
 };
 
 export default PaymentGatewayIntegration;
+

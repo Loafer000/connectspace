@@ -149,7 +149,7 @@ const SearchBar = ({ className = '' }) => {
           <div className="flex items-end">
             <button
               type="submit"
-              className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 flex items-center space-x-2 w-full lg:w-auto"
+              className="group px-8 py-4 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 text-white font-bold rounded-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 flex items-center space-x-2 w-full lg:w-auto"
             >
               <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -244,3 +244,4 @@ const SearchBar = ({ className = '' }) => {
 };
 
 export default SearchBar;
+

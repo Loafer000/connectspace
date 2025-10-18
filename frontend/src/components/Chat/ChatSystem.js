@@ -133,3 +133,4 @@ const ChatSystem = ({ propertyId, landlordId, tenantId }) => {
 };
 
 export default ChatSystem;
+

@@ -255,3 +255,4 @@ const SmartSearchPage = () => {
 };
 
 export default SmartSearchPage;
+

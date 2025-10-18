@@ -496,3 +496,4 @@ const CommunicationPage = ({ userId }) => {
 };
 
 export default CommunicationPage;
+

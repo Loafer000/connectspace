@@ -120,3 +120,4 @@ export const landlordAPI = {
 };
 
 export default landlordAPI;
+

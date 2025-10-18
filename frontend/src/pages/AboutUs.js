@@ -4,7 +4,7 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white">
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 text-white">
         <div className="container-custom py-20 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl mb-6">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ const AboutUs = () => {
       </section>
 
       {/* Statistics */}
-      <section className="section bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <section className="section bg-gradient-to-br from-blue-700 via-blue-600 to-blue-400 text-white">
         <div className="container-custom">
           <h2 className="text-3xl font-bold mb-12 text-center">ConnectSpace by the Numbers</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -108,3 +108,4 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
