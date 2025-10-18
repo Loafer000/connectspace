@@ -60,7 +60,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between gap-8">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                 <span className="text-white text-xl font-bold">C</span>
               </div>
               <div className="flex flex-col">
@@ -83,7 +83,7 @@ const Navbar = () => {
                     item.highlight
                       ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg'
                       : isActive(item.href)
-                      ? 'bg-teal-50 text-teal-700'
+                      ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
@@ -116,7 +116,7 @@ const Navbar = () => {
                           className="w-8 h-8 rounded-full border-2 border-teal-200"
                         />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-indigo-400 flex items-center justify-center text-white font-semibold">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center text-white font-semibold">
                           {(user?.name || 'U')[0].toUpperCase()}
                         </div>
                       )}

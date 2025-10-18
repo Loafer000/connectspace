@@ -29,18 +29,18 @@ const Homepage = () => {
 
   // Stats
   const stats = [
-    { label: 'Properties', value: '10,000+', icon: '🏢', color: 'from-teal-400 to-teal-500' },
-    { label: 'Happy Clients', value: '25,000+', icon: '😊', color: 'from-indigo-400 to-indigo-500' },
-    { label: 'Cities', value: '100+', icon: '🌆', color: 'from-orange-400 to-orange-500' },
-    { label: 'Success Rate', value: '98%', icon: '✨', color: 'from-green-400 to-green-500' },
+    { label: 'Properties', value: '10,000+', icon: '🏢', color: 'from-blue-400 to-blue-500' },
+    { label: 'Happy Clients', value: '25,000+', icon: '😊', color: 'from-blue-500 to-blue-600' },
+    { label: 'Cities', value: '100+', icon: '🌆', color: 'from-blue-300 to-blue-400' },
+    { label: 'Success Rate', value: '98%', icon: '✨', color: 'from-blue-600 to-blue-700' },
   ];
 
   // Property types
   const propertyTypes = [
     { id: 'office', name: 'Office Space', icon: '💼', count: 450, color: 'bg-blue-50 border-blue-200' },
-    { id: 'retail', name: 'Retail Shop', icon: '🏪', count: 300, color: 'bg-purple-50 border-purple-200' },
-    { id: 'warehouse', name: 'Warehouse', icon: '📦', count: 150, color: 'bg-orange-50 border-orange-200' },
-    { id: 'coworking', name: 'Co-working', icon: '🤝', count: 100, color: 'bg-green-50 border-green-200' },
+    { id: 'retail', name: 'Retail Shop', icon: '🏪', count: 300, color: 'bg-blue-100 border-blue-300' },
+    { id: 'warehouse', name: 'Warehouse', icon: '📦', count: 150, color: 'bg-blue-50 border-blue-200' },
+    { id: 'coworking', name: 'Co-working', icon: '🤝', count: 100, color: 'bg-blue-100 border-blue-300' },
   ];
 
   // Features
@@ -49,25 +49,25 @@ const Homepage = () => {
       icon: '🔍',
       title: 'Smart Search',
       description: 'Find your perfect space with AI-powered recommendations',
-      color: 'from-teal-500 to-teal-600'
+      color: 'from-blue-500 to-blue-600'
     },
     {
       icon: '🔒',
       title: 'Verified Listings',
       description: '100% authenticated properties with detailed verification',
-      color: 'from-indigo-500 to-indigo-600'
+      color: 'from-blue-600 to-blue-700'
     },
     {
       icon: '💳',
       title: 'Secure Payments',
       description: 'Safe and encrypted payment processing',
-      color: 'from-orange-500 to-orange-600'
+      color: 'from-blue-400 to-blue-500'
     },
     {
       icon: '🤝',
       title: '24/7 Support',
       description: 'Expert assistance whenever you need it',
-      color: 'from-green-500 to-green-600'
+      color: 'from-blue-500 to-blue-600'
     },
   ];
 
@@ -99,11 +99,11 @@ const Homepage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section - Modern & Clean */}
-      <section className="relative bg-gradient-to-br from-teal-600 via-teal-500 to-indigo-600 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-600 via-blue-500 to-blue-700 overflow-hidden">
         {/* Subtle Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-300 rounded-full blur-3xl"></div>
         </div>
 
         <div className="container-custom relative z-10 py-16 md:py-24">
@@ -117,12 +117,12 @@ const Homepage = () => {
             {/* Main Heading */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-slide-up">
               Find Your Perfect
-              <span className="block mt-2 bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text text-transparent">
+              <span className="block mt-2 text-white">
                 Commercial Space
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-teal-50 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-blue-50 mb-8 max-w-2xl mx-auto">
               Discover verified properties across India. Office spaces, retail shops, warehouses, and co-working spaces at your fingertips.
             </p>
 
@@ -133,11 +133,11 @@ const Homepage = () => {
 
             {/* Quick Actions */}
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link to="/search" className="btn btn-secondary btn-lg bg-white text-teal-600 hover:bg-gray-50">
+              <Link to="/search" className="btn btn-secondary btn-lg bg-white text-blue-600 hover:bg-gray-50">
                 <span>🔍</span>
                 <span>Browse Properties</span>
               </Link>
-              <button onClick={handleListProperty} className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-teal-600">
+              <button onClick={handleListProperty} className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-blue-600">
                 <span>➕</span>
                 <span>List Your Property</span>
               </button>
@@ -280,21 +280,21 @@ const Homepage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section bg-gradient-to-r from-teal-600 to-indigo-600">
+      <section className="section bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Ready to Find Your Perfect Space?
             </h2>
-            <p className="text-xl text-teal-50 mb-8">
+            <p className="text-xl text-blue-50 mb-8">
               Join thousands of successful businesses who found their ideal commercial property with us
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Link to="/search" className="btn btn-lg bg-white text-teal-600 hover:bg-gray-50">
+              <Link to="/search" className="btn btn-lg bg-white text-blue-600 hover:bg-gray-50">
                 <span>🔍</span>
                 <span>Start Searching</span>
               </Link>
-              <button onClick={handleListProperty} className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-teal-600">
+              <button onClick={handleListProperty} className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-blue-600">
                 <span>➕</span>
                 <span>List Property Free</span>
               </button>

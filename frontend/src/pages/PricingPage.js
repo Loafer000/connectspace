@@ -42,7 +42,7 @@ const PricingPage = () => {
       highlight: true,
       badge: 'Popular',
       idealFor: 'Repeat/multi-property owners',
-      color: 'from-indigo-500 to-purple-600'
+      color: 'from-blue-500 to-blue-600'
     },
     {
       name: 'Premium',
@@ -61,7 +61,7 @@ const PricingPage = () => {
       ],
       highlight: false,
       idealFor: 'Portfolio owners',
-      color: 'from-purple-500 to-pink-600'
+      color: 'from-blue-600 to-blue-700'
     }
   ];
 
@@ -79,7 +79,7 @@ const PricingPage = () => {
       ],
       highlight: false,
       idealFor: 'Budget tenants',
-      color: 'from-teal-500 to-teal-600'
+      color: 'from-blue-400 to-blue-500'
     },
     {
       name: 'Comfort',
@@ -96,7 +96,7 @@ const PricingPage = () => {
       highlight: true,
       badge: 'Popular',
       idealFor: 'Active searchers',
-      color: 'from-green-500 to-emerald-600'
+      color: 'from-blue-500 to-blue-600'
     },
     {
       name: 'Assure/Relax',
@@ -114,7 +114,7 @@ const PricingPage = () => {
       ],
       highlight: false,
       idealFor: 'Serious movers',
-      color: 'from-blue-500 to-indigo-600'
+      color: 'from-blue-600 to-blue-700'
     }
   ];
 
@@ -156,7 +156,7 @@ const PricingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-20">
         <div className="container-custom text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
             🏠 Premium Plans for Landlords & Tenants
@@ -172,7 +172,7 @@ const PricingPage = () => {
                 onClick={() => setSelectedRole('landlord')}
                 className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${
                   selectedRole === 'landlord'
-                    ? 'bg-white text-indigo-600 shadow-lg'
+                    ? 'bg-white text-blue-600 shadow-lg'
                     : 'text-white hover:bg-white/10'
                 }`}
               >
@@ -369,17 +369,17 @@ const PricingPage = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12 text-white">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-12 text-white">
             <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-blue-100 mb-8">
               Join thousands of satisfied landlords and tenants
             </p>
             {isAuthenticated ? (
-              <Link to="/dashboard" className="inline-block bg-white text-indigo-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+              <Link to="/dashboard" className="inline-block bg-white text-blue-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                 Go to Dashboard
               </Link>
             ) : (
-              <Link to="/" className="inline-block bg-white text-indigo-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+              <Link to="/" className="inline-block bg-white text-blue-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                 Sign Up Now
               </Link>
             )}
