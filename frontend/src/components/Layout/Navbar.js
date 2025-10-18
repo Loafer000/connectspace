@@ -65,14 +65,9 @@ const Navbar = () => {
                 alt="ConnectSpace Logo" 
                 className="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  ConnectSpace
-                </span>
-                <span className="text-xs text-gray-500 -mt-1">
-                  Find Your Perfect Space
-                </span>
-              </div>
+              <span className="text-xs text-gray-500 italic">
+                Find Your Perfect Space
+              </span>
             </Link>
 
             {/* Desktop Navigation - Centered */}
