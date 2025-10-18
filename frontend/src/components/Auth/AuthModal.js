@@ -378,7 +378,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                 <input
                   {...loginForm.register('email')}
                   type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   placeholder="your.email@example.com"
                 />
                 {loginForm.formState.errors.email && (
@@ -396,7 +396,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...loginForm.register('password')}
                     type={showPassword ? 'text' : 'password'}
-                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Enter your password"
                     style={{
                       WebkitAppearance: 'none',
@@ -461,7 +461,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Google login coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -478,7 +478,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Facebook login coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -492,7 +492,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Apple login coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/>
@@ -521,7 +521,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                         type="tel"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                        className="w-full pl-12 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                        className="w-full pl-12 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                         placeholder="9876543210"
                         maxLength="10"
                       />
@@ -549,7 +549,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                       type="text"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white text-center text-lg tracking-widest"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white text-center text-lg tracking-widest"
                       placeholder="000000"
                       maxLength="6"
                     />
@@ -605,7 +605,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...signupForm.register('firstName')}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="John"
                   />
                   {signupForm.formState.errors.firstName && (
@@ -622,7 +622,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...signupForm.register('lastName')}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Doe"
                   />
                   {signupForm.formState.errors.lastName && (
@@ -640,7 +640,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                 <input
                   {...signupForm.register('email')}
                   type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   placeholder="your.email@example.com"
                 />
                 {signupForm.formState.errors.email && (
@@ -659,7 +659,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...signupForm.register('password')}
                     type={showPassword ? 'text' : 'password'}
-                    className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Must be 8+ characters with uppercase, lowercase & number"
                     style={{
                       WebkitAppearance: 'none',
@@ -700,7 +700,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...signupForm.register('confirmPassword')}
                     type={showConfirmPassword ? 'text' : 'password'}
-                    className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white"
+                    className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Re-enter your password"
                     style={{
                       WebkitAppearance: 'none',
@@ -738,7 +738,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   I am a...
                 </label>
                 <div className="grid grid-cols-3 gap-3">
-                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-primary-500 transition-colors ${
+                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition-colors ${
                     signupForm.watch('userType') === 'tenant' ? 'border-primary-500 bg-primary-50' : 'border-gray-300'
                   }`}>
                     <input
@@ -753,13 +753,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                       <div className="text-xs text-gray-500">Looking to rent</div>
                     </div>
                     {signupForm.watch('userType') === 'tenant' && (
-                      <div className="absolute top-2 right-2 w-4 h-4 bg-primary-600 rounded-full flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
                         <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                       </div>
                     )}
                   </label>
                   
-                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-primary-500 transition-colors ${
+                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition-colors ${
                     signupForm.watch('userType') === 'landlord' ? 'border-primary-500 bg-primary-50' : 'border-gray-300'
                   }`}>
                     <input
@@ -774,13 +774,13 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                       <div className="text-xs text-gray-500">Property owner</div>
                     </div>
                     {signupForm.watch('userType') === 'landlord' && (
-                      <div className="absolute top-2 right-2 w-4 h-4 bg-primary-600 rounded-full flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
                         <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                       </div>
                     )}
                   </label>
 
-                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-primary-500 transition-colors ${
+                  <label className={`relative flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-blue-500 transition-colors ${
                     signupForm.watch('userType') === 'agent' ? 'border-primary-500 bg-primary-50' : 'border-gray-300'
                   }`}>
                     <input
@@ -795,7 +795,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                       <div className="text-xs text-gray-500">Real estate agent</div>
                     </div>
                     {signupForm.watch('userType') === 'agent' && (
-                      <div className="absolute top-2 right-2 w-4 h-4 bg-primary-600 rounded-full flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
                         <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                       </div>
                     )}
@@ -814,7 +814,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                   <input
                     {...signupForm.register('terms')}
                     type="checkbox"
-                    className="mt-1 mr-3 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    className="mt-1 mr-3 h-4 w-4 text-primary-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
                   <span className="text-sm text-gray-600">
                     I agree to ConnectSpace's{' '}
@@ -839,7 +839,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
               <button
                 type="submit"
                 disabled={signupForm.formState.isSubmitting}
-                className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition duration-200"
+                className="w-full bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 hover:from-blue-800 hover:via-blue-700 hover:to-blue-600 disabled:from-blue-400 disabled:via-blue-300 disabled:to-blue-200 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
               >
                 {signupForm.formState.isSubmitting ? (
                   <div className="flex items-center justify-center">
@@ -874,7 +874,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Google signup coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -891,7 +891,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Facebook signup coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -905,7 +905,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login', onSuccess }) => {
                     onClick={() => {
                       toast.success('Apple signup coming soon!');
                     }}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/>
