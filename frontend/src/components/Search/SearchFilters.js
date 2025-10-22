@@ -60,6 +60,22 @@ const SearchFilters = () => {
       [key]: newRange
     }));
     dispatch({ type: 'SET_FILTERS', payload: { [key]: newRange } });
+
+    // Build search query
+    const searchQuery = {
+      location: localFilters.location || '',
+      propertyType: Array.isArray(localFilters.propertyTypes) && localFilters.propertyTypes.length > 0 
+        ? localFilters.propertyTypes[0] 
+        : '',
+      rentRange: newRange,
+      minPrice: newRange.min,
+      maxPrice: newRange.max,
+      capacity: localFilters.capacity || '',
+      amenities: localFilters.amenities || []
+    };
+    
+    // Trigger search with new range values
+    searchProperties(searchQuery);
   };
 
   const togglePropertyType = (type) => {

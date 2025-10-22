@@ -16,13 +16,16 @@ const SearchResults = () => {
 
   useEffect(() => {
     const searchQuery = {
-      location: searchParams.get('q') || searchParams.get('location') || '',
+      location: searchParams.get('q') || searchParams.get('location') || searchParams.get('city') || '',
       propertyType: searchParams.get('propertyType') || searchParams.get('type') || '',
-      minPrice: searchParams.get('minPrice') || '',
-      maxPrice: searchParams.get('maxPrice') || '',
-      capacity: searchParams.get('capacity') || '',
-      floorPreference: searchParams.get('floorPreference') || ''
-    };
+      minPrice: searchParams.get('minPrice') || searchParams.get('minRent') || '',
+      maxPrice: searchParams.get('maxPrice') || searchParams.get('maxRent') || '',
+      capacity: searchParams.get('capacity') || searchParams.get('people') || '',
+      amenities: searchParams.get('amenities') ? searchParams.get('amenities').split(',') : [],
+      rentRange: {
+        min: parseInt(searchParams.get('minPrice') || searchParams.get('minRent') || '0'),
+        max: parseInt(searchParams.get('maxPrice') || searchParams.get('maxRent') || '100000')
+      }
 
     console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
     console.log('🔍 SearchResults: Built search query:', searchQuery);

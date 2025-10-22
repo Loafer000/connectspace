@@ -93,19 +93,38 @@ export const PropertyProvider = ({ children }) => {
       // Use location for text search (searches city, area, address, etc.)
       if (searchParams.location) {
         queryParams.q = searchParams.location;  // General text search across all fields
+        queryParams.city = searchParams.location; // Also search by city specifically
         console.log('🎯 Search term (q):', queryParams.q);
       } else {
         console.log('⚠️ No location provided in search params');
       }
       
-      if (searchParams.propertyType) {
+      // Handle property type
+      if (searchParams.propertyType && searchParams.propertyType !== 'all') {
         queryParams.propertyType = searchParams.propertyType;
         console.log('🏢 Property type filter:', queryParams.propertyType);
       }
-      if (searchParams.minPrice) queryParams.minRent = searchParams.minPrice;
-      if (searchParams.maxPrice) queryParams.maxRent = searchParams.maxPrice;
-      if (searchParams.bedrooms) queryParams.bedrooms = searchParams.bedrooms;
-      if (searchParams.capacity) queryParams.bedrooms = searchParams.capacity;
+
+      // Handle price range
+      if (searchParams.minPrice || searchParams.rentRange?.min) {
+        queryParams.minRent = parseInt(searchParams.minPrice || searchParams.rentRange?.min);
+      }
+      if (searchParams.maxPrice || searchParams.rentRange?.max) {
+        queryParams.maxRent = parseInt(searchParams.maxPrice || searchParams.rentRange?.max);
+      }
+
+      // Handle capacity and bedrooms
+      if (searchParams.capacity) {
+        queryParams.capacity = searchParams.capacity;
+      }
+      if (searchParams.bedrooms) {
+        queryParams.bedrooms = searchParams.bedrooms;
+      }
+
+      // Handle amenities
+      if (searchParams.amenities && searchParams.amenities.length > 0) {
+        queryParams.amenities = searchParams.amenities.join(',');
+      }
 
       console.log('📡 PropertyContext: Sending search request to API:', queryParams);
       console.log('📋 QueryParams details:', JSON.stringify(queryParams, null, 2));
