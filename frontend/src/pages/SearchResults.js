@@ -15,18 +15,11 @@ const SearchResults = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    const locationParam = searchParams.get('q') || searchParams.get('location') || searchParams.get('city') || '';
-    const propertyTypeParam = searchParams.get('propertyType') || searchParams.get('type') || '';
-    
-    console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
-    console.log('🔍 SearchResults: Location param:', locationParam);
-    console.log('🔍 SearchResults: PropertyType param:', propertyTypeParam);
-    
     const searchQuery = {
-      location: locationParam,
-      propertyType: propertyTypeParam,
-      minPrice: searchParams.get('minPrice') || searchParams.get('minRent') || '',
-      maxPrice: searchParams.get('maxPrice') || searchParams.get('maxRent') || '',
+      location: searchParams.get('q') || '',  // Only use 'q' parameter for consistency
+      propertyType: searchParams.get('propertyType') || '',
+      minPrice: searchParams.get('minPrice') || '',
+      maxPrice: searchParams.get('maxPrice') || '',
       capacity: searchParams.get('capacity') || searchParams.get('people') || '',
       amenities: searchParams.get('amenities') ? searchParams.get('amenities').split(',') : [],
       rentRange: {
@@ -35,6 +28,7 @@ const SearchResults = () => {
       }
     };
 
+    console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
     console.log('🔍 SearchResults: Built search query:', searchQuery);
     console.log('🔍 SearchResults: Calling searchProperties...');
 
