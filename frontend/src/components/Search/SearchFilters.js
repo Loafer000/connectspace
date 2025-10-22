@@ -39,9 +39,9 @@ const SearchFilters = () => {
     // Build search query from filters
     const searchQuery = {
       location: searchParams.get('q') || searchParams.get('location') || newFilters.location || '',
-      propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
+      propertyType: searchParams.get('propertyType') || (Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
         ? newFilters.propertyTypes[0] 
-        : '',
+        : ''),
       minPrice: newFilters.rentRange?.min || '',
       maxPrice: newFilters.rentRange?.max || '',
       capacity: newFilters.capacity || '',
@@ -66,9 +66,9 @@ const SearchFilters = () => {
     // Build search query
     const searchQuery = {
       location: searchParams.get('q') || searchParams.get('location') || localFilters.location || '',
-      propertyType: Array.isArray(localFilters.propertyTypes) && localFilters.propertyTypes.length > 0 
+      propertyType: searchParams.get('propertyType') || (Array.isArray(localFilters.propertyTypes) && localFilters.propertyTypes.length > 0 
         ? localFilters.propertyTypes[0] 
-        : '',
+        : ''),
       rentRange: newRange,
       minPrice: newRange.min,
       maxPrice: newRange.max,
@@ -172,9 +172,9 @@ const SearchFilters = () => {
     // Trigger search with updated amenities
     const searchQuery = {
       location: searchParams.get('q') || searchParams.get('location') || newFilters.location || '',
-      propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
+      propertyType: searchParams.get('propertyType') || (Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
         ? newFilters.propertyTypes[0] 
-        : '',
+        : ''),
       minPrice: newFilters.rentRange?.min || '',
       maxPrice: newFilters.rentRange?.max || '',
       capacity: newFilters.capacity || '',

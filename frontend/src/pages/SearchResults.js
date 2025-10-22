@@ -16,13 +16,15 @@ const SearchResults = () => {
 
   useEffect(() => {
     const locationParam = searchParams.get('q') || searchParams.get('location') || searchParams.get('city') || '';
+    const propertyTypeParam = searchParams.get('propertyType') || searchParams.get('type') || '';
     
     console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
-    console.log('🔍 SearchResults: Location param extracted:', locationParam);
+    console.log('🔍 SearchResults: Location param:', locationParam);
+    console.log('🔍 SearchResults: PropertyType param:', propertyTypeParam);
     
     const searchQuery = {
       location: locationParam,
-      propertyType: searchParams.get('propertyType') || searchParams.get('type') || '',
+      propertyType: propertyTypeParam,
       minPrice: searchParams.get('minPrice') || searchParams.get('minRent') || '',
       maxPrice: searchParams.get('maxPrice') || searchParams.get('maxRent') || '',
       capacity: searchParams.get('capacity') || searchParams.get('people') || '',
