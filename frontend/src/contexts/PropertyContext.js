@@ -373,6 +373,7 @@ export const PropertyProvider = ({ children }) => {
 
   const value = {
     ...state,
+    dispatch,
     searchProperties,
     getPropertyById,
     addProperty,
