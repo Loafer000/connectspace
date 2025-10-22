@@ -15,8 +15,13 @@ const SearchResults = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
+    const locationParam = searchParams.get('q') || searchParams.get('location') || searchParams.get('city') || '';
+    
+    console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
+    console.log('🔍 SearchResults: Location param extracted:', locationParam);
+    
     const searchQuery = {
-      location: searchParams.get('q') || searchParams.get('location') || searchParams.get('city') || '',
+      location: locationParam,
       propertyType: searchParams.get('propertyType') || searchParams.get('type') || '',
       minPrice: searchParams.get('minPrice') || searchParams.get('minRent') || '',
       maxPrice: searchParams.get('maxPrice') || searchParams.get('maxRent') || '',
@@ -28,7 +33,6 @@ const SearchResults = () => {
       }
     };
 
-    console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
     console.log('🔍 SearchResults: Built search query:', searchQuery);
     console.log('🔍 SearchResults: Calling searchProperties...');
 

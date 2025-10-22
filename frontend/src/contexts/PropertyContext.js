@@ -91,9 +91,8 @@ export const PropertyProvider = ({ children }) => {
       const queryParams = {};
       
       // Use location for text search (searches city, area, address, etc.)
-      if (searchParams.location) {
-        queryParams.q = searchParams.location;  // General text search across all fields
-        queryParams.city = searchParams.location; // Also search by city specifically
+      if (searchParams.location && searchParams.location.trim()) {
+        queryParams.q = searchParams.location.trim();  // General text search across all fields
         console.log('🎯 Search term (q):', queryParams.q);
       } else {
         console.log('⚠️ No location provided in search params');
