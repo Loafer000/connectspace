@@ -19,10 +19,9 @@ const propertySchema = new mongoose.Schema({
   propertyType: {
     type: String,
     required: [true, 'Property type is required'],
-    enum: {
-      values: ['apartment', 'house', 'villa', 'studio', 'pg', 'hostel', 'office', 'shop'],
-      message: 'Invalid property type'
-    }
+    lowercase: true,
+    trim: true
+    // No enum - allow any property type for flexibility
   },
   // Usage Preferences - WHO can use this property
   usagePreferences: {
