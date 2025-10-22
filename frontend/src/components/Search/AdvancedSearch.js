@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { propertyAPI } from '../../services/api';
 import './AdvancedSearch.css';
 
 const AdvancedSearch = ({ onSearchResults, onFiltersChange }) => {
@@ -79,84 +80,25 @@ const AdvancedSearch = ({ onSearchResults, onFiltersChange }) => {
   }, [searchQuery, filters, debouncedSearch, onFiltersChange]);
 
   const performSearch = async (query, searchFilters) => {
-    // Mock search results - replace with actual API call
-    const mockResults = generateMockResults(query, searchFilters);
-    if (onSearchResults) {
-      onSearchResults(mockResults);
+    const searchParams = {
+      q: query,
+      city: searchFilters.location,
+      minRent: searchFilters.priceRange.min,
+      maxRent: searchFilters.priceRange.max,
+      bedrooms: searchFilters.bedrooms,
+      propertyType: searchFilters.propertyType,
+      amenities: searchFilters.amenities.join(','),
+      sort: searchFilters.sortBy,
+    };
+
+    try {
+      const response = await propertyAPI.searchProperties(searchParams);
+      if (response.success && onSearchResults) {
+        onSearchResults(response.data.properties);
+      }
+    } catch (error) {
+      console.error('Failed to search properties:', error);
     }
-  };
-
-  const generateMockResults = (query, searchFilters) => {
-    // This would be replaced with actual API call
-    const baseResults = [
-      {
-        id: 1,
-        title: 'Modern Downtown Apartment',
-        price: 2400,
-        bedrooms: 2,
-        bathrooms: 2,
-        location: 'Downtown',
-        type: 'apartment',
-        petFriendly: true,
-        furnished: false,
-        amenities: ['Swimming Pool', 'Gym/Fitness Center', 'Parking'],
-        image: '/api/placeholder/300/200',
-        rating: 4.5,
-        distance: 2.3
-      },
-      {
-        id: 2,
-        title: 'Cozy Suburban House',
-        price: 3200,
-        bedrooms: 3,
-        bathrooms: 2.5,
-        location: 'Suburbs',
-        type: 'house',
-        petFriendly: true,
-        furnished: true,
-        amenities: ['Garden/Yard', 'Parking', 'Fireplace'],
-        image: '/api/placeholder/300/200',
-        rating: 4.2,
-        distance: 5.1
-      },
-      {
-        id: 3,
-        title: 'Luxury City Condo',
-        price: 1800,
-        bedrooms: 1,
-        bathrooms: 1,
-        location: 'City Center',
-        type: 'condo',
-        petFriendly: false,
-        furnished: false,
-        amenities: ['Concierge', 'Rooftop Access', 'Elevator'],
-        image: '/api/placeholder/300/200',
-        rating: 4.7,
-        distance: 1.2
-      }
-    ];
-
-    // Apply filters
-    return baseResults.filter(property => {
-      if (searchFilters.priceRange.min && property.price < parseInt(searchFilters.priceRange.min)) return false;
-      if (searchFilters.priceRange.max && property.price > parseInt(searchFilters.priceRange.max)) return false;
-      if (searchFilters.bedrooms && property.bedrooms !== parseInt(searchFilters.bedrooms)) return false;
-      if (searchFilters.bathrooms && property.bathrooms < parseInt(searchFilters.bathrooms)) return false;
-      if (searchFilters.propertyType && property.type !== searchFilters.propertyType) return false;
-      if (searchFilters.location && !property.location.toLowerCase().includes(searchFilters.location.toLowerCase())) return false;
-      if (searchFilters.petFriendly && !property.petFriendly) return false;
-      if (searchFilters.furnished && !property.furnished) return false;
-      if (searchFilters.amenities.length > 0) {
-        const hasAllAmenities = searchFilters.amenities.every(amenity => 
-          property.amenities.includes(amenity)
-        );
-        if (!hasAllAmenities) return false;
-      }
-      if (query && !property.title.toLowerCase().includes(query.toLowerCase()) && 
-          !property.location.toLowerCase().includes(query.toLowerCase())) return false;
-      
-      return true;
-    });
   };
 
   const handleFilterChange = (filterName, value) => {

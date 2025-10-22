@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useProperty } from '../../contexts/PropertyContext';
 
 const SearchFilters = () => {
+  const [searchParams] = useSearchParams();
   const { filters, dispatch } = useProperty();
   const [localFilters, setLocalFilters] = useState({
     rentRange: { min: 0, max: 100000 },
@@ -36,7 +38,7 @@ const SearchFilters = () => {
     
     // Build search query from filters
     const searchQuery = {
-      location: newFilters.location || '',
+      location: searchParams.get('q') || searchParams.get('location') || newFilters.location || '',
       propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
         ? newFilters.propertyTypes[0] 
         : '',
@@ -63,7 +65,7 @@ const SearchFilters = () => {
 
     // Build search query
     const searchQuery = {
-      location: localFilters.location || '',
+      location: searchParams.get('q') || searchParams.get('location') || localFilters.location || '',
       propertyType: Array.isArray(localFilters.propertyTypes) && localFilters.propertyTypes.length > 0 
         ? localFilters.propertyTypes[0] 
         : '',
@@ -93,7 +95,7 @@ const SearchFilters = () => {
 
     // Trigger search with updated property types
     const searchQuery = {
-      location: newFilters.location || '',
+      location: searchParams.get('q') || searchParams.get('location') || newFilters.location || '',
       propertyType: newTypes.length > 0 ? newTypes[0] : '',
       minPrice: newFilters.rentRange?.min || '',
       maxPrice: newFilters.rentRange?.max || '',
@@ -169,7 +171,7 @@ const SearchFilters = () => {
 
     // Trigger search with updated amenities
     const searchQuery = {
-      location: newFilters.location || '',
+      location: searchParams.get('q') || searchParams.get('location') || newFilters.location || '',
       propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
         ? newFilters.propertyTypes[0] 
         : '',
