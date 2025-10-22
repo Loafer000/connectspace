@@ -59,7 +59,11 @@ const SearchBar = ({ className = '' }) => {
         // Send location as 'q' for backend compatibility
         params.append('q', value);
         console.log(`  ✅ Adding param: q = ${value}`);
-      } else if (key !== 'location' && value && String(value).trim() !== '') {
+      } else if (key === 'propertyType' && value && String(value).trim() !== '' && String(value).toLowerCase() !== 'any type') {
+        // Only send propertyType if it's not empty and not 'Any Type'
+        params.append(key, value);
+        console.log(`  ✅ Adding param: ${key} = ${value}`);
+      } else if (key !== 'location' && key !== 'propertyType' && value && String(value).trim() !== '') {
         params.append(key, value);
         console.log(`  ✅ Adding param: ${key} = ${value}`);
       } else {

@@ -413,10 +413,13 @@ exports.searchProperties = async (req, res) => {
       console.log('📍 Area filter:', area);
       filters['address.area'] = new RegExp(area, 'i');
     }
-    if (propertyType) {
+    // Only filter by propertyType if it's specified and not empty
+    if (propertyType && propertyType.trim() !== '' && propertyType.toLowerCase() !== 'any type') {
       console.log('🏠 Property type filter:', propertyType);
       // Use case-insensitive regex for propertyType to handle variations
       filters.propertyType = new RegExp(propertyType, 'i');
+    } else {
+      console.log('🏠 No property type filter - showing all types');
     }
     if (bedrooms) {
       console.log('🛏️ Bedrooms filter:', bedrooms);
