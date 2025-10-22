@@ -26,6 +26,7 @@ const SearchResults = () => {
         min: parseInt(searchParams.get('minPrice') || searchParams.get('minRent') || '0'),
         max: parseInt(searchParams.get('maxPrice') || searchParams.get('maxRent') || '100000')
       }
+    };
 
     console.log('🔍 SearchResults: URL params:', Object.fromEntries(searchParams));
     console.log('🔍 SearchResults: Built search query:', searchQuery);
