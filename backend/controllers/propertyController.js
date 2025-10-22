@@ -392,7 +392,7 @@ exports.searchProperties = async (req, res) => {
       const searchRegex = new RegExp(q, 'i');
       console.log('🔎 Creating search regex for:', q);
       
-      // Simple and clear search - search in all relevant fields
+      // Simple and clear search - search in all relevant fields (excluding propertyType if it's specified separately)
       filters.$or = [
         { title: searchRegex },
         { description: searchRegex },
@@ -400,14 +400,12 @@ exports.searchProperties = async (req, res) => {
         { 'address.area': searchRegex },
         { 'address.state': searchRegex },
         { 'address.landmark': searchRegex },
-        { 'address.street': searchRegex },
-        { propertyType: searchRegex }
+        { 'address.street': searchRegex }
       ];
       
       console.log('📋 Search will match against fields:', [
         'title', 'description', 'address.city', 'address.area', 
-        'address.state', 'address.landmark', 'address.street', 
-        'propertyType'
+        'address.state', 'address.landmark', 'address.street'
       ]);
     }
 
@@ -417,7 +415,8 @@ exports.searchProperties = async (req, res) => {
     }
     if (propertyType) {
       console.log('🏠 Property type filter:', propertyType);
-      filters.propertyType = propertyType;
+      // Use case-insensitive regex for propertyType to handle variations
+      filters.propertyType = new RegExp(propertyType, 'i');
     }
     if (bedrooms) {
       console.log('🛏️ Bedrooms filter:', bedrooms);
