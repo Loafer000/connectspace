@@ -92,11 +92,21 @@ export const PropertyProvider = ({ children }) => {
       
       // Use location for text search (searches city, area, address, etc.)
       if (searchParams.location) {
-        queryParams.q = searchParams.location;  // General text search across all fields
-        console.log('🎯 Search term (q):', queryParams.q);
-      } else {
-        console.log('⚠️ No location provided in search params');
+        // Ensure the location is properly trimmed and encoded
+        const cleanLocation = searchParams.location.trim();
+        if (cleanLocation) {
+          queryParams.q = cleanLocation;  // General text search across all fields
+          console.log('🎯 Search term (q):', queryParams.q);
+        }
       }
+      
+      // Debug search parameters
+      console.log('🔍 Full search parameters:', {
+        original: searchParams,
+        transformed: queryParams,
+        hasLocation: Boolean(searchParams.location),
+        cleanedLocation: searchParams.location?.trim()
+      });
       
       // Handle property type
       if (searchParams.propertyType && searchParams.propertyType !== 'all') {
