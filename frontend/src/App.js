@@ -5,9 +5,12 @@ import { PropertyProvider } from './contexts/PropertyContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
+import PropertyTypeSelector from './components/PropertyTypeSelector/PropertyTypeSelector';
 
 // Pages
 import Homepage from './pages/Homepage';
+import ResidentialSpace from './pages/ResidentialSpace';
+import ResidentialTypeDetail from './pages/ResidentialTypeDetail';
 import SearchResults from './pages/SearchResults';
 import PropertyDetails from './pages/PropertyDetails';
 import Dashboard from './pages/Dashboard';
@@ -29,9 +32,12 @@ function App() {
         <PropertyProvider>
           <div className="min-h-screen flex flex-col">
             <Navbar />
+            <PropertyTypeSelector />
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Homepage />} />
+                <Route path="/residential" element={<ResidentialSpace />} />
+                <Route path="/residential/:type" element={<ResidentialTypeDetail />} />
                 <Route path="/search" element={<SearchResults />} />
                 <Route path="/property/:id" element={<PropertyDetails />} />
                 <Route path="/dashboard" element={<Dashboard />} />
