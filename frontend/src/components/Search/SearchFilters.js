@@ -24,12 +24,30 @@ const SearchFilters = () => {
     }));
   }, [filters]);
 
+  const { searchProperties } = useProperty();
+
   const handleFilterChange = (key, value) => {
-    setLocalFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...localFilters,
       [key]: value
-    }));
+    };
+    setLocalFilters(newFilters);
     dispatch({ type: 'SET_FILTERS', payload: { [key]: value } });
+    
+    // Build search query from filters
+    const searchQuery = {
+      location: newFilters.location || '',
+      propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
+        ? newFilters.propertyTypes[0] 
+        : '',
+      minPrice: newFilters.rentRange?.min || '',
+      maxPrice: newFilters.rentRange?.max || '',
+      capacity: newFilters.capacity || '',
+      amenities: newFilters.amenities || []
+    };
+    
+    // Trigger search with new filters
+    searchProperties(searchQuery);
   };
 
   const handleRangeChange = (key, type, value) => {
@@ -50,11 +68,23 @@ const SearchFilters = () => {
       : [...selectedPropertyTypes, type];
     
     setSelectedPropertyTypes(newTypes);
-    setLocalFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...localFilters,
       propertyTypes: newTypes
-    }));
+    };
+    setLocalFilters(newFilters);
     dispatch({ type: 'SET_FILTERS', payload: { propertyTypes: newTypes } });
+
+    // Trigger search with updated property types
+    const searchQuery = {
+      location: newFilters.location || '',
+      propertyType: newTypes.length > 0 ? newTypes[0] : '',
+      minPrice: newFilters.rentRange?.min || '',
+      maxPrice: newFilters.rentRange?.max || '',
+      capacity: newFilters.capacity || '',
+      amenities: newFilters.amenities || []
+    };
+    searchProperties(searchQuery);
   };
 
   const clearFilters = () => {
@@ -114,11 +144,25 @@ const SearchFilters = () => {
       ? currentAmenities.filter(a => a !== amenity)
       : [...currentAmenities, amenity];
     
-    setLocalFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...localFilters,
       amenities: newAmenities
-    }));
+    };
+    setLocalFilters(newFilters);
     dispatch({ type: 'SET_FILTERS', payload: { amenities: newAmenities } });
+
+    // Trigger search with updated amenities
+    const searchQuery = {
+      location: newFilters.location || '',
+      propertyType: Array.isArray(newFilters.propertyTypes) && newFilters.propertyTypes.length > 0 
+        ? newFilters.propertyTypes[0] 
+        : '',
+      minPrice: newFilters.rentRange?.min || '',
+      maxPrice: newFilters.rentRange?.max || '',
+      capacity: newFilters.capacity || '',
+      amenities: newAmenities
+    };
+    searchProperties(searchQuery);
   };
 
   return (
